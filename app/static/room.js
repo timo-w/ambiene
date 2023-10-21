@@ -35,23 +35,23 @@ chatMessageInput.onkeyup = function(e) {
 // clear the 'chatMessageInput' and forward the message
 chatMessageSend.onclick = function() {
     if (chatMessageInput.value.length === 0) return;
-    chatSocket.send(JSON.stringify({
+    socket.send(JSON.stringify({
         "message": chatMessageInput.value,
     }));
     chatMessageInput.value = "";
 };
 
 
-let chatSocket = null;
+let socket = null;
 
 function connect() {
-    chatSocket = new WebSocket("ws://" + window.location.host + "/ws/app/" + roomName + "/");
+    socket = new WebSocket("ws://" + window.location.host + "/ws/app/" + roomName + "/");
 
-    chatSocket.onopen = function(e) {
+    socket.onopen = function(e) {
         console.log("Successfully connected to the WebSocket.");
     }
 
-    chatSocket.onclose = function(e) {
+    socket.onclose = function(e) {
         console.log("WebSocket connection closed unexpectedly. Trying to reconnect in 2s...");
         setTimeout(function() {
             console.log("Reconnecting...");
@@ -59,7 +59,7 @@ function connect() {
         }, 2000);
     };
 
-    chatSocket.onmessage = function(e) {
+    socket.onmessage = function(e) {
         const data = JSON.parse(e.data);
         console.log(data);
     
@@ -89,10 +89,10 @@ function connect() {
         chatLog.scrollTop = chatLog.scrollHeight;
     };
 
-    chatSocket.onerror = function(err) {
+    socket.onerror = function(err) {
         console.log("WebSocket encountered an error: " + err.message);
         console.log("Closing the socket.");
-        chatSocket.close();
+        socket.close();
     }
 }
 

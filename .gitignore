@@ -89,3 +89,4 @@ app/migrations/
 .env
 db.sqlite3
 
+dump.rdb
