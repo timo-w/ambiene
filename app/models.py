@@ -1,5 +1,6 @@
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
 from django.db import models
+from accounts.models import User
 
 
 class Room(models.Model):
