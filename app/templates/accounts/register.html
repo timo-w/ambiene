@@ -8,22 +8,29 @@ Register
 {% block body %}
 
 <div class="container mt-3 p-5">
-    <div class="content-section">
-        <form method="POST">
-            {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Register Now</legend>
-                {{ form.as_p }}
-            </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Sign Up</button>
-            </div>
-        </form>
-        <div class="border-top pt-3">
-            <small class="text-muted">
-            Already Have An Account? <a class="ml-2" href="{% url 'login' %}">Log In</a>
-            </small>
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Register Now</legend>
+            {{ form.as_p }}
+        </fieldset>
+        {% if form.errors %}
+            ERROR:<ul>
+            {% for field in form %}
+                {% for error in field.errors %}
+                        <li>{{field.label}}: {{ error|escape }}</li>
+                {% endfor %}
+            {% endfor %}
+            </ul>
+        {% endif %}
+        <div class="form-group">
+            <button class="btn btn-outline-info" type="submit">Sign Up</button>
         </div>
+    </form>
+    <div class="border-top pt-3">
+        <small class="text-muted">
+        Already Have An Account? <a class="ml-2" href="{% url 'login' %}">Log In</a>
+        </small>
     </div>
 </div>
 
