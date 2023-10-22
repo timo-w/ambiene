@@ -13,7 +13,9 @@ document.querySelector("#roomInput").onkeyup = function(e) {
 // redirect to '/room/<roomInput>/'
 document.querySelector("#roomConnect").onclick = function() {
     let roomName = document.querySelector("#roomInput").value;
-    window.location.pathname = "app/" + roomName + "/";
+    if (roomName != "") {
+        window.location.pathname = "app/" + roomName + "/";
+    }
 }
 
 // redirect to '/room/<roomSelect>/'

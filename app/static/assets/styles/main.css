@@ -1,0 +1,11 @@
+#roomSelect {
+    height: 300px;
+}
+#chatLog {
+    height: 300px;
+    background-color: #FFFFFF;
+    resize: none;
+}
+#onlineUsersSelector {
+    height: 300px;
+}
