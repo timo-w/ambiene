@@ -14,6 +14,7 @@ document.querySelector("#roomInput").onkeyup = function(e) {
 document.querySelector("#roomConnect").onclick = function() {
     let roomName = document.querySelector("#roomInput").value;
     if (roomName != "") {
+        // TODO validation if 2 players dont connect OR invalid room name
         window.location.pathname = "app/" + roomName + "/";
     }
 }
@@ -21,5 +22,6 @@ document.querySelector("#roomConnect").onclick = function() {
 // redirect to '/room/<roomSelect>/'
 document.querySelector("#roomSelect").onchange = function() {
     let roomName = document.querySelector("#roomSelect").value.split(" (")[0];
+    // TODO validation if 2 players dont connect
     window.location.pathname = "app/" + roomName + "/";
 }

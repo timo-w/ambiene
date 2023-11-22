@@ -6,7 +6,7 @@ from channels.generic.websocket import WebsocketConsumer
 from .models import Room, Message
 
 
-class ChatConsumer(WebsocketConsumer):
+class RoomConsumer(WebsocketConsumer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(args, kwargs)
@@ -20,6 +20,10 @@ class ChatConsumer(WebsocketConsumer):
         self.room_group_name = f'chat_{self.room_name}'
         self.room = Room.objects.get(name=self.room_name)
         self.user = self.scope['user']
+
+        # only 2 people already connected then close
+        if self.room.get_online_count() >= 2:
+            return self.close()
 
         # connection has to be accepted
         self.accept()
