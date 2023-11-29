@@ -1,34 +1,46 @@
-// Initialise audio elements
-const audioContext = new AudioContext();
-const audioElement = document.querySelector("#testSound");
-const track = audioContext.createMediaElementSource(audioElement);
-const testAudioButton = document.querySelector("#testAudio");
-track.connect(audioContext.destination);
+const ctx = new AudioContext();
 
-// test audio button
-testAudioButton.addEventListener(
+let gainNode;
+
+function setupAudioNodes(gain) {
+    gainNode = ctx.createGain();
+    gainNode.connect(ctx.destination);
+    gainNode.gain.value = gain;
+}
+
+function fetchAudio(audioFilePath) {
+    return fetch(audioFilePath)
+        .then(response => response.arrayBuffer())
+        .then(data => ctx.decodeAudioData(data));
+}
+function playAudio(buffer, gain) {
+    const source = ctx.createBufferSource();
+    source.buffer = buffer;
+    setupAudioNodes(gain);
+    source.connect(gainNode);
+    source.start(ctx.currentTime);
+}
+
+function playAudioFile(audioFilePath, gain) {
+  fetchAudio(audioFilePath)
+    .then(buffer => {
+        playAudio(buffer, gain);
+    })
+    .catch(error => {
+        console.error('Error playing audio file:', error);
+    });
+}
+
+const pipeButton = document.querySelector("#pipeButton");
+pipeButton.addEventListener(
     "click",
     () => {
-        // Autoplay
-        if (audioContext.state === "suspended") {
-            audioContext.resume();
-        }
-        // Swap play/pause state
-        if (testAudioButton.dataset.playing === "false") {
-            audioElement.play();
-            testAudioButton.dataset.playing = "true";
-        } else if (testAudioButton.dataset.playing === "true") {
-            audioElement.pause();
-            testAudioButton.dataset.playing = "false";
-        }
-    },
-    false,
+        socket.send(JSON.stringify({
+            type: "audio_message",
+            message: "",
+        }));
+    }
 );
-// when audio stopped playing
-audioElement.addEventListener(
-    "ended",
-    () => {
-        testAudioButton.dataset.playing = "false";
-    },
-    false,
-);
+
+// Play on page load
+playAudioFile(testAudioFile, 0.5);

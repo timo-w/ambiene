@@ -36,7 +36,8 @@ chatMessageInput.onkeyup = function(e) {
 chatMessageSend.onclick = function() {
     if (chatMessageInput.value.length === 0) return;
     socket.send(JSON.stringify({
-        "message": chatMessageInput.value,
+        type: "chat_message",
+        message: chatMessageInput.value,
     }));
     chatMessageInput.value = "";
 };
@@ -79,6 +80,9 @@ function connect() {
             case "user_leave":
                 chatLog.value += data.user + " left the room.\n";
                 onlineUsersSelectorRemove(data.user);
+                break;
+            case "audio_message":
+                playAudioFile(pipeAudioFile, 0.5);
                 break;
             default:
                 console.error("Unknown message type!");

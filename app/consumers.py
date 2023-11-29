@@ -70,8 +70,20 @@ class RoomConsumer(WebsocketConsumer):
 
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+        message_type = text_data_json['type']
 
+        # check what type of message received
+        if message_type == 'chat_message':
+            message = text_data_json['message']
+            self.receive_chat_message(message)
+        elif message_type == 'audio_message':
+            message = text_data_json['message']
+            self.receive_audio_message(message)
+        else:
+            print(f"RoomConsumer.receive(): Unknown message type {message_type}")
+    
+    
+    def receive_chat_message(self, message):
         if not self.user.is_authenticated:
             return
 
@@ -86,7 +98,19 @@ class RoomConsumer(WebsocketConsumer):
         )
         Message.objects.create(user=self.user, room=self.room, content=message)
 
+    def receive_audio_message(self, message):
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name,
+            {
+                'type': 'audio_message',
+                'message': message,
+            }
+        )
+
     def chat_message(self, event):
+        self.send(text_data=json.dumps(event))
+
+    def audio_message(self, event):
         self.send(text_data=json.dumps(event))
 
     def user_join(self, event):
