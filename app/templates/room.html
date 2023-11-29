@@ -7,6 +7,8 @@
 
 {% block body %}
 
+<audio id="testSound" src="{% static 'assets/sounds/test.mp3' %}"></audio>
+
 <h2>Super Amazing Chat Room</h2>
 <div class="row">
     <div class="col-12 col-md-8">
@@ -27,7 +29,15 @@
         </select>
     </div>
 </div>
+
+<div class="my-4">
+    <button id="testAudio" data-playing="false" role="switch" aria-checked="false">
+        <span>Play/Pause</span>
+    </button>
+</div>
+
 {{ room.name|json_script:"roomName" }}
 <script src="{% static 'room.js' %}"></script>
+<script src="{% static 'audio.js' %}"></script>
 
 {% endblock %}
