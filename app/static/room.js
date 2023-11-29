@@ -82,7 +82,13 @@ function connect() {
                 onlineUsersSelectorRemove(data.user);
                 break;
             case "audio_message":
-                playAudioFile(pipeAudioFile, 0.5);
+                if (data.message == "PIPE") {
+                    playAudioFile(pipeAudioFile, 0.5);
+                    chatLog.value += "PIPE\n";
+                } else {
+                    playNote(notes[data.message.note], data.message.wave);
+                    chatLog.value += data.message.note + " ";
+                }
                 break;
             default:
                 console.error("Unknown message type!");

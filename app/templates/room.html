@@ -7,29 +7,49 @@
 
 {% block body %}
 
-<h2>Audio Room</h2>
+<h2>Audio Room <i>#{{ room.name }}</i></h2>
+<hr><br>
 
 <!-- Buttons -->
-<div class="my-4">
-    <button id="pipeButton"><span>Pipe</span></button>
-    <button id="volumeNone"><span>Volume 0</span></button>
-    <button id="volumeHalf"><span>Volume 0.5</span></button>
-    <button id="volumeFull"><span>Volume 1</span></button>
-    <button id="randomTrebleNoteButton"><span>Random Treble Notes</span></button>
-    <button id="randomBassNoteButton"><span>Random Bass Notes</span></button>
+<div class="row">
+    <button class="col-sm m-2 btn btn-success" id="pipeButton"><span>Pipe</span></button>
+    <button class="col-sm m-2 btn btn-success" id="volumeNone"><span>Volume 0</span></button>
+    <button class="col-sm m-2 btn btn-success" id="volumeHalf"><span>Volume 0.5</span></button>
+    <button class="col-sm m-2 btn btn-success" id="volumeFull"><span>Volume 1</span></button>
 </div>
+<div class="row">
+    <button class="col-sm m-2 btn btn-success" id="startTrebleButton"><span>Start Treble Notes</span></button>
+    <button class="col-sm m-2 btn btn-success" id="startBassButton"><span>Start Bass Notes</span></button>
+</div>
+<div class="row">
+    <button class="col-sm m-2 btn btn-success" id="stopTrebleButton"><span>Stop Treble Notes</span></button>
+    <button class="col-sm m-2 btn btn-success" id="stopBassButton"><span>Stop Bass Notes</span></button>
+</div>
+<div class="row">
+    <button class="col-sm my-2 mx-1 btn btn-success" id="keyClow"><span>C</span></button>
+    <button class="col-sm my-2 mx-1 btn btn-success" id="keyD"><span>D</span></button>
+    <button class="col-sm my-2 mx-1 btn btn-success" id="keyE"><span>E</span></button>
+    <button class="col-sm my-2 mx-1 btn btn-success" id="keyF"><span>F</span></button>
+    <button class="col-sm my-2 mx-1 btn btn-success" id="keyG"><span>G</span></button>
+    <button class="col-sm my-2 mx-1 btn btn-success" id="keyA"><span>A</span></button>
+    <button class="col-sm my-2 mx-1 btn btn-success" id="keyB"><span>B</span></button>
+    <button class="col-sm my-2 mx-1 btn btn-success" id="keyChigh"><span>C</span></button>
+</div>
+
+
+<br><hr><br>
 
 <!-- Chat Room -->
 <div class="row">
     <div class="col-12 col-md-8">
         <div class="mb-2">
-            <label for="chatLog">Room: #{{ room.name }}</label>
+            <label for="chatLog">Room Log:</label>
             <textarea class="form-control" id="chatLog" readonly></textarea>
         </div>
         <div class="input-group">
-            <input type="text" class="form-control" id="chatMessageInput" placeholder="Enter your chat message">
+            <input type="text" class="form-control" id="chatMessageInput" placeholder="Enter message:">
             <div class="input-group-append">
-                <button class="btn btn-success" id="chatMessageSend" type="button">Send</button>
+                <button class="mx-2 btn btn-success" id="chatMessageSend" type="button">Send</button>
             </div>
         </div>
     </div>

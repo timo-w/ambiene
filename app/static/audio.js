@@ -1,3 +1,16 @@
+// Generate equal temperament notes list
+const range = (start, stop) => Array(stop - start + 1).fill().map((_, i) => start + i);
+const octaveRange = range(0, 8).map(val => [val, val - 4]);
+const semitoneOffsets = [
+    ["C", -9], ["C#", -8], ["Db", -8], ["D", -7], ["D#", -6], ["Eb", -6], ["E", -5], ["F", -4],
+    ["F#", -3], ["Gb", -3], ["G", -2], ["G#", -1], ["Ab", -1], ["A", 0], ["A#", 1], ["Bb", 1], ["B", 2],
+];
+const notes = octaveRange.reduce((ob, [range, multiplier]) => semitoneOffsets.reduce((ob, [note, semitones]) => ({
+    ...ob,
+    [note + range]: 440 * Math.pow(2, (semitones + (multiplier * 12)) / 12),
+}), ob), {});
+
+
 // Set up audio context
 const ctx = new AudioContext();
 
@@ -48,7 +61,7 @@ pipeButton.addEventListener(
     () => {
         socket.send(JSON.stringify({
             type: "audio_message",
-            message: "",
+            message: "PIPE",
         }));
     }
 );
@@ -79,35 +92,38 @@ volumeFull.addEventListener(
     }
 );
 
-// playAudioFile(ambient_birds, 0);
-// playAudioFile(ambient_wind, 0);
-// playAudioFile(ambient_rain, 0);
-// playAudioFile(ambient_fire, 0);
 
 
+// Random Bass/Treble notes
 
-
-// List of notes (Frequencies in Hertz)
 const treble_notes = [
-    277.18, 311.13, 369.99, 415.30, 466.16,
-    554.37, 622.25, 739.99, 830.61, 932.33,
-    0,0,0,0,0,
+    'C4', 'D4', 'F4', 'G4', 'A4',
+    'C5', 'D5', 'F5', 'G5', 'A5',
+    '', '', '', '', '',
 ];
 const bass_notes = [
-    69.296, 77.782, 92.499, 103.83, 116.54,
-    138.59, 155.56, 185.00, 207.65, 233.08,
-    0,0,0,0,0,
+    'C2', 'D2', 'F2', 'G2', 'A2',
+    'C3', 'D3', 'F3', 'G3', 'A3',
+    '', '', '', '', '',
 ];
 
-function playRandomNote(notes, wave_type) {
-    // Get a random note from the notes array
-    const randomIndex = Math.floor(Math.random() * notes.length);
-    const randomNoteFrequency = notes[randomIndex];
+function playRandomNote(notesList, wave) {
+    const randomIndex = Math.floor(Math.random() * notesList.length);
+    const randomNote = notesList[randomIndex];
+
+    socket.send(JSON.stringify({type: "audio_message", message: {note: randomNote, wave: wave}}));
+}
+
+function playNote(note, wave) {
+
+    if (note == undefined) {
+        return;
+    }
 
     // Create oscillator
     const oscillator = ctx.createOscillator();
-    oscillator.type = wave_type;
-    oscillator.frequency.setValueAtTime(randomNoteFrequency, ctx.currentTime);
+    oscillator.type = wave;
+    oscillator.frequency.setValueAtTime(note, ctx.currentTime);
 
     // Create gain node for the envelope
     const gainNode = ctx.createGain();
@@ -126,6 +142,7 @@ function playRandomNote(notes, wave_type) {
     oscillator.stop(ctx.currentTime + 0.2); // note duration
 }
 
+
 // Function to calculate the time until the next second
 function timeUntilNextSecond() {
     const now = ctx.currentTime;
@@ -133,23 +150,68 @@ function timeUntilNextSecond() {
     return timeUntilNextSecond * 1000; // Convert to milliseconds
 }
 
-const randomTrebleNoteButton = document.querySelector("#randomTrebleNoteButton");
-randomTrebleNoteButton.addEventListener(
+let intv1;
+let intv2;
+let intv3;
+
+const startTrebleButton = document.querySelector("#startTrebleButton");
+startTrebleButton.addEventListener(
     "click",
     () => {
         setTimeout(() => {
-            setInterval(() => playRandomNote(treble_notes, 'sine'), 200);
-            setInterval(() => playRandomNote(treble_notes, 'triangle'), 200);
+            intv1 = setInterval(() => playRandomNote(treble_notes, 'sine'), 200);
+            intv2 = setInterval(() => playRandomNote(treble_notes, 'triangle'), 200);
         }, timeUntilNextSecond());
+    }
+);
+const startBassButton = document.querySelector("#startBassButton");
+startBassButton.addEventListener(
+    "click",
+    () => {
+        setTimeout(() => {
+            intv3 = setInterval(() => playRandomNote(bass_notes, 'square'), 400);
+        }, timeUntilNextSecond());
+    }
+);
+const stopTrebleButton = document.querySelector("#stopTrebleButton");
+stopTrebleButton.addEventListener(
+    "click",
+    () => {
+        clearInterval(intv1);
+        clearInterval(intv2);
+    }
+);
+const stopBassButton = document.querySelector("#stopBassButton");
+stopBassButton.addEventListener(
+    "click",
+    () => {
+        clearInterval(intv3);
     }
 );
 
-const randomBassNoteButton = document.querySelector("#randomBassNoteButton");
-randomBassNoteButton.addEventListener(
-    "click",
-    () => {
-        setTimeout(() => {
-            setInterval(() => playRandomNote(bass_notes, 'square'), 400);
-        }, timeUntilNextSecond());
-    }
-);
+
+// Test keyboard
+document.querySelector("#keyClow").addEventListener("click", () => {
+    socket.send(JSON.stringify({type: "audio_message", message: {note: 'C6', wave: 'triangle'}}));
+});
+document.querySelector("#keyD").addEventListener("click", () => {
+    socket.send(JSON.stringify({type: "audio_message", message: {note: 'D6', wave: 'triangle'}}));
+});
+document.querySelector("#keyE").addEventListener("click", () => {
+    socket.send(JSON.stringify({type: "audio_message", message: {note: 'E6', wave: 'triangle'}}));
+});
+document.querySelector("#keyF").addEventListener("click", () => {
+    socket.send(JSON.stringify({type: "audio_message", message: {note: 'F6', wave: 'triangle'}}));
+});
+document.querySelector("#keyG").addEventListener("click", () => {
+    socket.send(JSON.stringify({type: "audio_message", message: {note: 'G6', wave: 'triangle'}}));
+});
+document.querySelector("#keyA").addEventListener("click", () => {
+    socket.send(JSON.stringify({type: "audio_message", message: {note: 'A6', wave: 'triangle'}}));
+});
+document.querySelector("#keyB").addEventListener("click", () => {
+    socket.send(JSON.stringify({type: "audio_message", message: {note: 'B6', wave: 'triangle'}}));
+});
+document.querySelector("#keyChigh").addEventListener("click", () => {
+    socket.send(JSON.stringify({type: "audio_message", message: {note: 'C7', wave: 'triangle'}}));
+});
