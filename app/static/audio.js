@@ -70,27 +70,27 @@ pipeButton.addEventListener(
 playAudioFile(testAudioFile, 0.8);
 
 // Volume test
-const volumeNone = document.querySelector("#volumeNone");
-volumeNone.addEventListener(
-    "click",
-    () => {
-        setVolume(0);
-    }
-);
-const volumeHalf = document.querySelector("#volumeHalf");
-volumeHalf.addEventListener(
-    "click",
-    () => {
-        setVolume(0.5);
-    }
-);
-const volumeFull = document.querySelector("#volumeFull");
-volumeFull.addEventListener(
-    "click",
-    () => {
-        setVolume(1);
-    }
-);
+// const volumeNone = document.querySelector("#volumeNone");
+// volumeNone.addEventListener(
+//     "click",
+//     () => {
+//         setVolume(0);
+//     }
+// );
+// const volumeHalf = document.querySelector("#volumeHalf");
+// volumeHalf.addEventListener(
+//     "click",
+//     () => {
+//         setVolume(0.5);
+//     }
+// );
+// const volumeFull = document.querySelector("#volumeFull");
+// volumeFull.addEventListener(
+//     "click",
+//     () => {
+//         setVolume(1);
+//     }
+// );
 
 
 
@@ -99,22 +99,22 @@ volumeFull.addEventListener(
 const treble_notes = [
     'C4', 'D4', 'F4', 'G4', 'A4',
     'C5', 'D5', 'F5', 'G5', 'A5',
-    '', '', '', '', '',
-    '', '', '', '', '',
-    '', '', '', '', '',
-    '', '', '', '', '',
+    '-', '-', '-', '-', '-',
+    '-', '-', '-', '-', '-',
+    '-', '-', '-', '-', '-',
+    '-', '-', '-', '-', '-',
 ];
 const bass_notes = [
     'C2', 'D2', 'F2', 'G2', 'A2',
     'C3', 'D3', 'F3', 'G3', 'A3',
-    '', '', '', '', '',
+    '-', '-', '-', '-', '-',
 ];
 const arp_notes = [
     'C6', 'D6', 'F6', 'G6', 'A6',
     'C7', 'D7', 'F7', 'G7', 'A7',
-    '', '', '', '', '',
-    '', '', '', '', '',
-    '', '', '', '', '',
+    '-', '-', '-', '-', '-',
+    '-', '-', '-', '-', '-',
+    '-', '-', '-', '-', '-',
 ];
 
 function playRandomNote(notesList, wave) {
@@ -125,14 +125,14 @@ function playRandomNote(notesList, wave) {
 
 function playNote(note, wave) {
 
-    if (note == undefined) {
+    if (note == '-') {
         return;
     }
 
     // Create oscillator
     const oscillator = ctx.createOscillator();
     oscillator.type = wave;
-    oscillator.frequency.setValueAtTime(note, ctx.currentTime);
+    oscillator.frequency.setValueAtTime(notes[note], ctx.currentTime);
 
     // Create gain node for the envelope
     const gainNode = ctx.createGain();

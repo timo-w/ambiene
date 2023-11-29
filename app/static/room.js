@@ -84,9 +84,9 @@ function connect() {
             case "audio_message":
                 if (data.message == "PIPE") {
                     playAudioFile(pipeAudioFile, 0.5);
-                    chatLog.value += "PIPE\n";
+                    chatLog.value += "[PIPE] ";
                 } else {
-                    playNote(notes[data.message.note], data.message.wave);
+                    playNote(data.message.note, data.message.wave);
                     chatLog.value += data.message.note + " ";
                 }
                 break;
