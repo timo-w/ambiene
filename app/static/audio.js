@@ -67,7 +67,7 @@ pipeButton.addEventListener(
 );
 
 // Play on page load
-playAudioFile(testAudioFile, 0.5);
+playAudioFile(testAudioFile, 0.8);
 
 // Volume test
 const volumeNone = document.querySelector("#volumeNone");
@@ -100,17 +100,26 @@ const treble_notes = [
     'C4', 'D4', 'F4', 'G4', 'A4',
     'C5', 'D5', 'F5', 'G5', 'A5',
     '', '', '', '', '',
+    '', '', '', '', '',
+    '', '', '', '', '',
+    '', '', '', '', '',
 ];
 const bass_notes = [
     'C2', 'D2', 'F2', 'G2', 'A2',
     'C3', 'D3', 'F3', 'G3', 'A3',
     '', '', '', '', '',
 ];
+const arp_notes = [
+    'C6', 'D6', 'F6', 'G6', 'A6',
+    'C7', 'D7', 'F7', 'G7', 'A7',
+    '', '', '', '', '',
+    '', '', '', '', '',
+    '', '', '', '', '',
+];
 
 function playRandomNote(notesList, wave) {
     const randomIndex = Math.floor(Math.random() * notesList.length);
     const randomNote = notesList[randomIndex];
-
     socket.send(JSON.stringify({type: "audio_message", message: {note: randomNote, wave: wave}}));
 }
 
@@ -128,8 +137,6 @@ function playNote(note, wave) {
     // Create gain node for the envelope
     const gainNode = ctx.createGain();
     gainNode.gain.setValueAtTime(0, ctx.currentTime);
-    gainNode.gain.linearRampToValueAtTime(1, ctx.currentTime + 0.0); // Attack
-    gainNode.gain.linearRampToValueAtTime(0.5, ctx.currentTime + 0.3); // Decay
     gainNode.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.2); // Release
     gainNode.gain.value = 0.15;
 
@@ -153,7 +160,9 @@ function timeUntilNextSecond() {
 let intv1;
 let intv2;
 let intv3;
+let intv4;
 
+// Start/stop random note sequences
 const startTrebleButton = document.querySelector("#startTrebleButton");
 startTrebleButton.addEventListener(
     "click",
@@ -161,15 +170,6 @@ startTrebleButton.addEventListener(
         setTimeout(() => {
             intv1 = setInterval(() => playRandomNote(treble_notes, 'sine'), 200);
             intv2 = setInterval(() => playRandomNote(treble_notes, 'triangle'), 200);
-        }, timeUntilNextSecond());
-    }
-);
-const startBassButton = document.querySelector("#startBassButton");
-startBassButton.addEventListener(
-    "click",
-    () => {
-        setTimeout(() => {
-            intv3 = setInterval(() => playRandomNote(bass_notes, 'square'), 400);
         }, timeUntilNextSecond());
     }
 );
@@ -181,11 +181,36 @@ stopTrebleButton.addEventListener(
         clearInterval(intv2);
     }
 );
+const startBassButton = document.querySelector("#startBassButton");
+startBassButton.addEventListener(
+    "click",
+    () => {
+        setTimeout(() => {
+            intv3 = setInterval(() => playRandomNote(bass_notes, 'square'), 400);
+        }, timeUntilNextSecond());
+    }
+);
 const stopBassButton = document.querySelector("#stopBassButton");
 stopBassButton.addEventListener(
     "click",
     () => {
         clearInterval(intv3);
+    }
+);
+const startArpButton = document.querySelector("#startArpButton");
+startArpButton.addEventListener(
+    "click",
+    () => {
+        setTimeout(() => {
+            intv4 = setInterval(() => playRandomNote(arp_notes, 'sawtooth'), 100);
+        }, timeUntilNextSecond());
+    }
+);
+const stopArpButton = document.querySelector("#stopArpButton");
+stopArpButton.addEventListener(
+    "click",
+    () => {
+        clearInterval(intv4);
     }
 );
 
