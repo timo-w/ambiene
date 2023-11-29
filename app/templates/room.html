@@ -7,7 +7,19 @@
 
 {% block body %}
 
-<h2>Super Amazing Chat Room</h2>
+<h2>Audio Room</h2>
+
+<!-- Buttons -->
+<div class="my-4">
+    <button id="pipeButton"><span>Pipe</span></button>
+    <button id="volumeNone"><span>Volume 0</span></button>
+    <button id="volumeHalf"><span>Volume 0.5</span></button>
+    <button id="volumeFull"><span>Volume 1</span></button>
+    <button id="randomTrebleNoteButton"><span>Random Treble Notes</span></button>
+    <button id="randomBassNoteButton"><span>Random Bass Notes</span></button>
+</div>
+
+<!-- Chat Room -->
 <div class="row">
     <div class="col-12 col-md-8">
         <div class="mb-2">
@@ -28,18 +40,17 @@
     </div>
 </div>
 
-<div class="my-4">
-    <button id="pipeButton">
-        <span>Pipe</span>
-    </button>
-</div>
-
 {{ room.name|json_script:"roomName" }}
 
 <script>
     // To pass into audio.js
     let testAudioFile = "{% static 'assets/sounds/test.mp3' %}"
     let pipeAudioFile = "{% static 'assets/sounds/pipe.mp3' %}"
+
+    let ambient_birds = "{% static 'assets/sounds/ambient/birds.mp3' %}"
+    let ambient_wind = "{% static 'assets/sounds/ambient/wind.mp3' %}"
+    let ambient_rain = "{% static 'assets/sounds/ambient/rain.mp3' %}"
+    let ambient_fire = "{% static 'assets/sounds/ambient/fire.mp3' %}"
 </script>
 
 <script src="{% static 'room.js' %}"></script>
