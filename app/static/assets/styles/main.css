@@ -16,3 +16,8 @@ html, body {
 #onlineUsersSelector {
     height: 300px;
 }
+
+#keygrid-container {
+    width: 50%;
+    margin: 0 auto;
+}

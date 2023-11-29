@@ -14,6 +14,13 @@ const notes = octaveRange.reduce((ob, [range, multiplier]) => semitoneOffsets.re
 // Set up audio context
 const ctx = new AudioContext();
 
+// Reverb library
+reverbjs.extend(ctx);
+const reverbUrl = "http://reverbjs.org/Library/FalklandPalaceRoyalTennisCourt.m4a";
+const reverbNode = ctx.createReverbFromUrl(reverbUrl, function() {
+  reverbNode.connect(ctx.destination);
+});
+
 let gainNode;
 
 function setupAudioNodes(gain) {
@@ -37,7 +44,7 @@ function playAudio(buffer, gain, duration, shift) {
 }
 
 // Play a given audio file at a specified gain
-function playAudioFile(audioFilePath, gain=0.5, duration=60, shift=0) {
+function playAudioFile(audioFilePath, gain=0.5, duration=600, shift=0) {
   fetchAudio(audioFilePath)
     .then(buffer => {
         playAudio(buffer, gain, duration, shift);
@@ -69,7 +76,9 @@ pipeButton.addEventListener(
 );
 
 // Play on page load
-playAudioFile(testAudioFile, 0.3);
+playAudioFile(ambient_rain, 0.1);
+playAudioFile(ambient_birds, 0.7);
+playAudioFile(ambient_wind, 0.1);
 //playAudioFile(padAudioFile, 0.8, 200);
 
 // Volume test
@@ -120,13 +129,13 @@ const arp_notes = [
     '-', '-', '-', '-', '-',
 ];
 
-function playRandomNote(notesList, wave) {
+function playRandomNote(notesList, wave='sine', gain=0.5) {
     const randomIndex = Math.floor(Math.random() * notesList.length);
     const randomNote = notesList[randomIndex];
-    socket.send(JSON.stringify({type: "audio_message", message: {note: randomNote, wave: wave}}));
+    socket.send(JSON.stringify({type: "audio_message", message: {note: randomNote, wave: wave, gain: gain}}));
 }
 
-function playNote(note, wave) {
+function playNote(note, wave='sine', gain=0.5) {
 
     if (note == '-') {
         return;
@@ -141,11 +150,13 @@ function playNote(note, wave) {
     const gainNode = ctx.createGain();
     gainNode.gain.setValueAtTime(0, ctx.currentTime);
     gainNode.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.2); // Release
-    gainNode.gain.value = 0.15;
+    gainNode.gain.value = gain;
 
     // Connect oscillator to gain node and gain node to destination
     oscillator.connect(gainNode);
+    gainNode.connect(reverbNode);
     gainNode.connect(ctx.destination);
+
 
     // Start and stop the oscillator to play the note
     oscillator.start();
@@ -153,17 +164,24 @@ function playNote(note, wave) {
 }
 
 
-// Function to calculate the time until the next second
-function timeUntilNextSecond() {
-    const now = ctx.currentTime;
-    const timeUntilNextSecond = Math.ceil(now) - now + 1;
-    return timeUntilNextSecond * 1000; // Convert to milliseconds
-}
-
 let intv1;
 let intv2;
 let intv3;
 let intv4;
+
+
+// Function to calculate the time until the next second
+function timeUntilNextSecond() {
+    const now = ctx.currentTime;
+    const delay = Math.ceil(now) - now + 1;
+    return delay * 1000; // Convert to milliseconds
+}
+
+function timeUntilNextFifthSecond() {
+    const now = ctx.currentTime;
+    const delay = ((Math.floor(now / 0.2) * 0.2).toFixed(1)) - now + 0.1;
+    return delay * 1000; // Convert to milliseconds
+}
 
 // Start/stop random note sequences
 const startTrebleButton = document.querySelector("#startTrebleButton");
@@ -171,8 +189,8 @@ startTrebleButton.addEventListener(
     "click",
     () => {
         setTimeout(() => {
-            intv1 = setInterval(() => playRandomNote(treble_notes, 'sine'), 200);
-            intv2 = setInterval(() => playRandomNote(treble_notes, 'triangle'), 200);
+            intv1 = setInterval(() => playRandomNote(treble_notes, 'sine', 0.2), 200);
+            intv2 = setInterval(() => playRandomNote(treble_notes, 'triangle', 0.2), 200);
         }, timeUntilNextSecond());
     }
 );
@@ -189,7 +207,7 @@ startBassButton.addEventListener(
     "click",
     () => {
         setTimeout(() => {
-            intv3 = setInterval(() => playRandomNote(bass_notes, 'square'), 400);
+            intv3 = setInterval(() => playRandomNote(bass_notes, 'square', 0.1), 400);
         }, timeUntilNextSecond());
     }
 );
@@ -205,7 +223,7 @@ startArpButton.addEventListener(
     "click",
     () => {
         setTimeout(() => {
-            intv4 = setInterval(() => playRandomNote(arp_notes, 'sawtooth'), 100);
+            intv4 = setInterval(() => playRandomNote(arp_notes, 'triangle', 0.05), 100);
         }, timeUntilNextSecond());
     }
 );
@@ -219,10 +237,10 @@ stopArpButton.addEventListener(
 
 // Pad
 function randomPad() {
-    const detuneList = [0, 200, 500, -500, -300];
+    const detuneList = [0, 200, 500, 700, 900, -700, -500, -300];
     const randomIndex = Math.floor(Math.random() * detuneList.length);
     const detune = detuneList[randomIndex];
-    playAudioFile(padAudioFile, 0.5, 4, detune);
+    playAudioFile(padAudioFile, 0.7, 4, detune);
 }
 
 
@@ -238,29 +256,14 @@ padButton.addEventListener(
     }
 );
 
+// Tone grid
 
-// Test keyboard
-document.querySelector("#keyClow").addEventListener("click", () => {
-    socket.send(JSON.stringify({type: "audio_message", message: {note: 'C6', wave: 'triangle'}}));
-});
-document.querySelector("#keyD").addEventListener("click", () => {
-    socket.send(JSON.stringify({type: "audio_message", message: {note: 'D6', wave: 'triangle'}}));
-});
-document.querySelector("#keyE").addEventListener("click", () => {
-    socket.send(JSON.stringify({type: "audio_message", message: {note: 'E6', wave: 'triangle'}}));
-});
-document.querySelector("#keyF").addEventListener("click", () => {
-    socket.send(JSON.stringify({type: "audio_message", message: {note: 'F6', wave: 'triangle'}}));
-});
-document.querySelector("#keyG").addEventListener("click", () => {
-    socket.send(JSON.stringify({type: "audio_message", message: {note: 'G6', wave: 'triangle'}}));
-});
-document.querySelector("#keyA").addEventListener("click", () => {
-    socket.send(JSON.stringify({type: "audio_message", message: {note: 'A6', wave: 'triangle'}}));
-});
-document.querySelector("#keyB").addEventListener("click", () => {
-    socket.send(JSON.stringify({type: "audio_message", message: {note: 'B6', wave: 'triangle'}}));
-});
-document.querySelector("#keyChigh").addEventListener("click", () => {
-    socket.send(JSON.stringify({type: "audio_message", message: {note: 'C7', wave: 'triangle'}}));
-});
+const keyGrid = document.getElementsByClassName("keygrid");
+
+for (let i=0; i<keyGrid.length; i++) {
+    keyGrid.item(i).addEventListener("click", () => {
+        setTimeout(() => {
+            socket.send(JSON.stringify({type: "audio_message", message: {note: keyGrid.item(i).value, wave: 'sawtooth', gain: 0.15}}));
+        }, timeUntilNextFifthSecond());
+    });
+}

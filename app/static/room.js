@@ -86,7 +86,7 @@ function connect() {
                     playAudioFile(pipeAudioFile, 0.5);
                     chatLog.value += "[PIPE] ";
                 } else {
-                    playNote(data.message.note, data.message.wave);
+                    playNote(data.message.note, data.message.wave, data.message.gain);
                     chatLog.value += data.message.note + " ";
                 }
                 break;

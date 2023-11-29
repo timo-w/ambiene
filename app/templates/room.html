@@ -28,15 +28,43 @@
     <button class="col-sm m-2 btn btn-danger" id="stopBassButton"><span>Stop Bass Notes</span></button>
     <button class="col-sm m-2 btn btn-danger" id="stopArpButton"><span>Stop Arp</span></button>
 </div>
-<div class="row">
-    <button class="col-sm my-2 mx-1 btn btn-primary" id="keyClow"><span>C</span></button>
-    <button class="col-sm my-2 mx-1 btn btn-primary" id="keyD"><span>D</span></button>
-    <button class="col-sm my-2 mx-1 btn btn-primary" id="keyE"><span>E</span></button>
-    <button class="col-sm my-2 mx-1 btn btn-primary" id="keyF"><span>F</span></button>
-    <button class="col-sm my-2 mx-1 btn btn-primary" id="keyG"><span>G</span></button>
-    <button class="col-sm my-2 mx-1 btn btn-primary" id="keyA"><span>A</span></button>
-    <button class="col-sm my-2 mx-1 btn btn-primary" id="keyB"><span>B</span></button>
-    <button class="col-sm my-2 mx-1 btn btn-primary" id="keyChigh"><span>C</span></button>
+<hr>
+<div id="keygrid-container">
+    <div class="row">
+        <button class="col-sm p-2 btn btn-primary keygrid" value="C8"><span>C8</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="D8"><span>D8</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="F8"><span>F8</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="G8"><span>G8</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="A8"><span>A8</span></button>
+    </div>
+    <div class="row">
+        <button class="col-sm p-2 btn btn-primary keygrid" value="C7"><span>C7</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="D7"><span>D7</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="F7"><span>F7</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="G7"><span>G7</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="A7"><span>A7</span></button>
+    </div>
+    <div class="row">
+        <button class="col-sm p-2 btn btn-primary keygrid" value="C6"><span>C6</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="D6"><span>D6</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="F6"><span>F6</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="G6"><span>G6</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="A6"><span>A6</span></button>
+    </div>
+    <div class="row">
+        <button class="col-sm p-2 btn btn-primary keygrid" value="C5"><span>C5</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="D5"><span>D5</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="F5"><span>F5</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="G5"><span>G5</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="A5"><span>A5</span></button>
+    </div>
+    <div class="row">
+        <button class="col-sm p-2 btn btn-primary keygrid" value="C4"><span>C4</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="D4"><span>D4</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="F4"><span>F4</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="G4"><span>G4</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="A4"><span>A4</span></button>
+    </div>
 </div>
 
 <br><hr><br>
@@ -76,6 +104,7 @@
     let ambient_fire = "{% static 'assets/sounds/ambient/fire.mp3' %}"
 </script>
 
+<script src="http://reverbjs.org/reverb.js"></script>
 <script src="{% static 'room.js' %}"></script>
 <script src="{% static 'audio.js' %}"></script>
 
