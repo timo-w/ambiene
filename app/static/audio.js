@@ -26,19 +26,21 @@ function fetchAudio(audioFilePath) {
         .then(response => response.arrayBuffer())
         .then(data => ctx.decodeAudioData(data));
 }
-function playAudio(buffer, gain) {
+function playAudio(buffer, gain, duration, shift) {
     const source = ctx.createBufferSource();
     source.buffer = buffer;
+    source.detune.value = shift; // change pitch
     setupAudioNodes(gain);
     source.connect(gainNode);
     source.start(ctx.currentTime);
+    source.stop(ctx.currentTime + duration);
 }
 
 // Play a given audio file at a specified gain
-function playAudioFile(audioFilePath, gain) {
+function playAudioFile(audioFilePath, gain=0.5, duration=60, shift=0) {
   fetchAudio(audioFilePath)
     .then(buffer => {
-        playAudio(buffer, gain);
+        playAudio(buffer, gain, duration, shift);
     })
     .catch(error => {
         console.error('Error playing audio file:', error);
@@ -67,7 +69,8 @@ pipeButton.addEventListener(
 );
 
 // Play on page load
-playAudioFile(testAudioFile, 0.8);
+playAudioFile(testAudioFile, 0.3);
+//playAudioFile(padAudioFile, 0.8, 200);
 
 // Volume test
 // const volumeNone = document.querySelector("#volumeNone");
@@ -211,6 +214,27 @@ stopArpButton.addEventListener(
     "click",
     () => {
         clearInterval(intv4);
+    }
+);
+
+// Pad
+function randomPad() {
+    const detuneList = [0, 200, 500, -500, -300];
+    const randomIndex = Math.floor(Math.random() * detuneList.length);
+    const detune = detuneList[randomIndex];
+    playAudioFile(padAudioFile, 0.5, 4, detune);
+}
+
+
+const padButton = document.querySelector("#padButton");
+padButton.addEventListener(
+    "click",
+    () => {
+        setTimeout(() => {
+            setInterval(() => {
+                randomPad();
+            }, 4000);
+        }, timeUntilNextSecond());
     }
 );
 

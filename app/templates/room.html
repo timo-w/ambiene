@@ -13,6 +13,7 @@
 <!-- Buttons -->
 <div class="row">
     <button class="col-sm m-2 btn btn-primary" id="pipeButton"><span>Pipe</span></button>
+    <button class="col-sm m-2 btn btn-primary" id="padButton"><span>Pad</span></button>
     <!-- <button class="col-sm m-2 btn btn-primary" id="volumeNone"><span>Volume 0</span></button>
     <button class="col-sm m-2 btn btn-primary" id="volumeHalf"><span>Volume 0.5</span></button>
     <button class="col-sm m-2 btn btn-primary" id="volumeFull"><span>Volume 1</span></button> -->
@@ -66,6 +67,7 @@
 <script>
     // To pass into audio.js
     let testAudioFile = "{% static 'assets/sounds/test.mp3' %}"
+    let padAudioFile = "{% static 'assets/sounds/pad.mp3' %}"
     let pipeAudioFile = "{% static 'assets/sounds/pipe.mp3' %}"
 
     let ambient_birds = "{% static 'assets/sounds/ambient/birds.mp3' %}"
