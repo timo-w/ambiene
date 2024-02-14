@@ -9,6 +9,9 @@ def index_view(request):
         'rooms': Room.objects.all(),
     })
 
+def test_view(request):
+    return render(request, 'test-page.html', {})
+
 
 def room_view(request, room_name):
     # if room name valid

@@ -1,0 +1,118 @@
+html, body {
+    background: #333;
+    color: #DDD
+}
+
+.mixer {
+    height: 28rem;
+    position: absolute;
+    margin-left: -20rem;
+    margin-top:4rem;
+    margin-bottom: 10rem;
+    left: 50%;
+    width: 40rem;
+}
+
+
+.channel {
+    background-color: #484f55; 
+    border-right: 0.1rem solid rgba(black,0.4);
+    float: left;
+    height: 28rem;
+    position: relative;
+    width: 8rem;
+    
+    a {
+        background: #272b2c;
+        border-radius: 0.15rem;
+        top: 3rem;
+        padding-top: 0.28rem;
+        cursor: pointer;
+        display: block;
+        height: 2rem;
+        margin: 1rem 1.5rem;
+        position: absolute;
+        width: 5rem;
+        text-decoration: none;
+        text-align: center;
+        font-weight: bold;
+        font-size: 16px;
+        color: #DDD;
+        transition: 0.15s ease-in-out;
+    }
+    
+    a:hover {
+        transform: scale(1.05);
+    }
+    
+    .active {
+        background: #39b0f9;
+        box-shadow: 0px 0px 24px -4px #39b0f9;
+    }
+    
+    h3 {
+        top: 2rem;
+        position: absolute;
+        text-align: center;
+        width: 100%;
+        font-size: 20px;
+    }
+
+    p {
+        bottom: 1rem;
+        position: absolute;
+        text-align: center;
+        width: 50%;
+        left: 25%;
+        font-size: 20px;
+        border: 1px solid #DDD;
+        box-shadow: 0 0 8px 0 #DDD;
+        border-radius: 1rem;
+        padding: 0.2rem 0 0.2rem 0;
+        transition: 0.15s ease-in-out;
+    }
+    
+}
+.channel:hover {
+    background-color: #51585f; 
+    transition: 0.3s ease-out;
+}
+.channel:hover > input[type='range'] {
+    background: #DDD
+}
+.channel:hover > p {
+    border: 1px solid #39b0f9;
+    box-shadow: 0 0 8px 0 #39b0f9;
+}
+
+.slider {
+    bottom: 3rem;
+    left: -3.5rem;
+    position: absolute; 
+    transform: rotate(270deg) translate(10rem); 
+}
+
+
+input[type='range'] {
+    appearance: none !important;
+    background: #1f1f1f;
+    border-radius: 1rem;
+    height: 0.8rem;
+    width: 15rem;
+    transition: 0.15s ease-in-out;
+}
+
+input[type='range'].slider::-webkit-slider-thumb { 
+    -webkit-appearance: none !important;
+    background-color: #272b2c;
+    cursor: row-resize;
+    height: 3rem;
+    width: 1.5rem;
+    z-index: 10;
+    transition: 0.1s ease-in-out;
+}
+input[type='range'].slider::-webkit-slider-thumb:hover {
+    background-color: #39b0f9;
+    box-shadow: 0px 0px 24px -4px #39b0f9;
+    height: 4rem;
+}

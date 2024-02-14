@@ -21,13 +21,7 @@ const reverbNode = ctx.createReverbFromUrl(reverbUrl, function() {
   reverbNode.connect(ctx.destination);
 });
 
-let gainNode;
 
-function setupAudioNodes(gain) {
-    gainNode = ctx.createGain();
-    gainNode.connect(ctx.destination);
-    gainNode.gain.value = gain;
-}
 function fetchAudio(audioFilePath) {
     return fetch(audioFilePath)
         .then(response => response.arrayBuffer())
@@ -37,14 +31,16 @@ function playAudio(buffer, gain, duration, shift) {
     const source = ctx.createBufferSource();
     source.buffer = buffer;
     source.detune.value = shift; // change pitch
-    setupAudioNodes(gain);
+    gainNode = ctx.createGain();
+    gainNode.gain.value = gain;
+    gainNode.connect(ctx.destination);
     source.connect(gainNode);
     source.start(ctx.currentTime);
     source.stop(ctx.currentTime + duration);
 }
 
 // Play a given audio file at a specified gain
-function playAudioFile(audioFilePath, gain=0.5, duration=600, shift=0) {
+function playAudioFile(audioFilePath, gain=0.5, duration=10, shift=0) {
   fetchAudio(audioFilePath)
     .then(buffer => {
         playAudio(buffer, gain, duration, shift);
@@ -76,33 +72,9 @@ pipeButton.addEventListener(
 );
 
 // Play on page load
-playAudioFile(ambient_rain, 0.1);
-playAudioFile(ambient_birds, 0.7);
-playAudioFile(ambient_wind, 0.1);
-//playAudioFile(padAudioFile, 0.8, 200);
-
-// Volume test
-// const volumeNone = document.querySelector("#volumeNone");
-// volumeNone.addEventListener(
-//     "click",
-//     () => {
-//         setVolume(0);
-//     }
-// );
-// const volumeHalf = document.querySelector("#volumeHalf");
-// volumeHalf.addEventListener(
-//     "click",
-//     () => {
-//         setVolume(0.5);
-//     }
-// );
-// const volumeFull = document.querySelector("#volumeFull");
-// volumeFull.addEventListener(
-//     "click",
-//     () => {
-//         setVolume(1);
-//     }
-// );
+playAudioFile(ambient_rain, 0.1, 600);
+playAudioFile(ambient_birds, 0.7, 600);
+playAudioFile(ambient_wind, 0.1, 600);
 
 
 
@@ -148,19 +120,18 @@ function playNote(note, wave='sine', gain=0.5) {
 
     // Create gain node for the envelope
     const gainNode = ctx.createGain();
-    gainNode.gain.setValueAtTime(0, ctx.currentTime);
-    gainNode.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.2); // Release
+    gainNode.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.25); // Release
     gainNode.gain.value = gain;
+    oscillator.connect(gainNode);
 
     // Connect oscillator to gain node and gain node to destination
-    oscillator.connect(gainNode);
     gainNode.connect(reverbNode);
     gainNode.connect(ctx.destination);
 
 
     // Start and stop the oscillator to play the note
     oscillator.start();
-    oscillator.stop(ctx.currentTime + 0.2); // note duration
+    oscillator.stop(ctx.currentTime + 0.25); // note duration
 }
 
 
@@ -240,7 +211,7 @@ function randomPad() {
     const detuneList = [0, 200, 500, 700, 900, -700, -500, -300];
     const randomIndex = Math.floor(Math.random() * detuneList.length);
     const detune = detuneList[randomIndex];
-    playAudioFile(padAudioFile, 0.7, 4, detune);
+    playAudioFile(padAudioFile, 0.8, 4, detune);
 }
 
 

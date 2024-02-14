@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Test Page
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href={% static 'assets/styles/mixer.css' %}>
+<script src="{% static 'assets/scripts/mixer.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+
+<h2>Mixer Test</h2>
+
+<a id="mixer-reset" class="btn btn-light">Reset</a>
+<a id="mixer-preset-1" class="btn btn-light">Preset 1</a>
+<a id="mixer-preset-2" class="btn btn-light">Preset 2</a>
+
+
+<div class="mixer">
+
+    <section class="channel">
+        <h3>Ambience</h3>
+        <a class="slider-toggle">OFF</a>
+        <input class="slider" value="0" type="range" />
+        <p class="slider-label">0</p>
+    </section>
+
+    <section class="channel">
+        <h3>Treble</h3>
+        <a class="slider-toggle">OFF</a>
+        <input class="slider" value="0" type="range" />
+        <p class="slider-label">0</p>
+    </section>
+
+    <section class="channel">
+        <h3>Bass</h3>
+        <a class="slider-toggle">OFF</a>
+        <input class="slider" value="0" type="range" />
+        <p class="slider-label">0</p>
+    </section>
+
+    <section class="channel">
+        <h3>Arps</h3>
+        <a class="slider-toggle">OFF</a>
+        <input class="slider" value="0" type="range" />
+        <p class="slider-label">0</p>
+    </section>
+
+    <section class="channel">
+        <h3>Pad</h3>
+        <a class="slider-toggle">OFF</a>
+        <input class="slider" value="0" type="range" />
+        <p class="slider-label">0</p>
+    </section>
+
+</div>
+
+
+<script>
+    // To pass into audio.js
+    let notchAudioFile = "{% static 'assets/sounds/ui/notch.mp3' %}"
+    let buttonAudioFile = "{% static 'assets/sounds/ui/button.mp3' %}"
+</script>
+
+{% endblock %}
