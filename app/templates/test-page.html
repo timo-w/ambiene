@@ -7,13 +7,13 @@ Test Page
 
 {% block head %}
 <link rel="stylesheet" href={% static 'assets/styles/mixer.css' %}>
-<script src="{% static 'assets/scripts/mixer.js' %}"></script>
 {% endblock %}
 
 {% block body %}
 
 <h2>Mixer Test</h2>
 
+<a id="mixer-start" class="btn btn-light" onclick="ambienceTrack.toggle()" >Start/Stop</a>
 <a id="mixer-reset" class="btn btn-light">Reset</a>
 <a id="mixer-preset-1" class="btn btn-light">Preset 1</a>
 <a id="mixer-preset-2" class="btn btn-light">Preset 2</a>
@@ -22,47 +22,54 @@ Test Page
 <div class="mixer">
 
     <section class="channel">
-        <h3>Ambience</h3>
-        <a class="slider-toggle">OFF</a>
-        <input class="slider" value="0" type="range" />
+        <h3>Birds</h3>
+        <a class="slider-toggle active">ON</a>
+        <input class="slider" type="range" min="0" max="100" value="0" oninput="ambienceTrack.setBirds(this)" />
         <p class="slider-label">0</p>
     </section>
 
     <section class="channel">
-        <h3>Treble</h3>
-        <a class="slider-toggle">OFF</a>
-        <input class="slider" value="0" type="range" />
+        <h3>Campfire</h3>
+        <a class="slider-toggle active">ON</a>
+        <input class="slider" type="range" min="0" max="100" value="0" oninput="ambienceTrack.setFire(this)" />
         <p class="slider-label">0</p>
     </section>
 
     <section class="channel">
-        <h3>Bass</h3>
-        <a class="slider-toggle">OFF</a>
-        <input class="slider" value="0" type="range" />
+        <h3>Rain</h3>
+        <a class="slider-toggle active">ON</a>
+        <input class="slider" type="range" min="0" max="100" value="0" oninput="ambienceTrack.setRain(this)" />
         <p class="slider-label">0</p>
     </section>
 
     <section class="channel">
-        <h3>Arps</h3>
-        <a class="slider-toggle">OFF</a>
-        <input class="slider" value="0" type="range" />
+        <h3>Coffee Shop</h3>
+        <a class="slider-toggle active">ON</a>
+        <input class="slider" type="range" min="0" max="100" value="0" oninput="ambienceTrack.setShop(this)" />
         <p class="slider-label">0</p>
     </section>
 
     <section class="channel">
-        <h3>Pad</h3>
-        <a class="slider-toggle">OFF</a>
-        <input class="slider" value="0" type="range" />
-        <p class="slider-label">0</p>
+        <h3>Lowpass</h3>
+        <a class="slider-toggle active">ON</a>
+        <input class="slider" type="range" min="0" max="100" value="100" oninput="ambienceTrack.setLowpass(this)" />
+        <p class="slider-label">100</p>
     </section>
 
 </div>
 
 
 <script>
-    // To pass into audio.js
-    let notchAudioFile = "{% static 'assets/sounds/ui/notch.mp3' %}"
-    let buttonAudioFile = "{% static 'assets/sounds/ui/button.mp3' %}"
+    // To pass into mixer-audio.js
+    let notchFile = "{% static 'assets/sounds/ui/notch.mp3' %}";
+    let buttonFile = "{% static 'assets/sounds/ui/button.mp3' %}";
+    let birdsFile = "{% static 'assets/sounds/ambient/birds.mp3' %}";
+    let fireFile = "{% static 'assets/sounds/ambient/fire.mp3' %}";
+    let rainFile = "{% static 'assets/sounds/ambient/rain.mp3' %}";
+    let windFile = "{% static 'assets/sounds/ambient/wind.mp3' %}";
+    let shopFile = "{% static 'assets/sounds/ambient/shop.mp3' %}";
 </script>
+<script src="{% static 'assets/scripts/mixer-audio.js' %}"></script>
+<script src="{% static 'assets/scripts/mixer.js' %}"></script>
 
 {% endblock %}
