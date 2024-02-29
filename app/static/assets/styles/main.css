@@ -3,6 +3,7 @@ html, body {
     height: 100%;
     background: rgb(252,216,255);
     background: linear-gradient(146deg, rgba(252,216,255,1) 0%, rgba(200,236,255,1) 100%);
+    user-select: none;
 }
 
 #roomSelect {

@@ -49,7 +49,7 @@ function slideChannel(channel, label, target) {
                 clearInterval(slideInterval);
                 channel.style.backgroundColor = "";
             }
-        }, 0 // <- delay in ms
+        }, 10 // <- delay in ms
     );
 }
 
@@ -75,14 +75,18 @@ $(document).ready(function(){
 
     // Reset mixer
     $("#mixer-reset").click(function() {
+        playAudioFile(buttonAudioFile, 0.5, 0.5, -200);
         for (let i=0; i<sliders.length; i++) {
             slideChannel(sliders.item(i), slider_labels.item(i), 0);
             $(slider_toggles.item(i)).removeClass("active").text('OFF');
         }
+
+
     });
 
     // Set mixer to preset values
     $("#mixer-preset-1").click(function() {
+        playAudioFile(buttonAudioFile, 0.5, 0.5, -200);
         slideChannel(sliders.item(0), slider_labels.item(0), 0);
         $(slider_toggles.item(0)).removeClass("active").text('OFF');
         slideChannel(sliders.item(1), slider_labels.item(1), 100);
@@ -95,6 +99,7 @@ $(document).ready(function(){
         $(slider_toggles.item(4)).addClass("active").text('ON');
     });
     $("#mixer-preset-2").click(function() {
+        playAudioFile(buttonAudioFile, 0.5, 0.5, -200);
         slideChannel(sliders.item(0), slider_labels.item(0), 75);
         $(slider_toggles.item(0)).addClass("active").text('ON');
         slideChannel(sliders.item(1), slider_labels.item(1), 0);

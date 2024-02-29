@@ -101,7 +101,6 @@ input[type='range'] {
     width: 15rem;
     transition: 0.15s ease-in-out;
 }
-
 input[type='range'].slider::-webkit-slider-thumb { 
     -webkit-appearance: none !important;
     background-color: #272b2c;
