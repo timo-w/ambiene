@@ -20,7 +20,8 @@ function slideChannel(channel, label, target) {
                 clearInterval(slideInterval);
                 channel.style.backgroundColor = "";
             }
-        }, 0 // <- delay in ms
+            $(channel).trigger("input");
+        }, 10 // <- delay in ms
     );
 }
 
@@ -44,13 +45,14 @@ $(document).ready(function(){
         });
     };
 
-    // Reset mixer
+    // Reset mixer to default state
     $("#mixer-reset").click(function() {
         uiTrack.soundButton();
-        for (let i=0; i<sliders.length; i++) {
+        for (let i=0; i<sliders.length-1; i++) {
             slideChannel(sliders.item(i), slider_labels.item(i), 0);
-            $(slider_toggles.item(i)).removeClass("active").text('OFF');
+            $(slider_toggles.item(i)).addClass("active").text('ON');
         }
+        slideChannel(sliders.item(4), slider_labels.item(4), 100);
     });
 
     // Set mixer to preset values

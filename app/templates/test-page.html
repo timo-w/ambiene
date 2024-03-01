@@ -18,41 +18,46 @@ Test Page
 <a id="mixer-preset-1" class="btn btn-light">Preset 1</a>
 <a id="mixer-preset-2" class="btn btn-light">Preset 2</a>
 
+<div>
+    <hr>
+    <label for="master-volume">Master Volume:</label><br>
+    <input id="master-volume" type="range" min="0" max="200" value="100" oninput="ambienceTrack.setMaster(this)" />
+</div>
 
 <div class="mixer">
 
     <section class="channel">
         <h3>Birds</h3>
         <a class="slider-toggle active">ON</a>
-        <input class="slider" type="range" min="0" max="100" value="0" oninput="ambienceTrack.setBirds(this)" />
+        <input id="slider-1" class="slider" type="range" min="0" max="100" value="0" oninput="ambienceTrack.setBirds(this)" />
         <p class="slider-label">0</p>
     </section>
 
     <section class="channel">
         <h3>Campfire</h3>
         <a class="slider-toggle active">ON</a>
-        <input class="slider" type="range" min="0" max="100" value="0" oninput="ambienceTrack.setFire(this)" />
+        <input id="slider-2" class="slider" type="range" min="0" max="100" value="0" oninput="ambienceTrack.setFire(this)" />
         <p class="slider-label">0</p>
     </section>
 
     <section class="channel">
         <h3>Rain</h3>
         <a class="slider-toggle active">ON</a>
-        <input class="slider" type="range" min="0" max="100" value="0" oninput="ambienceTrack.setRain(this)" />
+        <input id="slider-3" class="slider" type="range" min="0" max="100" value="0" oninput="ambienceTrack.setRain(this)" />
         <p class="slider-label">0</p>
     </section>
 
     <section class="channel">
         <h3>Coffee Shop</h3>
         <a class="slider-toggle active">ON</a>
-        <input class="slider" type="range" min="0" max="100" value="0" oninput="ambienceTrack.setShop(this)" />
+        <input id="slider-4" class="slider" type="range" min="0" max="100" value="0" oninput="ambienceTrack.setShop(this)" />
         <p class="slider-label">0</p>
     </section>
 
     <section class="channel">
         <h3>Lowpass</h3>
         <a class="slider-toggle active">ON</a>
-        <input class="slider" type="range" min="0" max="100" value="100" oninput="ambienceTrack.setLowpass(this)" />
+        <input id="slider-5" class="slider" type="range" min="0" max="100" value="100" oninput="ambienceTrack.setLowpass(this)" />
         <p class="slider-label">100</p>
     </section>
 

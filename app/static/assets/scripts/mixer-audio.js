@@ -95,7 +95,7 @@ function createSource(buffer) {
   }
 
 
-
+// Ambience track
 let Ambience = function() {
     loadSounds(this, {
         birds: birdsFile,
@@ -114,12 +114,16 @@ Ambience.prototype.play = function() {
     this.ctlwind = createSource(this.wind);
     this.ctlrain = createSource(this.rain);
     this.ctlshop = createSource(this.shop);
-    // Set initial gain
-    this.ctlbirds.gainNode.gain.value = 0;
-    this.ctlfire.gainNode.gain.value = 0;
-    this.ctlwind.gainNode.gain.value = 0;
-    this.ctlrain.gainNode.gain.value = 0;
-    this.ctlshop.gainNode.gain.value = 0;
+    // Set initial gain based on sliders
+    this.masterVolume = parseInt(document.getElementById("master-volume").value) / 100;
+    this.ctlbirds.volume = parseInt(document.getElementById("slider-1").value) / 100;
+    this.ctlfire.volume = parseInt(document.getElementById("slider-2").value) / 100;
+    this.ctlwind.volume = 0;
+    this.ctlrain.volume = parseInt(document.getElementById("slider-3").value) / 100;
+    this.ctlshop.volume = parseInt(document.getElementById("slider-4").value) / 100;
+    this.setMaster();
+    // Set initial lowpass
+    this.setLowpass(document.getElementById("slider-5"));
     // Start playback in a loop
     let onName = this.ctlbirds.source.start ? 'start' : 'noteOn';
     this.ctlbirds.source[onName](0);
@@ -144,31 +148,39 @@ Ambience.prototype.toggle = function() {
     this.isPlaying = !this.isPlaying;
 };
 
-
+Ambience.prototype.setMaster = function() {
+    this.masterVolume = parseInt(document.getElementById("master-volume").value) / 100;
+    this.ctlbirds.gainNode.gain.value = this.ctlbirds.volume * this.masterVolume;
+    this.ctlfire.gainNode.gain.value = this.ctlfire.volume * this.masterVolume;
+    this.ctlwind.gainNode.gain.value = this.ctlwind.volume * this.masterVolume;
+    this.ctlrain.gainNode.gain.value = this.ctlrain.volume * this.masterVolume;
+    this.ctlshop.gainNode.gain.value = this.ctlshop.volume * this.masterVolume;
+};
 Ambience.prototype.setBirds = function(element) {
- x = parseInt(element.value) / parseInt(element.max);
-	this.ctlbirds.gainNode.gain.value = x;
+	this.ctlbirds.volume = parseInt(element.value) / parseInt(element.max);
+    this.ctlbirds.gainNode.gain.value = this.ctlbirds.volume * this.masterVolume;
 };
 Ambience.prototype.setFire = function(element) {
-	let x = parseInt(element.value) / parseInt(element.max);
-	this.ctlfire.gainNode.gain.value = x;
+	this.ctlfire.volume = parseInt(element.value) / parseInt(element.max);
+    this.ctlfire.gainNode.gain.value = this.ctlfire.volume * this.masterVolume;
 };
 Ambience.prototype.setWind = function(element) {
-	let x = parseInt(element.value) / parseInt(element.max);
-	this.ctlwind.gainNode.gain.value = x;
+	this.ctlwind.volume = parseInt(element.value) / parseInt(element.max);
+    this.ctlwind.gainNode.gain.value = this.ctlwind.volume * this.masterVolume;
 };
 Ambience.prototype.setRain = function(element) {
-	let x = parseInt(element.value) / parseInt(element.max);
-	this.ctlrain.gainNode.gain.value = x;
+	this.ctlrain.volume = parseInt(element.value) / parseInt(element.max);
+    this.ctlrain.gainNode.gain.value = this.ctlrain.volume * this.masterVolume;
 };
 Ambience.prototype.setShop = function(element) {
-	let x = parseInt(element.value) / parseInt(element.max);
-	this.ctlshop.gainNode.gain.value = x*10;
+	this.ctlshop.volume = parseInt(element.value) / parseInt(element.max);
+    this.ctlshop.gainNode.gain.value = this.ctlshop.volume * this.masterVolume;
 };
 
 Ambience.prototype.setLowpass = function(element) {
 	let x = parseInt(element.value);
-    x = (x * 20000) / 100;
+    // Convert to exponential scale
+    x = Math.round(Math.exp(x / 100 * Math.log(20000)) + 200);
 	this.ctlbirds.filter.frequency.setTargetAtTime(x, context.currentTime, 0);
     this.ctlfire.filter.frequency.setTargetAtTime(x, context.currentTime, 0);
     this.ctlrain.filter.frequency.setTargetAtTime(x, context.currentTime, 0);
@@ -177,8 +189,7 @@ Ambience.prototype.setLowpass = function(element) {
 };
 
 
-
-
+// UI track
 let UI = function() {
     loadSounds(this, {
         button: buttonFile,
@@ -206,5 +217,6 @@ UI.prototype.soundNotch = function() {
 }
 
 
+// Initialise tracks
 let ambienceTrack = new Ambience();
 let uiTrack = new UI();
