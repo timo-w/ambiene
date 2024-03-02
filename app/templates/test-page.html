@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-Test Page
+Mixer Test
 {% endblock %}
 
 {% block head %}
@@ -63,6 +63,21 @@ Test Page
 
 </div>
 
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<hr>
+
+<h2>Mixer Test</h2>
+
+<a id="marimba" class="btn btn-light" onclick="instrumentTrack.startMarimba()">Start Marimba</a>
+<br><label for="marimba-volume">Volume:</label><br>
+<input id="marimba-volume" type="range" min="0" max="200" value="100" />
+
+<br>
+
+<a id="synth" class="btn btn-light" onclick="instrumentTrack.startSynth()">Start Synth</a>
+<br><label for="synth-volume">Volume:</label><br>
+<input id="synth-volume" type="range" min="0" max="200" value="100" />
+
 
 <script>
     // To pass into mixer-audio.js
@@ -73,6 +88,8 @@ Test Page
     let rainFile = "{% static 'assets/sounds/ambient/rain.mp3' %}";
     let windFile = "{% static 'assets/sounds/ambient/wind.mp3' %}";
     let shopFile = "{% static 'assets/sounds/ambient/shop.mp3' %}";
+    let marimbaFile = "{% static 'assets/sounds/instrument/marimba.mp3' %}";
+    let synthFile = "{% static 'assets/sounds/instrument/synth.mp3' %}";
 </script>
 <script src="{% static 'assets/scripts/mixer-audio.js' %}"></script>
 <script src="{% static 'assets/scripts/mixer.js' %}"></script>

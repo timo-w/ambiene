@@ -82,7 +82,7 @@ function createSource(buffer) {
     source.connect(gainNode);
     gainNode.connect(filter);
     filter.connect(context.destination);
-
+    
     // Initial lowpass value
     filter.type = 'lowpass';
     filter.frequency.setTargetAtTime(20000, context.currentTime, 0);
@@ -93,6 +93,14 @@ function createSource(buffer) {
         filter: filter
     };
   }
+
+
+// Calculate the time until the next second
+function timeUntilNextSecond() {
+    const now = context.currentTime;
+    const delay = Math.ceil(now) - now + 1;
+    return delay * 1000; // Convert to milliseconds
+}
 
 
 // Ambience track
@@ -195,14 +203,11 @@ let UI = function() {
         button: buttonFile,
         notch: notchFile,
     });
-    this.isPlaying = false;
-    this.ctlnotch = createSource(this.notch);
-    this.ctlnotch.gainNode.gain.value = 0.5;
 }
 
 UI.prototype.soundButton = function() {
 	this.ctlbutton = createSource(this.button);
-	this.ctlbutton.gainNode.gain.value = 0.5;
+	this.ctlbutton.gainNode.gain.value = 0.7;
 	this.ctlbutton.source.loop = false;
 	let onName = this.ctlbutton.source.start ? 'start' : 'noteOn';
 	this.ctlbutton.source[onName](0);
@@ -210,13 +215,101 @@ UI.prototype.soundButton = function() {
 
 UI.prototype.soundNotch = function() {
     this.ctlnotch = createSource(this.notch);
-    this.ctlnotch.gainNode.gain.value = 0.25;
+    this.ctlnotch.gainNode.gain.value = 0.5;
     this.ctlnotch.source.loop = false;
     let onName = this.ctlnotch.source.start ? 'start' : 'noteOn';
     this.ctlnotch.source[onName](0);
 }
 
 
+// Generate equal temperament notes list
+const range = (start, stop) => Array(stop - start + 1).fill().map((_, i) => start + i);
+const octaveRange = range(0, 8).map(val => [val, val - 4]);
+const semitoneOffsets = [
+    ["C", -9], ["C#", -8], ["Db", -8], ["D", -7], ["D#", -6], ["Eb", -6], ["E", -5], ["F", -4],
+    ["F#", -3], ["Gb", -3], ["G", -2], ["G#", -1], ["Ab", -1], ["A", 0], ["A#", 1], ["Bb", 1], ["B", 2],
+];
+const notes = octaveRange.reduce((ob, [range, multiplier]) => semitoneOffsets.reduce((ob, [note, semitones]) => ({
+    ...ob,
+    [note + range]: 440 * Math.pow(2, (semitones + (multiplier * 12)) / 12),
+}), ob), {});
+
+// Map each note to its offset in cents (100 cents p/ semitone) relative to 440 Hz
+const noteCentsOffsets = {};
+Object.keys(notes).forEach(note => {
+  const frequency = notes[note];
+  const centsOffset = 1200 * Math.log2(frequency / 440);
+  noteCentsOffsets[note] = centsOffset;
+});
+
+// A pentatonic scale
+const pentatonic_scale = [
+    'C3', 'D3', 'F3', 'G3', 'A3',
+    'C4', 'D4', 'F4', 'G4', 'A4',
+    'C5', 'D5', 'F5', 'G5', 'A5',
+    '-', '-', '-', '-', '-',
+    '-', '-', '-', '-', '-',
+    '-', '-', '-', '-', '-',
+];
+
+
+// Instrument track
+let Instrument = function() {
+    loadSounds(this, {
+        marimba: marimbaFile,
+        synth: synthFile,
+    });
+}
+
+Instrument.prototype.soundMarimba = function(note) {
+	this.ctlmarimba = createSource(this.marimba);
+	this.ctlmarimba.gainNode.gain.value = parseInt(document.getElementById("marimba-volume").value) / 100;
+	this.ctlmarimba.source.loop = false;
+    this.ctlmarimba.source.detune.value = noteCentsOffsets[note];
+	let onName = this.ctlmarimba.source.start ? 'start' : 'noteOn';
+	this.ctlmarimba.source[onName](0);
+}
+
+Instrument.prototype.soundSynth = function(note) {
+    this.ctlsynth = createSource(this.synth);
+    this.ctlsynth.gainNode.gain.value = parseInt(document.getElementById("synth-volume").value) / 100;
+    this.ctlsynth.source.loop = false;
+    this.ctlsynth.source.detune.value = noteCentsOffsets[note];
+    let onName = this.ctlsynth.source.start ? 'start' : 'noteOn';
+    this.ctlsynth.source[onName](0);
+}
+
+Instrument.prototype.startMarimba = function() {
+    setTimeout(() => {
+        invl1 = setInterval(() => {
+            const randomIndex = Math.floor(Math.random() * pentatonic_scale.length);
+            const randomNote = pentatonic_scale[randomIndex];
+            try {
+                this.soundMarimba(randomNote);
+            } catch (TypeError) {
+                // Don't play anything
+            }
+        }, 200);
+    }, timeUntilNextSecond());
+    
+}
+
+Instrument.prototype.startSynth = function() {
+    setTimeout(() => {
+        invl2 = setInterval(() => {
+            const randomIndex = Math.floor(Math.random() * pentatonic_scale.length);
+            const randomNote = pentatonic_scale[randomIndex];
+            try {
+                this.soundSynth(randomNote);
+            } catch (TypeError) {
+                // Don't play anything
+            }
+        }, 400);
+    }, timeUntilNextSecond());
+}
+
+
 // Initialise tracks
 let ambienceTrack = new Ambience();
 let uiTrack = new UI();
+let instrumentTrack = new Instrument();

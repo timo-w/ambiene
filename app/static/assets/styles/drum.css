@@ -1,0 +1,96 @@
+html, body {
+    background: #333;
+    color: #DDD;
+}
+
+input[type='range'] {
+    appearance: none !important;
+    background: #1f1f1f;
+    border-radius: 1rem;
+    height: 0.8rem;
+    width: 15rem;
+    transition: 0.15s ease-in-out;
+}
+
+.drum-container {
+    height: 28rem;
+    width: 60rem;
+    position: absolute;
+    margin-left: -30rem;
+    margin-top: 4rem;
+    margin-bottom: 10rem;
+    left: 50%;
+    background-color: #484f55;
+    transform: scale(1);
+
+    .lighter-bg-1, .lighter-bg-2 {
+        background-color: #51585f;
+        position: absolute;
+        height: 100%;
+        width: 25%;
+        left: 0;
+    }
+    .lighter-bg-2 {
+        left: 50%;
+    }
+
+}
+
+.drum-label-container {
+    position: absolute;
+    height: 100%;
+    width: 15%;
+    left: 0;
+    background-color: #272b2c;
+}
+
+.drum-label {
+    position: relative;
+    height: calc((100% / 8) - 0.45rem);
+    width: calc(100% - 0.8rem);
+    margin: 0.4rem;
+    padding-top: 0.65rem;
+    background-color: #484f55;
+    border-radius: 0.15rem;
+    text-align: center;
+}
+.drum-label:hover {
+    transition: 0.15s ease-in-out;
+    cursor: pointer;
+    background-color: #51585f;
+}
+
+.drum-track-container {
+    position: absolute;
+    height: 100%;
+    width: 85%;
+    left: 15%;
+}
+
+.drum-track {
+    position: relative;
+    float: right;
+    height: calc(100% / 8);
+    width: 100%;
+
+    button {
+        position: relative;
+        height: calc(100% - 0.8rem);
+        width: calc((100% / 16) - 0.8rem);
+        margin: 0.4rem;
+        background-color: #272b2c;
+        border-radius: 0.15rem;
+        border-style: none;
+    }
+    button:hover {
+        transition: 0.15s ease-in-out;
+        cursor: pointer;
+        transform: scale(1.05);
+    }
+
+    .active-beat {
+        background-color: #39b0f9;
+        box-shadow: 0px 0px 24px -4px #39b0f9;
+    }
+
+}

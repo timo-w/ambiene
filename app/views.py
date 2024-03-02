@@ -12,6 +12,9 @@ def index_view(request):
 def test_view(request):
     return render(request, 'test-page.html', {})
 
+def drum_view(request):
+    return render(request, 'drum-test.html', {})
+
 
 def room_view(request, room_name):
     # if room name valid

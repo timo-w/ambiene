@@ -10,6 +10,22 @@ const notes = octaveRange.reduce((ob, [range, multiplier]) => semitoneOffsets.re
     [note + range]: 440 * Math.pow(2, (semitones + (multiplier * 12)) / 12),
 }), ob), {});
 
+// Map each note to its offset multiplier relative to 440 Hz (e.g. A3=0.5, A4=1, A5=2, etc.)
+const noteMultipliers = {};
+Object.keys(notes).forEach(note => {
+  const frequency = notes[note];
+  const offsetMultiplier = frequency / 440;
+  noteMultipliers[note] = offsetMultiplier;
+});
+
+// Map each note to its offset in cents (100 cents p/ semitone) relative to 440 Hz
+const noteCentsOffsets = {};
+Object.keys(notes).forEach(note => {
+  const frequency = notes[note];
+  const centsOffset = 1200 * Math.log2(frequency / 440);
+  noteCentsOffsets[note] = centsOffset;
+});
+
 
 // Set up audio context
 const ctx = new AudioContext();

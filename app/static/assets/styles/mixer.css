@@ -1,26 +1,26 @@
 html, body {
     background: #333;
-    color: #DDD
+    color: #DDD;
 }
 
 .mixer {
     height: 28rem;
+    width: 40rem;
     position: absolute;
     margin-left: -20rem;
-    margin-top:4rem;
+    margin-top: 4rem;
     margin-bottom: 10rem;
     left: 50%;
-    width: 40rem;
+    transform: scale(1);
 }
 
 
 .channel {
-    background-color: #484f55; 
-    border-right: 0.1rem solid rgba(black,0.4);
-    float: left;
-    height: 28rem;
     position: relative;
-    width: 8rem;
+    background-color: #484f55;
+    float: left;
+    height: 100%;
+    width: calc(100% / 5);
     
     a {
         background: #272b2c;
