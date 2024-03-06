@@ -3,7 +3,7 @@ console.log("Sanity check from audio.js.");
 const context = new (window.AudioContext || window.webkitAudioContext)();
 
 
-// Audio visualiser
+// For audio visualisation
 const analyser = context.createAnalyser();
 analyser.fftSize = 256;
 const bufferLength = analyser.frequencyBinCount;
