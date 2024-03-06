@@ -3,7 +3,7 @@
     width: 40rem;
     position: absolute;
     margin-left: -20rem;
-    margin-top: 4rem;
+    margin-top: 8rem;
     margin-bottom: 10rem;
     left: 50%;
     transform: scale(1);
@@ -16,6 +16,7 @@
     float: left;
     height: 100%;
     width: calc(100% / 5);
+    transition: 0.3s ease-out;
     
     a {
         background: #272b2c;
@@ -60,8 +61,7 @@
         width: 50%;
         left: 25%;
         font-size: 20px;
-        border: 1px solid #DDD;
-        box-shadow: 0 0 8px 0 #DDD;
+        border: 2px solid #272b2c;
         border-radius: 1rem;
         padding: 0.2rem 0 0.2rem 0;
         transition: 0.15s ease-in-out;
@@ -70,13 +70,12 @@
 }
 .channel:hover {
     background-color: #51585f; 
-    transition: 0.3s ease-out;
 }
 .channel:hover > input[type='range'] {
     background: #DDD
 }
 .channel:hover > p {
-    border: 1px solid #39b0f9;
+    border: 2px solid #39b0f9;
     box-shadow: 0 0 8px 0 #39b0f9;
 }
 

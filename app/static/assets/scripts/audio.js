@@ -1,6 +1,14 @@
-console.log("Sanity check from mixer-audio.js.");
+console.log("Sanity check from audio.js.");
 
-context = new (window.AudioContext || window.webkitAudioContext)();
+const context = new (window.AudioContext || window.webkitAudioContext)();
+
+
+// Audio visualiser
+const analyser = context.createAnalyser();
+analyser.fftSize = 256;
+const bufferLength = analyser.frequencyBinCount;
+const dataArray = new Uint8Array(bufferLength);
+
 
 function playSound(buffer, time) {
     let source = context.createBufferSource();
@@ -81,7 +89,8 @@ function createSource(buffer) {
     source.loop = true;
     source.connect(gainNode);
     gainNode.connect(filter);
-    filter.connect(context.destination);
+    filter.connect(analyser);
+    analyser.connect(context.destination);
     
     // Initial lowpass value
     filter.type = 'lowpass';

@@ -13,10 +13,23 @@ Mixer Test
 
 {% block body %}
 
+<!-- Audio visualiser background -->
+<canvas id="visualiser"></canvas>
+
 
 <div class="panel-nav">
-    <button id="panel-prev">Previous</button>
-    <button id="panel-next">Next</button>
+    <div id="panel-nav-ambience" class="panel-nav-container current-panel">
+        <img src={% static 'assets/icons/tree.png' %}>
+        <a>Ambience</a>
+    </div>
+    <div id="panel-nav-sequencer" class="panel-nav-container">
+        <img src={% static 'assets/icons/drum.png' %}>
+        <a>Sequencer</a>
+    </div>
+    <div id="panel-nav-instrument" class="panel-nav-container">
+        <img src={% static 'assets/icons/wave.png' %}>
+        <a>Instrument</a>
+    </div>
 </div>
 
 
@@ -45,6 +58,7 @@ Mixer Test
     <input id="synth-volume" type="range" min="0" max="200" value="100" />
 
 </section>
+
 
 
 <script>
@@ -79,7 +93,7 @@ Mixer Test
 <script src="{% static 'assets/scripts/audio.js' %}"></script>
 <script src="{% static 'assets/scripts/mixer.js' %}"></script>
 <script src="{% static 'assets/scripts/sequencer.js' %}"></script>
-
+<script src="{% static 'assets/scripts/visualiser.js' %}"></script>
 
 
 {% endblock %}
