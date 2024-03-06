@@ -1,1 +1,0 @@
-console.log("Sanity check from drum-audio.js.");

@@ -309,7 +309,63 @@ Instrument.prototype.startSynth = function() {
 }
 
 
+// Sequencer track
+let Sequencer = function() {
+    loadSounds(this, {
+        kick: kickFile,
+        snare: snareFile,
+        hatClosed: hatClosedFile,
+        hatOpen: hatOpenFile,
+        clap: clapFile,
+        crunch: crunchFile,
+        shaker: shakerFile,
+        cowbell: cowbellFile
+    });
+}
+
+Sequencer.prototype.playSound = function(sound) {
+    switch (sound) {
+        case 0:
+            this.ctl = createSource(this.kick);
+            break;
+        case 1:
+            this.ctl = createSource(this.snare);
+            break;
+        case 2:
+            this.ctl = createSource(this.hatClosed);
+            break;
+        case 3:
+            this.ctl = createSource(this.hatOpen);
+            break;
+        case 4:
+            this.ctl = createSource(this.clap);
+            break;
+        case 5:
+            this.ctl = createSource(this.crunch);
+            break;
+        case 6:
+            this.ctl = createSource(this.shaker);
+            break;
+        case 7:
+            this.ctl = createSource(this.cowbell);
+            break;
+        default:
+            console.error('Unknown sequencer sound provided.');
+            break;
+    }
+	this.ctl.gainNode.gain.value = parseInt(document.getElementById("sequencer-volume").value) / 100;
+	this.ctl.source.loop = false;
+    // Set lowpass
+    let x = parseInt(document.getElementById("sequencer-filter").value);
+    x = Math.round(Math.exp(x / 100 * Math.log(20000)) + 200);
+    this.ctl.filter.frequency.setTargetAtTime(x, context.currentTime, 0);
+	let onName = this.ctl.source.start ? 'start' : 'noteOn';
+	this.ctl.source[onName](0);
+}
+
+
 // Initialise tracks
 let ambienceTrack = new Ambience();
 let uiTrack = new UI();
 let instrumentTrack = new Instrument();
+let sequencerTrack = new Sequencer();

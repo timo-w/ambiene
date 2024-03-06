@@ -1,25 +1,14 @@
-{% extends 'base.html' %}
-{% load static %}
+<h2>Sequencer Test</h2>
 
-{% block title %}
-Drum Machine Test
-{% endblock %}
-
-{% block head %}
-<link rel="stylesheet" href={% static 'assets/styles/sequencer.css' %}>
-{% endblock %}
-
-{% block body %}
-
-<h2>Drum Machine Test</h2>
-
-<a id="sequencer-start" class="btn btn-light" onclick="" >Start/Stop</a>
-<a id="sequencer-reset" class="btn btn-light" onclick="resetSequencer()" >Reset Sequencer</a>
+<a id="sequencer-reset" class="btn btn-light" onclick="resetSequencer()" >Clear Sequencer</a>
 
 <div>
     <hr>
-    <label for="master-volume">Master Volume:</label><br>
-    <input id="master-volume" type="range" min="0" max="200" value="100" oninput="" />
+    <label for="sequencer-volume">Sequencer Volume:</label><br>
+    <input id="sequencer-volume" type="range" min="0" max="200" value="100" />
+    <br>
+    <label for="sequencer-filter">Sequencer Lowpass:</label><br>
+    <input id="sequencer-filter" type="range" min="0" max="100" value="50" />
 </div>
 
 
@@ -70,18 +59,5 @@ Drum Machine Test
 </section>
 
 
-<script>
-    // To pass into drum-audio.js
-    let kickFile = "{% static 'assets/sounds/instrument/drums/kick.mp3' %}";
-    let snareFile = "{% static 'assets/sounds/instrument/drums/snare.mp3' %}";
-    let hatClosedFile = "{% static 'assets/sounds/instrument/drums/hat-closed.mp3' %}";
-    let hatOpenFile = "{% static 'assets/sounds/instrument/drums/hat-open.mp3' %}";
-    let clapFile = "{% static 'assets/sounds/instrument/drums/clap.mp3' %}";
-    let crunchFile = "{% static 'assets/sounds/instrument/drums/crunch.mp3' %}";
-    let shakerFile = "{% static 'assets/sounds/instrument/drums/shaker.mp3' %}";
-    let cowbellFile = "{% static 'assets/sounds/instrument/drums/cowbell.mp3' %}";
-</script>
-<script src="{% static 'assets/scripts/drum-audio.js' %}"></script>
-<script src="{% static 'assets/scripts/sequencer.js' %}"></script>
 
-{% endblock %}
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
