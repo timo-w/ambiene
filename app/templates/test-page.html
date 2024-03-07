@@ -89,10 +89,112 @@ Mixer Test
     let shakerFile = "{% static 'assets/sounds/instrument/drums/shaker.mp3' %}";
     let cowbellFile = "{% static 'assets/sounds/instrument/drums/cowbell.mp3' %}";
 
+    // Guitar
+    let guitarFiles = {
+        gentle: {
+            sparse: [
+                "{% static 'assets/sounds/instrument/guitar/gentle/sparse/1.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/sparse/2.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/sparse/3.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/sparse/4.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/sparse/5.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/sparse/6.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/sparse/7.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/sparse/8.mp3' %}",
+            ],
+            moderate: [
+                "{% static 'assets/sounds/instrument/guitar/gentle/moderate/1.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/moderate/2.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/moderate/3.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/moderate/4.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/moderate/5.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/moderate/6.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/moderate/7.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/moderate/8.mp3' %}",
+            ],
+            full: [
+                "{% static 'assets/sounds/instrument/guitar/gentle/full/1.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/full/2.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/full/3.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/full/4.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/full/5.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/full/6.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/full/7.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/full/8.mp3' %}",
+            ],
+        },
+        standard: {
+            sparse: [
+                "{% static 'assets/sounds/instrument/guitar/standard/sparse/1.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/sparse/2.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/sparse/3.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/sparse/4.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/sparse/5.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/sparse/6.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/sparse/7.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/sparse/8.mp3' %}",
+            ],
+            moderate: [
+                "{% static 'assets/sounds/instrument/guitar/standard/moderate/1.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/moderate/2.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/moderate/3.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/moderate/4.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/moderate/5.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/moderate/6.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/moderate/7.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/moderate/8.mp3' %}",
+            ],
+            full: [
+                "{% static 'assets/sounds/instrument/guitar/standard/full/1.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/full/2.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/full/3.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/full/4.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/full/5.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/full/6.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/full/7.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/full/8.mp3' %}",
+            ],
+        },
+        intense: {
+            sparse: [
+                "{% static 'assets/sounds/instrument/guitar/intense/sparse/1.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/sparse/2.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/sparse/3.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/sparse/4.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/sparse/5.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/sparse/6.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/sparse/7.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/sparse/8.mp3' %}",
+            ],
+            moderate: [
+                "{% static 'assets/sounds/instrument/guitar/intense/moderate/1.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/moderate/2.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/moderate/3.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/moderate/4.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/moderate/5.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/moderate/6.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/moderate/7.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/moderate/8.mp3' %}",
+            ],
+            full: [
+                "{% static 'assets/sounds/instrument/guitar/intense/full/1.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/full/2.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/full/3.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/full/4.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/full/5.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/full/6.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/full/7.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/full/8.mp3' %}",
+            ],
+        },
+    };
+    
+
 </script>
 <script src="{% static 'assets/scripts/audio.js' %}"></script>
 <script src="{% static 'assets/scripts/mixer.js' %}"></script>
 <script src="{% static 'assets/scripts/sequencer.js' %}"></script>
+<script src="{% static 'assets/scripts/instrument.js' %}"></script>
 <script src="{% static 'assets/scripts/visualiser.js' %}"></script>
 
 

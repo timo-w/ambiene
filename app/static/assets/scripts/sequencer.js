@@ -68,7 +68,10 @@ $(document).ready(function(){
 
     // Set initial sequencer state on page load
     getSequencerState();
-    setInterval(playNextBeat, 200);
+    
+    setTimeout(() => {
+        setInterval(playNextBeat, 200);
+    }, timeUntilNextSecond());
     // Track label buttons on click
     for (let i=0; i<sequencer_label_buttons.length; i++) {
         sequencer_label_buttons.item(i).addEventListener("click", () => {
