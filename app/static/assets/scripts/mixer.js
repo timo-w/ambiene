@@ -27,6 +27,7 @@ function slideChannel(channel, label, target) {
 
 
 $(document).ready(function(){
+    
 
     // Enable/disable tracks
     $(".channel a").click(function() {

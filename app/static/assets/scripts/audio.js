@@ -3,6 +3,17 @@ console.log("Sanity check from audio.js.");
 // Audio context
 const context = new (window.AudioContext || window.webkitAudioContext)();
 
+// Display overlay if context suspended
+if (context.state === 'suspended') {
+    const overlay = document.getElementById('overlay');
+    overlay.className = 'overlay-visible';
+    document.addEventListener('click', () => {
+        context.resume().then(() => {
+            overlay.className = 'overlay-hidden';
+        });
+    }, {once: true});
+}
+
 // For audio visualisation
 const analyser = context.createAnalyser();
 analyser.fftSize = 256;
@@ -327,7 +338,7 @@ Instrument.prototype.startSynth = function() {
 };
 
 Instrument.prototype.soundGuitar = function(intensity, density, variation) {
-    // Select samples
+    // Select sample
     let files = {};
     let samples = [];
     let chosen_sample;
@@ -354,8 +365,7 @@ Instrument.prototype.soundGuitar = function(intensity, density, variation) {
             break;
     }
     chosen_sample = samples[variation];
-
-    // Play sample
+    // Load then play sample
     loadSounds(this, {
         sample: chosen_sample
     });
@@ -365,7 +375,6 @@ Instrument.prototype.soundGuitar = function(intensity, density, variation) {
 	let onName = this.ctlguitar.source.start ? 'start' : 'noteOn';
 	this.ctlguitar.source[onName](0);
 };
-// Guitar volume
 Instrument.prototype.setGuitar = function(element) {
     this.ctlguitar.gainNode.gain.value = parseInt(element.value) / parseInt(element.max);
 };
