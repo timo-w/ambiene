@@ -31,7 +31,7 @@ $(document).ready(function(){
     // Enable/disable tracks
     $(".channel a").click(function() {
         $(this).toggleClass("active");
-        uiTrack.soundButton();
+        uiTrack.sound("button");
         this.innerHTML = $(this).hasClass("active") ? 'ON' : 'OFF';
     });
 
@@ -40,14 +40,14 @@ $(document).ready(function(){
         sliders.item(i).addEventListener("input", () => {
             slider_labels.item(i).innerHTML = sliders.item(i).value;
             if (sliders.item(i).value % 10 == 0) {
-                uiTrack.soundNotch();
+                uiTrack.sound("notch");
             }
         });
     };
 
     // Reset mixer to default state
     $("#mixer-reset").click(function() {
-        uiTrack.soundButton();
+        uiTrack.sound("button");
         for (let i=0; i<sliders.length-1; i++) {
             slideChannel(sliders.item(i), slider_labels.item(i), 0);
             $(slider_toggles.item(i)).addClass("active").text('ON');
@@ -57,7 +57,7 @@ $(document).ready(function(){
 
     // Set mixer to preset values
     $("#mixer-preset-1").click(function() {
-        uiTrack.soundButton();
+        uiTrack.sound("button");
         slideChannel(sliders.item(0), slider_labels.item(0), 0);
         $(slider_toggles.item(0)).removeClass("active").text('OFF');
         slideChannel(sliders.item(1), slider_labels.item(1), 100);
@@ -70,7 +70,7 @@ $(document).ready(function(){
         $(slider_toggles.item(4)).addClass("active").text('ON');
     });
     $("#mixer-preset-2").click(function() {
-        uiTrack.soundButton();
+        uiTrack.sound("button");
         slideChannel(sliders.item(0), slider_labels.item(0), 75);
         $(slider_toggles.item(0)).addClass("active").text('ON');
         slideChannel(sliders.item(1), slider_labels.item(1), 0);

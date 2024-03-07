@@ -47,7 +47,7 @@ $(document).ready(function(){
 
     // Enable/disable tracks
     $("#guitarTest").click(function() {
-        uiTrack.soundButton();
+        uiTrack.sound("button");
         setTimeout(() => {
             setInterval(nextGuitarSample, 6400);
         }, timeUntilNextSecond());

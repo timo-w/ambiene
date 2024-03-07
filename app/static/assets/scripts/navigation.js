@@ -2,7 +2,7 @@ $(document).ready(function(){
 
     $("#panel-nav-ambience").on( "click", function() {
         
-        uiTrack.soundButton();
+        uiTrack.sound("button");
 
         $("#panel-nav-ambience").addClass("current-panel");
         $("#panel-nav-sequencer").removeClass("current-panel");
@@ -19,7 +19,7 @@ $(document).ready(function(){
 
     $("#panel-nav-sequencer").on( "click", function() {
 
-        uiTrack.soundButton();
+        uiTrack.sound("button");
 
         $("#panel-nav-ambience").removeClass("current-panel");
         $("#panel-nav-sequencer").addClass("current-panel");
@@ -36,7 +36,7 @@ $(document).ready(function(){
 
     $("#panel-nav-instrument").on( "click", function() {
 
-        uiTrack.soundButton();
+        uiTrack.sound("button");
 
         $("#panel-nav-ambience").removeClass("current-panel");
         $("#panel-nav-sequencer").removeClass("current-panel");

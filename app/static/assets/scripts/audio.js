@@ -1,7 +1,7 @@
 console.log("Sanity check from audio.js.");
 
+// Audio context
 const context = new (window.AudioContext || window.webkitAudioContext)();
-
 
 // For audio visualisation
 const analyser = context.createAnalyser();
@@ -10,6 +10,7 @@ const bufferLength = analyser.frequencyBinCount;
 const dataArray = new Uint8Array(bufferLength);
 
 
+// Generic web audio api functions
 function playSound(buffer, time) {
     let source = context.createBufferSource();
     source.buffer = buffer;
@@ -46,7 +47,6 @@ function BufferLoader(context, urlList, callback) {
     this.bufferList = new Array();
     this.loadCount = 0;
 }
-
 BufferLoader.prototype.loadBuffer = function(url, index) {
     let request = new XMLHttpRequest();
     request.open("GET", url, true);
@@ -74,13 +74,12 @@ BufferLoader.prototype.loadBuffer = function(url, index) {
     }
     request.send();
 };
-
 BufferLoader.prototype.load = function() {
     for (let i=0; i<this.urlList.length; ++i)
     this.loadBuffer(this.urlList[i], i);
 };
 
-function createSource(buffer) {
+function createSource(buffer, doNotAnalyse=false) {
     let source = context.createBufferSource();
     let gainNode = context.createGain();
     let filter = context.createBiquadFilter();
@@ -89,8 +88,13 @@ function createSource(buffer) {
     source.loop = true;
     source.connect(gainNode);
     gainNode.connect(filter);
-    filter.connect(analyser);
-    analyser.connect(context.destination);
+    // Don't connect to analyser (UI sounds) for visualisation
+    if (doNotAnalyse) {
+        filter.connect(context.destination);
+    } else {
+        filter.connect(analyser);
+        analyser.connect(context.destination);
+    }
     
     // Initial lowpass value
     filter.type = 'lowpass';
@@ -110,6 +114,37 @@ function timeUntilNextSecond() {
     const delay = Math.ceil(now) - now + 1;
     return delay * 1000; // Convert to milliseconds
 };
+
+
+// Generate equal temperament notes list
+const range = (start, stop) => Array(stop - start + 1).fill().map((_, i) => start + i);
+const octaveRange = range(0, 8).map(val => [val, val - 4]);
+const semitoneOffsets = [
+    ["C", -9], ["C#", -8], ["Db", -8], ["D", -7], ["D#", -6], ["Eb", -6], ["E", -5], ["F", -4],
+    ["F#", -3], ["Gb", -3], ["G", -2], ["G#", -1], ["Ab", -1], ["A", 0], ["A#", 1], ["Bb", 1], ["B", 2],
+];
+const notes = octaveRange.reduce((ob, [range, multiplier]) => semitoneOffsets.reduce((ob, [note, semitones]) => ({
+    ...ob,
+    [note + range]: 440 * Math.pow(2, (semitones + (multiplier * 12)) / 12),
+}), ob), {});
+
+// Map each note to its offset in cents (100 cents p/ semitone) relative to 440 Hz
+const noteCentsOffsets = {};
+Object.keys(notes).forEach(note => {
+  const frequency = notes[note];
+  const centsOffset = 1200 * Math.log2(frequency / 440);
+  noteCentsOffsets[note] = centsOffset;
+});
+
+// Pentatonic scale ('-' means rest)
+const pentatonic_scale = [
+    'C#3', 'D#3', 'F#3', 'G#3', 'A#3',
+    'C#4', 'D#4', 'F#4', 'G#4', 'A#4',
+    'C#5', 'D#5', 'F#5', 'G#5', 'A#5',
+    '-', '-', '-', '-', '-',
+    '-', '-', '-', '-', '-',
+    '-', '-', '-', '-', '-',
+];
 
 
 // Ambience track
@@ -149,7 +184,6 @@ Ambience.prototype.play = function() {
     this.ctlrain.source[onName](0);
     this.ctlshop.source[onName](0);
 };
-
 
 Ambience.prototype.stop = function() {
     let offName = this.ctlbirds.source.stop ? 'stop' : 'noteOff';
@@ -211,55 +245,30 @@ let UI = function() {
     loadSounds(this, {
         button: buttonFile,
         notch: notchFile,
+        click: clickFile,
     });
-}
-
-UI.prototype.soundButton = function() {
-	this.ctlbutton = createSource(this.button);
-	this.ctlbutton.gainNode.gain.value = 0.7;
-	this.ctlbutton.source.loop = false;
-	let onName = this.ctlbutton.source.start ? 'start' : 'noteOn';
-	this.ctlbutton.source[onName](0);
 };
 
-UI.prototype.soundNotch = function() {
-    this.ctlnotch = createSource(this.notch);
-    this.ctlnotch.gainNode.gain.value = 0.5;
-    this.ctlnotch.source.loop = false;
-    let onName = this.ctlnotch.source.start ? 'start' : 'noteOn';
-    this.ctlnotch.source[onName](0);
+UI.prototype.sound = function(sound) {
+    switch (sound) {
+        case "button":
+            this.ctl = createSource(this.button, doNotAnalyse=true);
+            break;
+        case "notch":
+            this.ctl = createSource(this.notch, doNotAnalyse=true);
+            break;
+        case "click":
+            this.ctl = createSource(this.click, doNotAnalyse=true);
+            break;
+        default:
+            console.error('Unknown UI sound provided.');
+            break;
+    }
+	this.ctl.gainNode.gain.value = 0.8;
+	this.ctl.source.loop = false;
+	let onName = this.ctl.source.start ? 'start' : 'noteOn';
+	this.ctl.source[onName](0);
 };
-
-
-// Generate equal temperament notes list
-const range = (start, stop) => Array(stop - start + 1).fill().map((_, i) => start + i);
-const octaveRange = range(0, 8).map(val => [val, val - 4]);
-const semitoneOffsets = [
-    ["C", -9], ["C#", -8], ["Db", -8], ["D", -7], ["D#", -6], ["Eb", -6], ["E", -5], ["F", -4],
-    ["F#", -3], ["Gb", -3], ["G", -2], ["G#", -1], ["Ab", -1], ["A", 0], ["A#", 1], ["Bb", 1], ["B", 2],
-];
-const notes = octaveRange.reduce((ob, [range, multiplier]) => semitoneOffsets.reduce((ob, [note, semitones]) => ({
-    ...ob,
-    [note + range]: 440 * Math.pow(2, (semitones + (multiplier * 12)) / 12),
-}), ob), {});
-
-// Map each note to its offset in cents (100 cents p/ semitone) relative to 440 Hz
-const noteCentsOffsets = {};
-Object.keys(notes).forEach(note => {
-  const frequency = notes[note];
-  const centsOffset = 1200 * Math.log2(frequency / 440);
-  noteCentsOffsets[note] = centsOffset;
-});
-
-// A pentatonic scale
-const pentatonic_scale = [
-    'C#3', 'D#3', 'F#3', 'G#3', 'A#3',
-    'C#4', 'D#4', 'F#4', 'G#4', 'A#4',
-    'C#5', 'D#5', 'F#5', 'G#5', 'A#5',
-    '-', '-', '-', '-', '-',
-    '-', '-', '-', '-', '-',
-    '-', '-', '-', '-', '-',
-];
 
 
 // Instrument track

@@ -68,21 +68,21 @@ $(document).ready(function(){
 
     // Set initial sequencer state on page load
     getSequencerState();
-    
+
     setTimeout(() => {
         setInterval(playNextBeat, 200);
     }, timeUntilNextSecond());
     // Track label buttons on click
     for (let i=0; i<sequencer_label_buttons.length; i++) {
         sequencer_label_buttons.item(i).addEventListener("click", () => {
-            uiTrack.soundButton();
+            uiTrack.sound("button");
             $(sequencer_label_buttons.item(i)).toggleClass("drum-muted");
         });
     };
     // Beat button on click
     for (let i=0; i<sequencer_buttons.length; i++) {
         sequencer_buttons.item(i).addEventListener("click", () => {
-            uiTrack.soundButton();
+            uiTrack.sound("button");
             $(sequencer_buttons.item(i)).toggleClass("active-beat");
             getSequencerState();
         });
