@@ -1,0 +1,21 @@
+<h2>Instruments</h2>
+
+<a id="marimba" class="btn btn-light" onclick="instrumentTrack.startMarimba()">Start Marimba</a>
+<br><label for="marimba-volume">Volume:</label><br>
+<input id="marimba-volume" type="range" min="0" max="200" value="100" />
+
+<br>
+
+<a id="synth" class="btn btn-light" onclick="instrumentTrack.startSynth()">Start Synth</a>
+<br><label for="synth-volume">Volume:</label><br>
+<input id="synth-volume" type="range" min="0" max="200" value="100" />
+
+<br>
+
+<a id="guitarTest" class="btn btn-light">Start Guitar</a>
+<br><label for="guitar-volume">Volume:</label><br>
+<input id="guitar-volume" type="range" min="0" max="200" value="100" oninput="instrumentTrack.setGuitar(this)" />
+<br><label for="guitar-intensity">Intensity:</label><br>
+<input id="guitar-intensity" type="range" min="0" max="2" value="0" />
+<br><label for="guitar-density">Density:</label><br>
+<input id="guitar-density" type="range" min="0" max="2" value="1" />

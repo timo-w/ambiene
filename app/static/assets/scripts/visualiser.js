@@ -19,9 +19,9 @@ function draw() {
     let barHeight;
     let x = 0;
     for (let i = 0; i < bufferLength; i++) {
-        barHeight = dataArray[i] * 2;
+        barHeight = dataArray[i] * 5;
         //canvasCtx.fillStyle = `rgb(${barHeight} ${barHeight} ${barHeight})`;
-        canvasCtx.fillStyle = `#333`;
+        canvasCtx.fillStyle = `rgba(221,221,221,0.1)`;
         canvasCtx.fillRect(x, windowHeight - barHeight / 2, barWidth, barHeight);
         x += barWidth + 1;
     }

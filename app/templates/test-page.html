@@ -44,19 +44,7 @@ Mixer Test
 
 
 <section id="panel-instrument">
-
-    <h2>Instrument Test</h2>
-
-    <a id="marimba" class="btn btn-light" onclick="instrumentTrack.startMarimba()">Start Marimba</a>
-    <br><label for="marimba-volume">Volume:</label><br>
-    <input id="marimba-volume" type="range" min="0" max="200" value="100" />
-
-    <br>
-
-    <a id="synth" class="btn btn-light" onclick="instrumentTrack.startSynth()">Start Synth</a>
-    <br><label for="synth-volume">Volume:</label><br>
-    <input id="synth-volume" type="range" min="0" max="200" value="100" />
-
+    {% include "instrument.html" %}
 </section>
 
 
@@ -188,7 +176,7 @@ Mixer Test
             ],
         },
     };
-    
+
 
 </script>
 <script src="{% static 'assets/scripts/audio.js' %}"></script>

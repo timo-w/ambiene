@@ -15,7 +15,7 @@ function playSound(buffer, time) {
     source.buffer = buffer;
     source.connect(context.destination);
     source[source.start ? 'start' : 'noteOn'](time);
-}
+};
 
 function loadSounds(obj, soundMap, callback) {
     let names = [];
@@ -36,7 +36,7 @@ function loadSounds(obj, soundMap, callback) {
         }
     });
     bufferLoader.load();
-}
+};
 
 
 function BufferLoader(context, urlList, callback) {
@@ -101,7 +101,7 @@ function createSource(buffer) {
         gainNode: gainNode,
         filter: filter
     };
-  }
+};
 
 
 // Calculate the time until the next second
@@ -109,7 +109,7 @@ function timeUntilNextSecond() {
     const now = context.currentTime;
     const delay = Math.ceil(now) - now + 1;
     return delay * 1000; // Convert to milliseconds
-}
+};
 
 
 // Ambience track
@@ -122,7 +122,7 @@ let Ambience = function() {
         shop: shopFile,
     });
     this.isPlaying = false;
-}
+};
 
 Ambience.prototype.play = function() {
     // Create sources
@@ -220,7 +220,7 @@ UI.prototype.soundButton = function() {
 	this.ctlbutton.source.loop = false;
 	let onName = this.ctlbutton.source.start ? 'start' : 'noteOn';
 	this.ctlbutton.source[onName](0);
-}
+};
 
 UI.prototype.soundNotch = function() {
     this.ctlnotch = createSource(this.notch);
@@ -228,7 +228,7 @@ UI.prototype.soundNotch = function() {
     this.ctlnotch.source.loop = false;
     let onName = this.ctlnotch.source.start ? 'start' : 'noteOn';
     this.ctlnotch.source[onName](0);
-}
+};
 
 
 // Generate equal temperament notes list
@@ -268,7 +268,7 @@ let Instrument = function() {
         marimba: marimbaFile,
         synth: synthFile,
     });
-}
+};
 
 Instrument.prototype.soundMarimba = function(note) {
 	this.ctlmarimba = createSource(this.marimba);
@@ -277,7 +277,7 @@ Instrument.prototype.soundMarimba = function(note) {
     this.ctlmarimba.source.detune.value = noteCentsOffsets[note];
 	let onName = this.ctlmarimba.source.start ? 'start' : 'noteOn';
 	this.ctlmarimba.source[onName](0);
-}
+};
 
 Instrument.prototype.soundSynth = function(note) {
     this.ctlsynth = createSource(this.synth);
@@ -286,7 +286,7 @@ Instrument.prototype.soundSynth = function(note) {
     this.ctlsynth.source.detune.value = noteCentsOffsets[note];
     let onName = this.ctlsynth.source.start ? 'start' : 'noteOn';
     this.ctlsynth.source[onName](0);
-}
+};
 
 Instrument.prototype.startMarimba = function() {
     setTimeout(() => {
@@ -301,7 +301,7 @@ Instrument.prototype.startMarimba = function() {
         }, 200);
     }, timeUntilNextSecond());
     
-}
+};
 
 Instrument.prototype.startSynth = function() {
     setTimeout(() => {
@@ -315,7 +315,51 @@ Instrument.prototype.startSynth = function() {
             }
         }, 400);
     }, timeUntilNextSecond());
-}
+};
+
+Instrument.prototype.soundGuitar = function(intensity, density, variation) {
+    // Select samples
+    let files = {};
+    let samples = [];
+    let chosen_sample;
+    switch (intensity) {
+        case "gentle":
+            files = guitarFiles["gentle"];
+            break;
+        case "standard":
+            files = guitarFiles["standard"];
+            break;
+        case "intense":
+            files = guitarFiles["intense"];
+            break;
+    }
+    switch (density) {
+        case "sparse":
+            samples = files["sparse"];
+            break;
+        case "moderate":
+            samples = files["moderate"];
+            break;
+        case "full":
+            samples = files["full"];
+            break;
+    }
+    chosen_sample = samples[variation];
+
+    // Play sample
+    loadSounds(this, {
+        sample: chosen_sample
+    });
+    this.ctlguitar = createSource(this.sample);
+    this.ctlguitar.gainNode.gain.value = parseInt(document.getElementById("guitar-volume").value) / 100;
+	this.ctlguitar.source.loop = false;
+	let onName = this.ctlguitar.source.start ? 'start' : 'noteOn';
+	this.ctlguitar.source[onName](0);
+};
+// Guitar volume
+Instrument.prototype.setGuitar = function(element) {
+    this.ctlguitar.gainNode.gain.value = parseInt(element.value) / parseInt(element.max);
+};
 
 
 // Sequencer track
@@ -330,7 +374,7 @@ let Sequencer = function() {
         shaker: shakerFile,
         cowbell: cowbellFile
     });
-}
+};
 
 Sequencer.prototype.playSound = function(sound) {
     switch (sound) {
@@ -370,7 +414,7 @@ Sequencer.prototype.playSound = function(sound) {
     this.ctl.filter.frequency.setTargetAtTime(x, context.currentTime, 0);
 	let onName = this.ctl.source.start ? 'start' : 'noteOn';
 	this.ctl.source[onName](0);
-}
+};
 
 
 // Initialise tracks
