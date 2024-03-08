@@ -1,12 +1,12 @@
-.drum-container {
+.sequencer {
     height: 28rem;
     width: 60rem;
     position: absolute;
     margin-left: -30rem;
     margin-top: 4rem;
-    margin-bottom: 10rem;
     left: 50%;
     background-color: #484f55;
+    box-shadow: 0px 0px 24px 2px #EC5E47;
 
     .lighter-bg-1, .lighter-bg-2 {
         background-color: #51585f;

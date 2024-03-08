@@ -57,6 +57,15 @@ $(document).ready(function(){
     $("#slider-shop").on("input", () => {
         ambienceTrack.setShop($("#slider-shop").val()/100);
     });
+    $("#slider-crickets").on("input", () => {
+        ambienceTrack.setCrickets($("#slider-crickets").val()/100);
+    });
+    $("#slider-harbour").on("input", () => {
+        ambienceTrack.setHarbour($("#slider-harbour").val()/100);
+    });
+    $("#slider-thunder").on("input", () => {
+        ambienceTrack.setThunder($("#slider-thunder").val()/100);
+    });
     // Toggle mute
     $("#toggle-birds").on("click", () => {
         $("#slider-birds").trigger("input");
@@ -67,8 +76,17 @@ $(document).ready(function(){
     $("#toggle-rain").on("click", () => {
         $("#slider-rain").trigger("input");
     });
-    $("#toggle-shop").on("click", () => {
-        $("#slider-shop").trigger("input");
+    $("#toggle-crickets").on("click", () => {
+        $("#slider-crickets").trigger("input");
+    });
+    $("#toggle-filter").on("click", () => {
+        $("#slider-filter").trigger("input");
+    });
+    $("#toggle-harbour").on("click", () => {
+        $("#slider-harbour").trigger("input");
+    });
+    $("#toggle-thunder").on("click", () => {
+        $("#slider-thunder").trigger("input");
     });
     $("#toggle-filter").on("click", () => {
         $("#slider-filter").trigger("input");
@@ -81,8 +99,8 @@ $(document).ready(function(){
             slideChannel(sliders.item(i), slider_labels.item(i), 0);
             $(slider_toggles.item(i)).addClass("active").text('ON');
         }
-        slideChannel(sliders.item(4), slider_labels.item(4), 50);
-        $(slider_toggles.item(4)).addClass("active").text('ON');
+        slideChannel(sliders.item(7), slider_labels.item(7), 50);
+        $(slider_toggles.item(7)).addClass("active").text('ON');
     });
 
     // Set mixer to preset values

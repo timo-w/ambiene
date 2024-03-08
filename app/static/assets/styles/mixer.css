@@ -1,11 +1,11 @@
 .mixer {
     height: 28rem;
-    width: 40rem;
+    width: 60rem;
     position: absolute;
-    margin-left: -20rem;
+    margin-left: -30rem;
     margin-top: 8rem;
-    margin-bottom: 10rem;
     left: 50%;
+    box-shadow: 0px 0px 24px 2px #39b0f9;
 }
 
 
@@ -14,7 +14,7 @@
     background-color: #484f55;
     float: left;
     height: 100%;
-    width: calc(100% / 5);
+    width: calc(100% / 8);
     transition: 0.3s ease-out;
     
     a {
@@ -25,7 +25,7 @@
         cursor: pointer;
         display: block;
         height: 2rem;
-        margin: 1rem 1.5rem;
+        margin: 1rem 1.2rem;
         position: absolute;
         width: 5rem;
         text-decoration: none;
@@ -83,7 +83,7 @@
 
 .slider {
     bottom: 3rem;
-    left: -3.5rem;
+    left: -3.75rem;
     position: absolute; 
     transform: rotate(270deg) translate(10rem); 
 }

@@ -179,6 +179,9 @@ let Ambience = function() {
         fire: fireFile,
         rain: rainFile,
         shop: shopFile,
+        crickets: cricketsFile,
+        harbour: harbourFile,
+        thunder: thunderFile,
     });
     this.isPlaying = false;
 };
@@ -189,32 +192,34 @@ Ambience.prototype.play = function() {
     this.ctlfire = createSource(this.fire);
     this.ctlrain = createSource(this.rain);
     this.ctlshop = createSource(this.shop);
+    this.ctlcrickets = createSource(this.crickets);
+    this.ctlharbour = createSource(this.harbour);
+    this.ctlthunder = createSource(this.thunder);
+    this.tracks = [this.ctlbirds, this.ctlfire, this.ctlrain, this.ctlshop, this.ctlcrickets, this.ctlharbour, this.ctlthunder];
     // Set initial values
-    this.masterVolume = parseInt(document.getElementById("ambience-master-volume").value) / 100;
-    this.ctlbirds.volume = parseInt(document.getElementById("slider-birds").value) / 100;
-    this.ctlfire.volume = parseInt(document.getElementById("slider-fire").value) / 100;
-    this.ctlrain.volume = parseInt(document.getElementById("slider-rain").value) / 100;
-    this.ctlshop.volume = parseInt(document.getElementById("slider-shop").value) / 100;
+    this.masterVolume = parseInt($("#ambience-master-volume").val()) / 100;
+    this.ctlbirds.volume = parseInt($("#slider-birds").val()) / 100;
+    this.ctlfire.volume = parseInt($("#slider-fire").val()) / 100;
+    this.ctlrain.volume = parseInt($("#slider-rain").val()) / 100;
+    this.ctlshop.volume = parseInt($("#slider-shop").val()) / 100;
+    this.ctlcrickets.volume = parseInt($("#slider-crickets").val()) / 100;
+    this.ctlharbour.volume = parseInt($("#slider-harbour").val()) / 100;
+    this.ctlthunder.volume = parseInt($("#slider-thunder").val()) / 100;
     this.setMaster();
     this.setFilter(document.getElementById("slider-filter"));
     // Start playback in a loop
-    this.ctlbirds.source.loop = true;
-    this.ctlfire.source.loop = true;
-    this.ctlrain.source.loop = true;
-    this.ctlshop.source.loop = true;
     let onName = this.ctlbirds.source.start ? 'start' : 'noteOn';
-    this.ctlbirds.source[onName](0);
-    this.ctlfire.source[onName](0);
-    this.ctlrain.source[onName](0);
-    this.ctlshop.source[onName](0);
+    for (let i=0; i<this.tracks.length; i++) {
+        this.tracks[i].source.loop = true;
+        this.tracks[i].source[onName](0);
+    }
 };
 
 Ambience.prototype.stop = function() {
     let offName = this.ctlbirds.source.stop ? 'stop' : 'noteOff';
-    this.ctlbirds.source[offName](0);
-    this.ctlfire.source[offName](0);
-    this.ctlrain.source[offName](0);
-    this.ctlshop.source[offName](0);
+    for (let i=0; i<this.tracks.length; i++) {
+        this.tracks[i].source[offName](0);
+    }
 };
 
 Ambience.prototype.toggle = function() {
@@ -228,6 +233,9 @@ Ambience.prototype.setMaster = function() {
     this.setFire(parseInt($("#slider-fire").val()) / 100);
     this.setRain(parseInt($("#slider-rain").val()) / 100);
     this.setShop(parseInt($("#slider-shop").val()) / 100);
+    this.setCrickets(parseInt($("#slider-crickets").val()) / 100);
+    this.setHarbour(parseInt($("#slider-harbour").val()) / 100);
+    this.setThunder(parseInt($("#slider-thunder").val()) / 100);
 };
 Ambience.prototype.setBirds = function(value) {
     this.ctlbirds.volume = $("#toggle-birds").hasClass("active") ? value : 0;
@@ -245,6 +253,18 @@ Ambience.prototype.setShop = function(value) {
 	this.ctlshop.volume = $("#toggle-shop").hasClass("active") ? value : 0;
     this.ctlshop.gainNode.gain.value = this.ctlshop.volume * this.masterVolume;
 };
+Ambience.prototype.setCrickets = function(value) {
+	this.ctlcrickets.volume = $("#toggle-crickets").hasClass("active") ? value : 0;
+    this.ctlcrickets.gainNode.gain.value = this.ctlcrickets.volume * this.masterVolume;
+};
+Ambience.prototype.setHarbour = function(value) {
+	this.ctlharbour.volume = $("#toggle-shop").hasClass("active") ? value : 0;
+    this.ctlharbour.gainNode.gain.value = this.ctlharbour.volume * this.masterVolume;
+};
+Ambience.prototype.setThunder = function(value) {
+	this.ctlthunder.volume = $("#toggle-shop").hasClass("active") ? value : 0;
+    this.ctlthunder.gainNode.gain.value = this.ctlthunder.volume * this.masterVolume;
+};
 
 Ambience.prototype.setFilter = function(element) {
 	let filterValue = $("#toggle-filter").hasClass("active") ? parseInt(element.value * 2) : 100;
@@ -252,6 +272,9 @@ Ambience.prototype.setFilter = function(element) {
     determineFilter(this.ctlfire.filter, filterValue);
     determineFilter(this.ctlrain.filter, filterValue);
     determineFilter(this.ctlshop.filter, filterValue);
+    determineFilter(this.ctlcrickets.filter, filterValue);
+    determineFilter(this.ctlharbour.filter, filterValue);
+    determineFilter(this.ctlthunder.filter, filterValue);
 };
 
 
@@ -262,6 +285,7 @@ let UI = function() {
         button: buttonFile,
         notch: notchFile,
         click: clickFile,
+        pipe: pipeFile,
     });
 };
 
@@ -281,11 +305,17 @@ UI.prototype.sound = function(sound) {
         case "click":
             this.ctl = createSource(this.click, doNotAnalyse=true);
             break;
+        case "pipe":
+            this.ctl = createSource(this.pipe);
+            break;
         default:
             console.error('Unknown UI sound provided.');
             break;
     }
 	this.ctl.gainNode.gain.value = 0.8;
+    if (sound == "pipe") {
+        this.ctl.gainNode.gain.value = 5;
+    }
 	let onName = this.ctl.source.start ? 'start' : 'noteOn';
 	this.ctl.source[onName](0);
 };

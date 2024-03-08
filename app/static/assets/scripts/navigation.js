@@ -89,6 +89,8 @@ $(document).ready(function(){
                     uiTrack.sound("click");
                     break;
             }
+        } else if (event.key == "|") {
+            uiTrack.sound("pipe");
         }
     }); 
 
