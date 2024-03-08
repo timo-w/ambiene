@@ -15,13 +15,13 @@ Mixer Test
 {% block body %}
                                             
 <!-- Overlay to enable audio -->
-<div id="overlay">Click to play</div>
+<div id="overlay">click anywhere to resume</div>
 <!-- Audio visualiser background -->
 <canvas id="visualiser"></canvas>
 
 
 <div class="panel-nav">
-    <div id="panel-nav-ambience" class="panel-nav-container current-panel">
+    <div id="panel-nav-ambience" class="panel-nav-container current-panel" style="border:2px solid #39b0f9;box-shadow:0px 0px 12px -8px #39b0f9;">
         <img src={% static 'assets/icons/tree.png' %}>
         <a>Ambience</a>
     </div>
@@ -31,7 +31,7 @@ Mixer Test
     </div>
     <div id="panel-nav-instrument" class="panel-nav-container">
         <img src={% static 'assets/icons/wave.png' %}>
-        <a>Instrument</a>
+        <a>Instruments</a>
     </div>
 </div>
 
@@ -56,6 +56,7 @@ Mixer Test
     // To pass into audio.js
 
     // UI
+    let uiFile = "{% static 'assets/sounds/ui/ui.mp3' %}";
     let notchFile = "{% static 'assets/sounds/ui/notch.mp3' %}";
     let buttonFile = "{% static 'assets/sounds/ui/button.mp3' %}";
     let clickFile = "{% static 'assets/sounds/ui/click.mp3' %}";
@@ -72,6 +73,7 @@ Mixer Test
     let synthFile = "{% static 'assets/sounds/instrument/synth.mp3' %}";
     let fluteFile = "{% static 'assets/sounds/instrument/flute.mp3' %}";
     let pianoFile = "{% static 'assets/sounds/instrument/piano.mp3' %}";
+    let padFile = "{% static 'assets/sounds/instrument/pad.mp3' %}";
 
     // Drums
     let kickFile = "{% static 'assets/sounds/instrument/drums/kick.mp3' %}";

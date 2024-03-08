@@ -10,6 +10,7 @@ if (context.state === 'suspended') {
     document.addEventListener('click', () => {
         context.resume().then(() => {
             overlay.className = 'overlay-hidden';
+            uiTrack.sound("click");
         });
     }, {once: true});
 }
@@ -94,6 +95,8 @@ function createSource(buffer, doNotAnalyse=false) {
     let source = context.createBufferSource();
     let gainNode = context.createGain();
     let filter = context.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setTargetAtTime(20000, context.currentTime, 0);
 
     source.buffer = buffer;
     source.loop = false;
@@ -106,10 +109,6 @@ function createSource(buffer, doNotAnalyse=false) {
         filter.connect(analyser);
         analyser.connect(context.destination);
     }
-    
-    // Initial lowpass value
-    filter.type = 'lowpass';
-    filter.frequency.setTargetAtTime(20000, context.currentTime, 0);
 
     return {
         source: source,
@@ -163,15 +162,7 @@ Object.keys(notes).forEach(note => {
   noteCentsOffsets[note] = centsOffset;
 });
 
-// Pentatonic scale ('-' means rest)
-// const pentatonic_scale = [
-//     'C#3', 'D#3', 'F#3', 'G#3', 'A#3',
-//     'C#4', 'D#4', 'F#4', 'G#4', 'A#4',
-//     'C#5', 'D#5', 'F#5', 'G#5', 'A#5',
-//     '-', '-', '-', '-', '-',
-//     '-', '-', '-', '-', '-',
-//     '-', '-', '-', '-', '-',
-// ];
+// Pentatonic scale
 const pentatonic_scale = [
     'C#2', 'D#2', 'F#2', 'G#2', 'A#2', // 0-4
     'C#3', 'D#3', 'F#3', 'G#3', 'A#3', // 5-9
@@ -199,7 +190,7 @@ Ambience.prototype.play = function() {
     this.ctlrain = createSource(this.rain);
     this.ctlshop = createSource(this.shop);
     // Set initial values
-    this.masterVolume = parseInt(document.getElementById("master-volume").value) / 100;
+    this.masterVolume = parseInt(document.getElementById("ambience-master-volume").value) / 100;
     this.ctlbirds.volume = parseInt(document.getElementById("slider-birds").value) / 100;
     this.ctlfire.volume = parseInt(document.getElementById("slider-fire").value) / 100;
     this.ctlrain.volume = parseInt(document.getElementById("slider-rain").value) / 100;
@@ -232,7 +223,7 @@ Ambience.prototype.toggle = function() {
 };
 
 Ambience.prototype.setMaster = function() {
-    this.masterVolume = parseInt(document.getElementById("master-volume").value) / 100;
+    this.masterVolume = parseInt(document.getElementById("ambience-master-volume").value) / 100;
     this.setBirds(parseInt($("#slider-birds").val()) / 100);
     this.setFire(parseInt($("#slider-fire").val()) / 100);
     this.setRain(parseInt($("#slider-rain").val()) / 100);
@@ -267,6 +258,7 @@ Ambience.prototype.setFilter = function(element) {
 // UI track
 let UI = function() {
     loadSounds(this, {
+        ui: uiFile,
         button: buttonFile,
         notch: notchFile,
         click: clickFile,
@@ -275,6 +267,11 @@ let UI = function() {
 
 UI.prototype.sound = function(sound) {
     switch (sound) {
+        case "ui":
+            this.ctl = createSource(this.ui, doNotAnalyse=true);
+            // Pick a note from pentatonic scale
+            this.ctl.source.detune.value = noteCentsOffsets[pentatonic_scale[Math.floor(Math.random() * 8) + 6]];
+            break;
         case "button":
             this.ctl = createSource(this.button, doNotAnalyse=true);
             break;
@@ -301,31 +298,38 @@ let Instrument = function() {
         synth: synthFile,
         flute: fluteFile,
         piano: pianoFile,
+        pad: padFile,
     });
 };
 
 Instrument.prototype.sound = function(sound, note) {
     let filterValue = 100;
+    this.setMaster();
     switch (sound) {
         case "marimba":
             this.ctl = createSource(this.marimba);
-            this.ctl.gainNode.gain.value = parseInt(document.getElementById("marimba-volume").value) / 100;
+            this.ctl.gainNode.gain.value = (parseInt(document.getElementById("marimba-volume").value) / 100) * this.masterVolume;
             filterValue = parseInt(document.getElementById("marimba-filter").value);
             break;
         case "synth":
             this.ctl = createSource(this.synth);
-            this.ctl.gainNode.gain.value = parseInt(document.getElementById("synth-volume").value) / 100;
+            this.ctl.gainNode.gain.value = (parseInt(document.getElementById("synth-volume").value) / 100) * this.masterVolume;
             filterValue = parseInt(document.getElementById("synth-filter").value);
             break;
         case "flute":
             this.ctl = createSource(this.flute);
-            this.ctl.gainNode.gain.value = parseInt(document.getElementById("flute-volume").value) / 100;
+            this.ctl.gainNode.gain.value = (parseInt(document.getElementById("flute-volume").value) / 100) * this.masterVolume;
             filterValue = parseInt(document.getElementById("flute-filter").value);
             break;
         case "piano":
             this.ctl = createSource(this.piano);
-            this.ctl.gainNode.gain.value = parseInt(document.getElementById("piano-volume").value) / 100;
+            this.ctl.gainNode.gain.value = (parseInt(document.getElementById("piano-volume").value) / 100) * this.masterVolume;
             filterValue = parseInt(document.getElementById("piano-filter").value);
+            break;
+        case "pad":
+            this.ctl = createSource(this.pad);
+            this.ctl.gainNode.gain.value = (parseInt(document.getElementById("pad-volume").value) / 100) * this.masterVolume;
+            filterValue = parseInt(document.getElementById("pad-filter").value);
             break;
         default:
             console.error('Unknown instrument sound provided.');
@@ -336,6 +340,9 @@ Instrument.prototype.sound = function(sound, note) {
     let onName = this.ctl.source.start ? 'start' : 'noteOn';
     this.ctl.source[onName](0);
 };
+Instrument.prototype.setMaster = function() {
+    this.masterVolume = parseInt(document.getElementById("instrument-master-volume").value) / 100;
+}
 
 Instrument.prototype.soundGuitar = function(intensity, density, variation) {
     // Select sample
@@ -370,12 +377,13 @@ Instrument.prototype.soundGuitar = function(intensity, density, variation) {
         sample: chosen_sample
     });
     this.ctlguitar = createSource(this.sample);
-    this.ctlguitar.gainNode.gain.value = parseInt(document.getElementById("guitar-volume").value) / 100;
+    this.ctlguitar.gainNode.gain.value = (parseInt(document.getElementById("guitar-volume").value) / 100) * (parseInt(document.getElementById("instrument-master-volume").value) / 100);
 	let onName = this.ctlguitar.source.start ? 'start' : 'noteOn';
 	this.ctlguitar.source[onName](0);
 };
+
 Instrument.prototype.setGuitar = function(element) {
-    this.ctlguitar.gainNode.gain.value = parseInt(element.value) / parseInt(element.max);
+    this.ctlguitar.gainNode.gain.value = (parseInt(element.value) / parseInt(element.max)) * (parseInt(document.getElementById("instrument-master-volume").value) / 100);
 };
 
 

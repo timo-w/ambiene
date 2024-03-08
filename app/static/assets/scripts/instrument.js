@@ -20,10 +20,14 @@ function soundSynth() {
 }
 // Sound flute
 function soundFlute() {
-    let chord = [getRandomNote(9, 15), getRandomNote(14, 18)]
+    let chord = [getRandomNote(8, 12), getRandomNote(10, 14)]
     for (let i=0; i<chord.length; i++) {
         instrumentTrack.sound("flute", chord[i]);
     }  
+}
+// Sound pad
+function soundPad() {
+    instrumentTrack.sound("pad", getRandomNote(7,17));
 }
 // Sound piano
 function soundPiano() {
@@ -86,7 +90,6 @@ function nextGuitarSample() {
             density = "full";
             break;
     }
-    console.log("Guitar: " + intensity + "/" + density + " " + (variation+1));
     instrumentTrack.soundGuitar(intensity, density, variation);
 }
 
@@ -102,7 +105,7 @@ $(document).ready(function(){
     });
 
     // Start guitar
-    $("#guitarTest").click(function() {
+    $("#guitar").click(function() {
         uiTrack.sound("button");
         setTimeout(() => {
             nextGuitarSample();
@@ -145,6 +148,16 @@ $(document).ready(function(){
             setInterval(soundPiano, 400);
         }, timeUntilNextSecond());
     });
+
+    // Start pad
+    $("#pad").click(function() {
+        uiTrack.sound("button");
+        setTimeout(() => {
+            soundPad();
+            setInterval(soundPad, 6400);
+        }, timeUntilNextSecond());
+    });
+
 
 
 });

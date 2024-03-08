@@ -2,8 +2,8 @@
 
 <div>
     <hr>
-    <label for="master-volume">Master Volume:</label><br>
-    <input id="master-volume" type="range" min="0" max="200" value="100" oninput="ambienceTrack.setMaster(this)" />
+    <label for="instrument-master-volume">Master Volume:</label><br>
+    <input id="instrument-master-volume" type="range" min="0" max="200" value="100" oninput="instrumentTrack.setMaster()"  />
 </div>
 
 <br>
@@ -30,7 +30,7 @@
     </div>
 
     <div class="instrument">
-        <a id="guitarTest" class="btn btn-light">Start Guitar</a>
+        <a id="guitar" class="btn btn-light">Start Guitar</a>
         <br>
         <label for="guitar-volume">Volume:</label><br>
         <input id="guitar-volume" type="range" min="0" max="200" value="100" oninput="instrumentTrack.setGuitar(this)" />
@@ -66,7 +66,13 @@
     </div>
 
     <div class="instrument">
-        
+        <a id="pad" class="btn btn-light">Start Pad</a>
+        <br>
+        <label for="pad-volume">Volume:</label><br>
+        <input id="pad-volume" type="range" min="0" max="200" value="100" />
+        <br>
+        <label for="pad-filter">Filter:</label><br>
+        <input id="pad-filter" type="range" min="0" max="200" value="100" />
     </div>
 
     <div class="instrument">
