@@ -127,6 +127,22 @@ function timeUntilNextSecond() {
 };
 
 
+// Determine type and value of filter (1-100=Lowpass, 100-200=Highpass)
+function determineFilter(filterNode, value) {
+    if (value > 0 && value <= 100) {
+        filterNode.type = "lowpass";
+        value = Math.round(Math.exp(value / 100 * Math.log(20000)) + 200);
+        filterNode.frequency.setTargetAtTime(value, context.currentTime, 0);
+    } else if (value > 100 && value <= 200) {
+        filterNode.type = "highpass";
+        value = ((Math.log(value) - Math.log(100)) / (Math.log(200) - Math.log(100))) * Math.log(4000);
+        filterNode.frequency.setTargetAtTime(Math.round(Math.exp(value)), context.currentTime, 0);
+    } else {
+        console.error("Invalid filter value provided");
+    }
+}
+
+
 // Generate equal temperament notes list
 const range = (start, stop) => Array(stop - start + 1).fill().map((_, i) => start + i);
 const octaveRange = range(0, 8).map(val => [val, val - 4]);
@@ -148,13 +164,20 @@ Object.keys(notes).forEach(note => {
 });
 
 // Pentatonic scale ('-' means rest)
+// const pentatonic_scale = [
+//     'C#3', 'D#3', 'F#3', 'G#3', 'A#3',
+//     'C#4', 'D#4', 'F#4', 'G#4', 'A#4',
+//     'C#5', 'D#5', 'F#5', 'G#5', 'A#5',
+//     '-', '-', '-', '-', '-',
+//     '-', '-', '-', '-', '-',
+//     '-', '-', '-', '-', '-',
+// ];
 const pentatonic_scale = [
-    'C#3', 'D#3', 'F#3', 'G#3', 'A#3',
-    'C#4', 'D#4', 'F#4', 'G#4', 'A#4',
-    'C#5', 'D#5', 'F#5', 'G#5', 'A#5',
-    '-', '-', '-', '-', '-',
-    '-', '-', '-', '-', '-',
-    '-', '-', '-', '-', '-',
+    'C#2', 'D#2', 'F#2', 'G#2', 'A#2', // 0-4
+    'C#3', 'D#3', 'F#3', 'G#3', 'A#3', // 5-9
+    'C#4', 'D#4', 'F#4', 'G#4', 'A#4', // 10-14
+    'C#5', 'D#5', 'F#5', 'G#5', 'A#5', // 15-19
+    'C#6', 'D#6', 'F#6', 'G#6', 'A#6', // 20-24
 ];
 
 
@@ -290,51 +313,28 @@ let Instrument = function() {
     });
 };
 
-Instrument.prototype.soundMarimba = function(note) {
-	this.ctlmarimba = createSource(this.marimba);
-	this.ctlmarimba.gainNode.gain.value = parseInt(document.getElementById("marimba-volume").value) / 100;
-	this.ctlmarimba.source.loop = false;
-    this.ctlmarimba.source.detune.value = noteCentsOffsets[note];
-	let onName = this.ctlmarimba.source.start ? 'start' : 'noteOn';
-	this.ctlmarimba.source[onName](0);
-};
-
-Instrument.prototype.soundSynth = function(note) {
-    this.ctlsynth = createSource(this.synth);
-    this.ctlsynth.gainNode.gain.value = parseInt(document.getElementById("synth-volume").value) / 100;
-    this.ctlsynth.source.loop = false;
-    this.ctlsynth.source.detune.value = noteCentsOffsets[note];
-    let onName = this.ctlsynth.source.start ? 'start' : 'noteOn';
-    this.ctlsynth.source[onName](0);
-};
-
-Instrument.prototype.startMarimba = function() {
-    setTimeout(() => {
-        invl1 = setInterval(() => {
-            const randomIndex = Math.floor(Math.random() * pentatonic_scale.length);
-            const randomNote = pentatonic_scale[randomIndex];
-            try {
-                this.soundMarimba(randomNote);
-            } catch (TypeError) {
-                // Don't play anything
-            }
-        }, 200);
-    }, timeUntilNextSecond());
-    
-};
-
-Instrument.prototype.startSynth = function() {
-    setTimeout(() => {
-        invl2 = setInterval(() => {
-            const randomIndex = Math.floor(Math.random() * pentatonic_scale.length);
-            const randomNote = pentatonic_scale[randomIndex];
-            try {
-                this.soundSynth(randomNote);
-            } catch (TypeError) {
-                // Don't play anything
-            }
-        }, 400);
-    }, timeUntilNextSecond());
+Instrument.prototype.sound = function(sound, note) {
+    let filterValue = 100;
+    switch (sound) {
+        case "marimba":
+            this.ctl = createSource(this.marimba);
+            this.ctl.gainNode.gain.value = parseInt(document.getElementById("marimba-volume").value) / 100;
+            filterValue = parseInt(document.getElementById("marimba-filter").value);
+            break;
+        case "synth":
+            this.ctl = createSource(this.synth);
+            this.ctl.gainNode.gain.value = parseInt(document.getElementById("synth-volume").value) / 100;
+            filterValue = parseInt(document.getElementById("synth-filter").value);
+            break;
+        default:
+            console.error('Unknown instrument sound provided.');
+            break;
+    }
+    this.ctl.source.loop = false;
+    determineFilter(this.ctl.filter, filterValue);
+    this.ctl.source.detune.value = noteCentsOffsets[note];
+    let onName = this.ctl.source.start ? 'start' : 'noteOn';
+    this.ctl.source[onName](0);
 };
 
 Instrument.prototype.soundGuitar = function(intensity, density, variation) {
@@ -426,10 +426,8 @@ Sequencer.prototype.playSound = function(sound) {
     }
 	this.ctl.gainNode.gain.value = parseInt(document.getElementById("sequencer-volume").value) / 100;
 	this.ctl.source.loop = false;
-    // Set lowpass
-    let x = parseInt(document.getElementById("sequencer-filter").value);
-    x = Math.round(Math.exp(x / 100 * Math.log(20000)) + 200);
-    this.ctl.filter.frequency.setTargetAtTime(x, context.currentTime, 0);
+    let filterValue = parseInt(document.getElementById("sequencer-filter").value);
+    determineFilter(this.ctl.filter, filterValue);
 	let onName = this.ctl.source.start ? 'start' : 'noteOn';
 	this.ctl.source[onName](0);
 };

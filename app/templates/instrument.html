@@ -1,14 +1,29 @@
 <h2>Instruments</h2>
 
-<a id="marimba" class="btn btn-light" onclick="instrumentTrack.startMarimba()">Start Marimba</a>
-<br><label for="marimba-volume">Volume:</label><br>
-<input id="marimba-volume" type="range" min="0" max="200" value="100" />
+<div>
+    <hr>
+    <label for="master-volume">Master Volume:</label><br>
+    <input id="master-volume" type="range" min="0" max="200" value="100" oninput="ambienceTrack.setMaster(this)" />
+</div>
 
 <br>
 
-<a id="synth" class="btn btn-light" onclick="instrumentTrack.startSynth()">Start Synth</a>
+<a id="marimba" class="btn btn-light">Start Marimba</a>
+<br>
+<label for="marimba-volume">Volume:</label><br>
+<input id="marimba-volume" type="range" min="0" max="200" value="100" />
+<br>
+<label for="marimba-filter">Filter:</label><br>
+<input id="marimba-filter" type="range" min="0" max="200" value="100" />
+
+<br>
+
+<a id="synth" class="btn btn-light">Start Synth</a>
 <br><label for="synth-volume">Volume:</label><br>
 <input id="synth-volume" type="range" min="0" max="200" value="100" />
+<br>
+<label for="synth-filter">Filter:</label><br>
+<input id="synth-filter" type="range" min="0" max="200" value="100" />
 
 <br>
 

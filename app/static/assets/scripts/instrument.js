@@ -3,6 +3,22 @@ console.log("Sanity check from instrument.js.");
 let guitar_intensity = 0;
 let guitar_density = 1;
 
+// Get a random pentatonic note
+function getRandomNote(minIndex, maxIndex) {
+    if (minIndex < 0 || maxIndex >= pentatonic_scale.length || minIndex > maxIndex) {
+        throw new Error("Invalid index range");
+    }
+    return pentatonic_scale[Math.floor(Math.random() * (maxIndex - minIndex + 1)) + minIndex];
+}
+// Sound marimba
+function soundMarimba() {
+    instrumentTrack.sound("marimba", getRandomNote(5,14));
+}
+// Sound synth
+function soundSynth() {
+    instrumentTrack.sound("synth", getRandomNote(0,9));
+}
+
 // Trigger next guitar sample based on sliders
 function nextGuitarSample() {
     let intensity;
@@ -45,11 +61,27 @@ $(document).ready(function(){
         guitar_density = document.getElementById("guitar-density").value;
     });
 
-    // Enable/disable tracks
+    // Start guitar
     $("#guitarTest").click(function() {
         uiTrack.sound("button");
         setTimeout(() => {
             setInterval(nextGuitarSample, 6400);
+        }, timeUntilNextSecond());
+    });
+
+    // Start marimba
+    $("#marimba").click(function() {
+        uiTrack.sound("button");
+        setTimeout(() => {
+            setInterval(soundMarimba, 200);
+        }, timeUntilNextSecond());
+    });
+
+    // Start synth
+    $("#synth").click(function() {
+        uiTrack.sound("button");
+        setTimeout(() => {
+            setInterval(soundSynth, 400);
         }, timeUntilNextSecond());
     });
 
