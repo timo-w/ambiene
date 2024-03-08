@@ -1,3 +1,5 @@
+{% load static %}
+
 <h2>Ambience Mix</h2>
 
 <a id="mixer-start" class="btn btn-light" onclick="ambienceTrack.toggle()" >Start/Stop</a>
@@ -14,56 +16,56 @@
 <div class="mixer">
 
     <section class="channel">
-        <h3>Birds</h3>
+        <img src={% static 'assets/icons/ambient/birds.png' %}>
         <a id="toggle-birds" class="slider-toggle active">ON</a>
         <input id="slider-birds" class="slider" type="range" min="0" max="100" value="0" />
         <p class="slider-label">0</p>
     </section>
 
     <section class="channel">
-        <h3>Campfire</h3>
+        <img src={% static 'assets/icons/ambient/fire.png' %}>
         <a id="toggle-fire" class="slider-toggle active">ON</a>
         <input id="slider-fire" class="slider" type="range" min="0" max="100" value="0" />
         <p class="slider-label">0</p>
     </section>
 
     <section class="channel">
-        <h3>Rain</h3>
+        <img src={% static 'assets/icons/ambient/rain.png' %}>
         <a id="toggle-rain" class="slider-toggle active">ON</a>
         <input id="slider-rain" class="slider" type="range" min="0" max="100" value="0" />
         <p class="slider-label">0</p>
     </section>
 
     <section class="channel">
-        <h3>Coffee Shop</h3>
+        <img src={% static 'assets/icons/ambient/shop.png' %}>
         <a id="toggle-shop" class="slider-toggle active">ON</a>
         <input id="slider-shop" class="slider" type="range" min="0" max="100" value="0" />
         <p class="slider-label">0</p>
     </section>
 
     <section class="channel">
-        <h3>Crickets</h3>
+        <img src={% static 'assets/icons/ambient/crickets.png' %}>
         <a id="toggle-crickets" class="slider-toggle active">ON</a>
         <input id="slider-crickets" class="slider" type="range" min="0" max="100" value="0" />
         <p class="slider-label">0</p>
     </section>
 
     <section class="channel">
-        <h3>Harbour</h3>
+        <img src={% static 'assets/icons/ambient/harbour.png' %}>
         <a id="toggle-harbour" class="slider-toggle active">ON</a>
         <input id="slider-harbour" class="slider" type="range" min="0" max="100" value="0" />
         <p class="slider-label">0</p>
     </section>
 
     <section class="channel">
-        <h3>Thunder</h3>
+        <img src={% static 'assets/icons/ambient/thunder.png' %}>
         <a id="toggle-thunder" class="slider-toggle active">ON</a>
         <input id="slider-thunder" class="slider" type="range" min="0" max="100" value="0" />
         <p class="slider-label">0</p>
     </section>
 
     <section id="filter-channel" class="channel">
-        <h3>Filter</h3>
+        <img src={% static 'assets/icons/ambient/filter.png' %}>
         <a id="toggle-filter" class="slider-toggle active">ON</a>
         <input id="slider-filter" class="slider" type="range" min="0" max="100" value="50" oninput="ambienceTrack.setFilter(this)" />
         <p class="slider-label">50</p>
