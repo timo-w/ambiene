@@ -18,6 +18,46 @@ function soundMarimba() {
 function soundSynth() {
     instrumentTrack.sound("synth", getRandomNote(0,9));
 }
+// Sound flute
+function soundFlute() {
+    let chord = [getRandomNote(9, 15), getRandomNote(14, 18)]
+    for (let i=0; i<chord.length; i++) {
+        instrumentTrack.sound("flute", chord[i]);
+    }  
+}
+// Sound piano
+function soundPiano() {
+    // Pick a random number
+    let variation = Math.floor(Math.random() * parseInt($("#piano-density").val()));
+    switch (variation) {
+        // Play a chord
+        case 0:
+            instrumentTrack.sound("piano", getRandomNote(0, 9));
+            instrumentTrack.sound("piano", getRandomNote(5, 14));
+            instrumentTrack.sound("piano", getRandomNote(9, 17));
+            break;
+        // Play two notes
+        case 1:
+            instrumentTrack.sound("piano", getRandomNote(6, 10));
+            instrumentTrack.sound("piano", getRandomNote(8, 16));
+            break;
+        // Play a single note
+        case 2:
+            instrumentTrack.sound("piano", getRandomNote(8, 14));
+            break;
+        case 3:
+            instrumentTrack.sound("piano", getRandomNote(10, 16));
+            break;
+        // Play two notes quickly
+        case 4:
+            instrumentTrack.sound("piano", getRandomNote(8, 16));
+            setTimeout(() => {
+                instrumentTrack.sound("piano", getRandomNote(8, 16));
+            }, 200);
+        // Otherwise do nothing
+    }
+}
+
 
 // Trigger next guitar sample based on sliders
 function nextGuitarSample() {
@@ -65,6 +105,7 @@ $(document).ready(function(){
     $("#guitarTest").click(function() {
         uiTrack.sound("button");
         setTimeout(() => {
+            nextGuitarSample();
             setInterval(nextGuitarSample, 6400);
         }, timeUntilNextSecond());
     });
@@ -73,6 +114,7 @@ $(document).ready(function(){
     $("#marimba").click(function() {
         uiTrack.sound("button");
         setTimeout(() => {
+            soundMarimba();
             setInterval(soundMarimba, 200);
         }, timeUntilNextSecond());
     });
@@ -81,7 +123,26 @@ $(document).ready(function(){
     $("#synth").click(function() {
         uiTrack.sound("button");
         setTimeout(() => {
+            soundSynth();
             setInterval(soundSynth, 400);
+        }, timeUntilNextSecond());
+    });
+
+    // Start flute
+    $("#flute").click(function() {
+        uiTrack.sound("button");
+        setTimeout(() => {
+            soundFlute();
+            setInterval(soundFlute, 800);
+        }, timeUntilNextSecond());
+    });
+
+    // Start piano
+    $("#piano").click(function() {
+        uiTrack.sound("button");
+        setTimeout(() => {
+            soundPiano();
+            setInterval(soundPiano, 400);
         }, timeUntilNextSecond());
     });
 

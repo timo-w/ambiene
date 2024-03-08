@@ -122,7 +122,7 @@ function createSource(buffer, doNotAnalyse=false) {
 // Calculate the time until the next second
 function timeUntilNextSecond() {
     const now = context.currentTime;
-    const delay = Math.ceil(now) - now + 1;
+    const delay = Math.ceil(now) - now;
     return delay * 1000; // Convert to milliseconds
 };
 
@@ -299,6 +299,8 @@ let Instrument = function() {
     loadSounds(this, {
         marimba: marimbaFile,
         synth: synthFile,
+        flute: fluteFile,
+        piano: pianoFile,
     });
 };
 
@@ -314,6 +316,16 @@ Instrument.prototype.sound = function(sound, note) {
             this.ctl = createSource(this.synth);
             this.ctl.gainNode.gain.value = parseInt(document.getElementById("synth-volume").value) / 100;
             filterValue = parseInt(document.getElementById("synth-filter").value);
+            break;
+        case "flute":
+            this.ctl = createSource(this.flute);
+            this.ctl.gainNode.gain.value = parseInt(document.getElementById("flute-volume").value) / 100;
+            filterValue = parseInt(document.getElementById("flute-filter").value);
+            break;
+        case "piano":
+            this.ctl = createSource(this.piano);
+            this.ctl.gainNode.gain.value = parseInt(document.getElementById("piano-volume").value) / 100;
+            filterValue = parseInt(document.getElementById("piano-filter").value);
             break;
         default:
             console.error('Unknown instrument sound provided.');

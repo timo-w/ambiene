@@ -8,6 +8,7 @@ Mixer Test
 {% block head %}
 <link rel="stylesheet" href={% static 'assets/styles/mixer.css' %}>
 <link rel="stylesheet" href={% static 'assets/styles/sequencer.css' %}>
+<link rel="stylesheet" href={% static 'assets/styles/instrument.css' %}>
 <script src="{% static 'assets/scripts/navigation.js' %}"></script>
 {% endblock %}
 
@@ -69,6 +70,8 @@ Mixer Test
     // Instrument
     let marimbaFile = "{% static 'assets/sounds/instrument/marimba.mp3' %}";
     let synthFile = "{% static 'assets/sounds/instrument/synth.mp3' %}";
+    let fluteFile = "{% static 'assets/sounds/instrument/flute.mp3' %}";
+    let pianoFile = "{% static 'assets/sounds/instrument/piano.mp3' %}";
 
     // Drums
     let kickFile = "{% static 'assets/sounds/instrument/drums/kick.mp3' %}";

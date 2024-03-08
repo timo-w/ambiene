@@ -8,32 +8,77 @@
 
 <br>
 
-<a id="marimba" class="btn btn-light">Start Marimba</a>
-<br>
-<label for="marimba-volume">Volume:</label><br>
-<input id="marimba-volume" type="range" min="0" max="200" value="100" />
-<br>
-<label for="marimba-filter">Filter:</label><br>
-<input id="marimba-filter" type="range" min="0" max="200" value="100" />
+<section class="instrument-container">
 
-<br>
+    <div class="instrument">
+        <a id="marimba" class="btn btn-light">Start Marimba</a>
+        <br>
+        <label for="marimba-volume">Volume:</label><br>
+        <input id="marimba-volume" type="range" min="0" max="200" value="100" />
+        <br>
+        <label for="marimba-filter">Filter:</label><br>
+        <input id="marimba-filter" type="range" min="0" max="200" value="100" />
+    </div>
 
-<a id="synth" class="btn btn-light">Start Synth</a>
-<br><label for="synth-volume">Volume:</label><br>
-<input id="synth-volume" type="range" min="0" max="200" value="100" />
-<br>
-<label for="synth-filter">Filter:</label><br>
-<input id="synth-filter" type="range" min="0" max="200" value="100" />
+    <div class="instrument">
+        <a id="synth" class="btn btn-light">Start Synth</a>
+        <br><label for="synth-volume">Volume:</label><br>
+        <input id="synth-volume" type="range" min="0" max="200" value="100" />
+        <br>
+        <label for="synth-filter">Filter:</label><br>
+        <input id="synth-filter" type="range" min="0" max="200" value="100" />
+    </div>
 
-<br>
+    <div class="instrument">
+        <a id="guitarTest" class="btn btn-light">Start Guitar</a>
+        <br>
+        <label for="guitar-volume">Volume:</label><br>
+        <input id="guitar-volume" type="range" min="0" max="200" value="100" oninput="instrumentTrack.setGuitar(this)" />
+        <br>
+        <label for="guitar-intensity">Intensity:</label><br>
+        <input id="guitar-intensity" type="range" min="0" max="2" value="0" />
+        <br>
+        <label for="guitar-density">Density:</label><br>
+        <input id="guitar-density" type="range" min="0" max="2" value="1" />
+    </div>
 
-<a id="guitarTest" class="btn btn-light">Start Guitar</a>
-<br>
-<label for="guitar-volume">Volume:</label><br>
-<input id="guitar-volume" type="range" min="0" max="200" value="100" oninput="instrumentTrack.setGuitar(this)" />
-<br>
-<label for="guitar-intensity">Intensity:</label><br>
-<input id="guitar-intensity" type="range" min="0" max="2" value="0" />
-<br>
-<label for="guitar-density">Density:</label><br>
-<input id="guitar-density" type="range" min="0" max="2" value="1" />
+    <div class="instrument">
+        <a id="flute" class="btn btn-light">Start Flute</a>
+        <br>
+        <label for="flute-volume">Volume:</label><br>
+        <input id="flute-volume" type="range" min="0" max="200" value="100" />
+        <br>
+        <label for="flute-filter">Filter:</label><br>
+        <input id="flute-filter" type="range" min="0" max="200" value="100" />
+    </div>
+
+    <div class="instrument">
+        <a id="piano" class="btn btn-light">Start Piano</a>
+        <br>
+        <label for="piano-volume">Volume:</label><br>
+        <input id="piano-volume" type="range" min="0" max="200" value="100" />
+        <br>
+        <label for="piano-filter">Filter:</label><br>
+        <input id="piano-filter" type="range" min="0" max="200" value="100" />
+        <br>
+        <label for="piano-density">Density:</label><br>
+        <input id="piano-density" type="range" min="6" max="26" value="16" />
+    </div>
+
+    <div class="instrument">
+        
+    </div>
+
+    <div class="instrument">
+        
+    </div>
+
+    <div class="instrument">
+        
+    </div>
+
+    <div class="instrument">
+        
+    </div>
+
+</section>
