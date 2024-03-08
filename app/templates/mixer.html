@@ -15,37 +15,37 @@
 
     <section class="channel">
         <h3>Birds</h3>
-        <a class="slider-toggle active">ON</a>
-        <input id="slider-1" class="slider" type="range" min="0" max="100" value="0" oninput="ambienceTrack.setBirds(this)" />
+        <a id="toggle-birds" class="slider-toggle active">ON</a>
+        <input id="slider-birds" class="slider" type="range" min="0" max="100" value="0" />
         <p class="slider-label">0</p>
     </section>
 
     <section class="channel">
         <h3>Campfire</h3>
-        <a class="slider-toggle active">ON</a>
-        <input id="slider-2" class="slider" type="range" min="0" max="100" value="0" oninput="ambienceTrack.setFire(this)" />
+        <a id="toggle-fire" class="slider-toggle active">ON</a>
+        <input id="slider-fire" class="slider" type="range" min="0" max="100" value="0" />
         <p class="slider-label">0</p>
     </section>
 
     <section class="channel">
         <h3>Rain</h3>
-        <a class="slider-toggle active">ON</a>
-        <input id="slider-3" class="slider" type="range" min="0" max="100" value="0" oninput="ambienceTrack.setRain(this)" />
+        <a id="toggle-rain" class="slider-toggle active">ON</a>
+        <input id="slider-rain" class="slider" type="range" min="0" max="100" value="0" />
         <p class="slider-label">0</p>
     </section>
 
     <section class="channel">
         <h3>Coffee Shop</h3>
-        <a class="slider-toggle active">ON</a>
-        <input id="slider-4" class="slider" type="range" min="0" max="100" value="0" oninput="ambienceTrack.setShop(this)" />
+        <a id="toggle-shop" class="slider-toggle active">ON</a>
+        <input id="slider-shop" class="slider" type="range" min="0" max="100" value="0" />
         <p class="slider-label">0</p>
     </section>
 
-    <section class="channel">
-        <h3>Lowpass</h3>
-        <a class="slider-toggle active">ON</a>
-        <input id="slider-5" class="slider" type="range" min="0" max="100" value="100" oninput="ambienceTrack.setLowpass(this)" />
-        <p class="slider-label">100</p>
+    <section id="filter-channel" class="channel">
+        <h3>Filter</h3>
+        <a id="toggle-filter" class="slider-toggle active">ON</a>
+        <input id="slider-filter" class="slider" type="range" min="0" max="100" value="50" oninput="ambienceTrack.setFilter(this)" />
+        <p class="slider-label">50</p>
     </section>
 
 </div>

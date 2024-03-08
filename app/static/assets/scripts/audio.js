@@ -96,7 +96,7 @@ function createSource(buffer, doNotAnalyse=false) {
     let filter = context.createBiquadFilter();
 
     source.buffer = buffer;
-    source.loop = true;
+    source.loop = false;
     source.connect(gainNode);
     gainNode.connect(filter);
     // Don't connect to analyser (UI sounds) for visualisation
@@ -129,7 +129,7 @@ function timeUntilNextSecond() {
 
 // Determine type and value of filter (1-100=Lowpass, 100-200=Highpass)
 function determineFilter(filterNode, value) {
-    if (value > 0 && value <= 100) {
+    if (value >= 0 && value <= 100) {
         filterNode.type = "lowpass";
         value = Math.round(Math.exp(value / 100 * Math.log(20000)) + 200);
         filterNode.frequency.setTargetAtTime(value, context.currentTime, 0);
@@ -187,7 +187,6 @@ let Ambience = function() {
         birds: birdsFile,
         fire: fireFile,
         rain: rainFile,
-        wind: windFile,
         shop: shopFile,
     });
     this.isPlaying = false;
@@ -197,24 +196,24 @@ Ambience.prototype.play = function() {
     // Create sources
     this.ctlbirds = createSource(this.birds);
     this.ctlfire = createSource(this.fire);
-    this.ctlwind = createSource(this.wind);
     this.ctlrain = createSource(this.rain);
     this.ctlshop = createSource(this.shop);
-    // Set initial gain based on sliders
+    // Set initial values
     this.masterVolume = parseInt(document.getElementById("master-volume").value) / 100;
-    this.ctlbirds.volume = parseInt(document.getElementById("slider-1").value) / 100;
-    this.ctlfire.volume = parseInt(document.getElementById("slider-2").value) / 100;
-    this.ctlwind.volume = 0;
-    this.ctlrain.volume = parseInt(document.getElementById("slider-3").value) / 100;
-    this.ctlshop.volume = parseInt(document.getElementById("slider-4").value) / 100;
+    this.ctlbirds.volume = parseInt(document.getElementById("slider-birds").value) / 100;
+    this.ctlfire.volume = parseInt(document.getElementById("slider-fire").value) / 100;
+    this.ctlrain.volume = parseInt(document.getElementById("slider-rain").value) / 100;
+    this.ctlshop.volume = parseInt(document.getElementById("slider-shop").value) / 100;
     this.setMaster();
-    // Set initial lowpass
-    this.setLowpass(document.getElementById("slider-5"));
+    this.setFilter(document.getElementById("slider-filter"));
     // Start playback in a loop
+    this.ctlbirds.source.loop = true;
+    this.ctlfire.source.loop = true;
+    this.ctlrain.source.loop = true;
+    this.ctlshop.source.loop = true;
     let onName = this.ctlbirds.source.start ? 'start' : 'noteOn';
     this.ctlbirds.source[onName](0);
     this.ctlfire.source[onName](0);
-    this.ctlwind.source[onName](0);
     this.ctlrain.source[onName](0);
     this.ctlshop.source[onName](0);
 };
@@ -224,7 +223,6 @@ Ambience.prototype.stop = function() {
     this.ctlbirds.source[offName](0);
     this.ctlfire.source[offName](0);
     this.ctlrain.source[offName](0);
-    this.ctlwind.source[offName](0);
     this.ctlshop.source[offName](0);
 };
 
@@ -235,42 +233,34 @@ Ambience.prototype.toggle = function() {
 
 Ambience.prototype.setMaster = function() {
     this.masterVolume = parseInt(document.getElementById("master-volume").value) / 100;
+    this.setBirds(parseInt($("#slider-birds").val()) / 100);
+    this.setFire(parseInt($("#slider-fire").val()) / 100);
+    this.setRain(parseInt($("#slider-rain").val()) / 100);
+    this.setShop(parseInt($("#slider-shop").val()) / 100);
+};
+Ambience.prototype.setBirds = function(value) {
+    this.ctlbirds.volume = $("#toggle-birds").hasClass("active") ? value : 0;
     this.ctlbirds.gainNode.gain.value = this.ctlbirds.volume * this.masterVolume;
-    this.ctlfire.gainNode.gain.value = this.ctlfire.volume * this.masterVolume;
-    this.ctlwind.gainNode.gain.value = this.ctlwind.volume * this.masterVolume;
-    this.ctlrain.gainNode.gain.value = this.ctlrain.volume * this.masterVolume;
-    this.ctlshop.gainNode.gain.value = this.ctlshop.volume * this.masterVolume;
 };
-Ambience.prototype.setBirds = function(element) {
-	this.ctlbirds.volume = parseInt(element.value) / parseInt(element.max);
-    this.ctlbirds.gainNode.gain.value = this.ctlbirds.volume * this.masterVolume;
-};
-Ambience.prototype.setFire = function(element) {
-	this.ctlfire.volume = parseInt(element.value) / parseInt(element.max);
+Ambience.prototype.setFire = function(value) {
+	this.ctlfire.volume = $("#toggle-fire").hasClass("active") ? value : 0;
     this.ctlfire.gainNode.gain.value = this.ctlfire.volume * this.masterVolume;
 };
-Ambience.prototype.setWind = function(element) {
-	this.ctlwind.volume = parseInt(element.value) / parseInt(element.max);
-    this.ctlwind.gainNode.gain.value = this.ctlwind.volume * this.masterVolume;
-};
-Ambience.prototype.setRain = function(element) {
-	this.ctlrain.volume = parseInt(element.value) / parseInt(element.max);
+Ambience.prototype.setRain = function(value) {
+	this.ctlrain.volume = $("#toggle-rain").hasClass("active") ? value : 0;
     this.ctlrain.gainNode.gain.value = this.ctlrain.volume * this.masterVolume;
 };
-Ambience.prototype.setShop = function(element) {
-	this.ctlshop.volume = parseInt(element.value) / parseInt(element.max);
+Ambience.prototype.setShop = function(value) {
+	this.ctlshop.volume = $("#toggle-shop").hasClass("active") ? value : 0;
     this.ctlshop.gainNode.gain.value = this.ctlshop.volume * this.masterVolume;
 };
 
-Ambience.prototype.setLowpass = function(element) {
-	let x = parseInt(element.value);
-    // Convert to exponential scale
-    x = Math.round(Math.exp(x / 100 * Math.log(20000)) + 200);
-	this.ctlbirds.filter.frequency.setTargetAtTime(x, context.currentTime, 0);
-    this.ctlfire.filter.frequency.setTargetAtTime(x, context.currentTime, 0);
-    this.ctlrain.filter.frequency.setTargetAtTime(x, context.currentTime, 0);
-    this.ctlwind.filter.frequency.setTargetAtTime(x, context.currentTime, 0);
-    this.ctlshop.filter.frequency.setTargetAtTime(x, context.currentTime, 0);
+Ambience.prototype.setFilter = function(element) {
+	let filterValue = $("#toggle-filter").hasClass("active") ? parseInt(element.value * 2) : 100;
+    determineFilter(this.ctlbirds.filter, filterValue);
+    determineFilter(this.ctlfire.filter, filterValue);
+    determineFilter(this.ctlrain.filter, filterValue);
+    determineFilter(this.ctlshop.filter, filterValue);
 };
 
 
@@ -299,7 +289,6 @@ UI.prototype.sound = function(sound) {
             break;
     }
 	this.ctl.gainNode.gain.value = 0.8;
-	this.ctl.source.loop = false;
 	let onName = this.ctl.source.start ? 'start' : 'noteOn';
 	this.ctl.source[onName](0);
 };
@@ -330,7 +319,6 @@ Instrument.prototype.sound = function(sound, note) {
             console.error('Unknown instrument sound provided.');
             break;
     }
-    this.ctl.source.loop = false;
     determineFilter(this.ctl.filter, filterValue);
     this.ctl.source.detune.value = noteCentsOffsets[note];
     let onName = this.ctl.source.start ? 'start' : 'noteOn';
@@ -371,7 +359,6 @@ Instrument.prototype.soundGuitar = function(intensity, density, variation) {
     });
     this.ctlguitar = createSource(this.sample);
     this.ctlguitar.gainNode.gain.value = parseInt(document.getElementById("guitar-volume").value) / 100;
-	this.ctlguitar.source.loop = false;
 	let onName = this.ctlguitar.source.start ? 'start' : 'noteOn';
 	this.ctlguitar.source[onName](0);
 };
@@ -425,7 +412,6 @@ Sequencer.prototype.playSound = function(sound) {
             break;
     }
 	this.ctl.gainNode.gain.value = parseInt(document.getElementById("sequencer-volume").value) / 100;
-	this.ctl.source.loop = false;
     let filterValue = parseInt(document.getElementById("sequencer-filter").value);
     determineFilter(this.ctl.filter, filterValue);
 	let onName = this.ctl.source.start ? 'start' : 'noteOn';

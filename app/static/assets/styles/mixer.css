@@ -78,6 +78,9 @@
     border: 2px solid #39b0f9;
     box-shadow: 0 0 8px 0 #39b0f9;
 }
+#filter-channel {
+    border-left: 2px solid #272b2c;
+}
 
 .slider {
     bottom: 3rem;
