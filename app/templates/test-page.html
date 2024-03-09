@@ -15,27 +15,44 @@ Mixer Test
 {% block body %}
                                             
 <!-- Overlay to enable audio -->
-<div id="overlay">click anywhere to start</div>
+<div id="overlay"><h1>Click to start</h1></div>
 <!-- Audio visualiser background -->
 <canvas id="visualiser"></canvas>
 
 
 <div class="panel-nav">
-    <div id="panel-nav-ambience" class="panel-nav-container">
-        <img src={% static 'assets/icons/tree.png' %}>
-        <a>Ambience</a>
+    <div class="panel-nav-row">
+        <div id="panel-nav-ambience" class="panel-nav-container">
+            <img src={% static 'assets/icons/tree.png' %}>
+            <a>Ambience</a>
+        </div>
+        <div id="panel-nav-sequencer" class="panel-nav-container">
+            <img src={% static 'assets/icons/drum.png' %}>
+            <a>Sequencer</a>
+        </div>
+        <div id="panel-nav-instrument" class="panel-nav-container">
+            <img src={% static 'assets/icons/wave.png' %}>
+            <a>Instruments</a>
+        </div>
     </div>
-    <div id="panel-nav-sequencer" class="panel-nav-container">
-        <img src={% static 'assets/icons/drum.png' %}>
-        <a>Sequencer</a>
+    <div class="panel-nav-row-2">
+        <div class="panel-nav-slider">
+            <input id="ambience-master-volume" type="range" min="0" max="200" value="100" oninput="ambienceTrack.setMaster()" />
+        </div>
+        <div class="panel-nav-slider">
+            <input id="sequencer-master-volume" type="range" min="0" max="100" value="50" />
+        </div>
+        <div class="panel-nav-slider">
+            <input id="instrument-master-volume" type="range" min="0" max="200" value="100" oninput="instrumentTrack.setMaster()" />
+        </div>
     </div>
-    <div id="panel-nav-instrument" class="panel-nav-container">
-        <img src={% static 'assets/icons/wave.png' %}>
-        <a>Instruments</a>
-    </div>
-</div>
+</div>    
 
+<div id="settingsIcon">
+    <img src={% static 'assets/icons/settings.png' %} alt="Settings">
+</div>
 <section id="settings">
+    <h1>Settings</h1>
     <input type="checkbox" id="muteUI" checked />
     <label for="muteUI">Play UI sounds</label>
     <br>
@@ -58,6 +75,8 @@ Mixer Test
 <section id="panel-instrument">
     {% include "instrument.html" %}
 </section>
+
+<section id="panel-base"></section>
 
 
 

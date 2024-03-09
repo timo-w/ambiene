@@ -7,6 +7,20 @@ html, body {
     color: #DDD;
 }
 
+h1 {
+    font-family: "Alumni Sans Pinstripe", sans-serif;
+    text-transform: uppercase;
+}
+.panel-title {
+    position: absolute;
+    top: 13rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60rem;
+    font-size: 120px;
+    text-align: left;
+}
+
 /* Overlay */
 #overlay {
     position: absolute;
@@ -21,7 +35,10 @@ html, body {
     justify-content: center;
     padding-top: 32rem;
     box-sizing: border-box;
-    font-size: 32px;
+
+    h1{
+        font-size: 100px;
+    }
 }
 #overlay.overlay-hidden {
     display: none;
@@ -48,11 +65,29 @@ html, body {
 
 
 /* Settings menu */
+#settingsIcon {
+    position: absolute;
+    z-index: 2;
+    width: 3rem;
+    height: 3rem;
+    bottom: 2rem;
+    left: 2rem;
+    transition: 0.15s ease-in-out;
+
+    img {
+        width: 100%;
+    }
+}
+#settingsIcon:hover {
+    cursor: pointer;
+    transform: scale(1.1) rotate(30deg);
+}
 #settings {
+    display: none;
     position: absolute;
     z-index: 2;
     width: 16rem;
-    height: 10rem;
+    height: 12rem;
     bottom: 4rem;
     left: 4rem;
     padding: 1rem;
@@ -62,12 +97,16 @@ html, body {
     backdrop-filter: blur(8px);
     transition: 0.2s ease-in-out;
 
+    h1 {
+        text-align: center;
+    }
+
     a {
         position: absolute;
         bottom: 1rem;
         left: 50%;
         border-radius: 0.3rem;
-        padding-top: 0.15rem;
+        padding-top: 0.2rem;
         text-align: center;
         width: 5rem;
         height: 2rem;
@@ -79,6 +118,10 @@ html, body {
         background-color: #484f55;
         cursor: pointer;
     }
+}
+#settings:hover {
+    background-color: rgba(17, 17, 17, 0.6);
+    backdrop-filter: blur(20px);
 }
 
 /* Audio visualiser */
@@ -104,7 +147,7 @@ html, body {
 
 .panel-nav {
     position: absolute;
-    height: 10rem;
+    height: 12rem;
     width: 50rem;
     margin-left: -25rem;
     margin-top: 50rem;
@@ -112,19 +155,32 @@ html, body {
     padding-bottom: 1rem;
     left: 50%;
     display: flex;
+    flex-direction: column;
     z-index: 2;
-    justify-content: space-evenly;
     border-radius: 1rem;
     background-color: rgba(17, 17, 17, 0.4);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(8px);
     transition: 0.2s ease-in-out;
 
+    .panel-nav-row {
+        display: flex;
+        flex: 1;
+        gap: 5rem;
+        padding: 0 3rem;
+    }
+    .panel-nav-row-2 {
+        display: flex;
+        flex-shrink: 1;
+        gap: 5rem;
+        padding: 0 3rem;
+    }
+
     .panel-nav-container {
         position: relative;
-        width: 20%;
-        height: 100%;
-        float: left;
+        height: 80%;
+        margin-top: 0.2rem;
+        flex-grow: 3;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -153,8 +209,60 @@ html, body {
         margin-bottom: -1rem;
     }
 
+    .panel-nav-slider {
+        position: relative;
+        margin-top: -1rem;
+        margin-bottom: 0.5rem;
+        display: flex;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        input {
+            width: 100%;
+            background-color: #DDD;
+            height: 0.3rem;
+        }
+        input::-webkit-slider-thumb { 
+            -webkit-appearance: none !important;
+            background-color: #DDD;
+            cursor: col-resize;
+            height: 1.8rem;
+            width: 0.6rem;
+            border-radius: 0.1rem;
+            z-index: 10;
+            transition: 0.1s ease-in-out;
+        }
+        input::-webkit-slider-thumb:hover { 
+            width: 0.8rem;
+        }
+        input#ambience-master-volume::-webkit-slider-thumb:hover { 
+            background-color: #39b0f9;
+        }
+        input#sequencer-master-volume::-webkit-slider-thumb:hover { 
+            background-color: #EC5E47;
+        }
+        input#instrument-master-volume::-webkit-slider-thumb:hover { 
+            background-color: #81DE53;
+        }
+
+    }
+
 }
 .panel-nav:hover {
     background-color: rgba(17, 17, 17, 0.6);
     backdrop-filter: blur(20px);
+}
+
+#panel-base {
+    position: absolute;
+    top: 20rem;
+    left: 50%;
+    height: 30rem;
+    width: 60rem;
+    transform: translateX(-50%);
+    background-color: #272b2c;
+    transition: 0.7s ease-in-out;
 }

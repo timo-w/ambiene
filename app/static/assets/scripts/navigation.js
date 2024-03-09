@@ -5,6 +5,7 @@ $(document).ready(function(){
 
     // Set ambience as initial page
     $("#panel-nav-ambience").addClass("current-panel").css({"border": "2px solid #39b0f9", "box-shadow": "0px 0px 12px -4px #39b0f9"});
+    $("#panel-base").css({"box-shadow": "0px 0px 24px -4px #39b0f9"});
 
     // Ambience page
     $("#panel-nav-ambience").on("click", function() {
@@ -16,6 +17,7 @@ $(document).ready(function(){
         $("#panel-nav-ambience").addClass("current-panel").css({"border": "2px solid #39b0f9", "box-shadow": "0px 0px 12px -4px #39b0f9"});
         $("#panel-nav-sequencer").removeClass("current-panel").css({"border": "none", "box-shadow": "none"});
         $("#panel-nav-instrument").removeClass("current-panel").css({"border": "none", "box-shadow": "none"});
+        $("#panel-base").css({"box-shadow": "0px 0px 24px -4px #39b0f9"});
 
         $("#panel-sequencer").fadeOut(150);
         $("#panel-instrument").fadeOut(150);
@@ -36,6 +38,7 @@ $(document).ready(function(){
         $("#panel-nav-ambience").removeClass("current-panel").css({"border": "none", "box-shadow": "none"});
         $("#panel-nav-sequencer").addClass("current-panel").css({"border": "2px solid #EC5E47", "box-shadow": "0px 0px 12px -4px #EC5E47"});
         $("#panel-nav-instrument").removeClass("current-panel").css({"border": "none", "box-shadow": "none"});
+        $("#panel-base").css({"box-shadow": "0px 0px 24px -4px #EC5E47"});
 
         $("#panel-mixer").fadeOut(150);
         $("#panel-instrument").fadeOut(150);
@@ -56,6 +59,7 @@ $(document).ready(function(){
         $("#panel-nav-ambience").removeClass("current-panel").css({"border": "none", "box-shadow": "none"});
         $("#panel-nav-sequencer").removeClass("current-panel").css({"border": "none", "box-shadow": "none"});
         $("#panel-nav-instrument").addClass("current-panel").css({"border": "2px solid #81DE53", "box-shadow": "0px 0px 12px -4px #81DE53"});
+        $("#panel-base").css({"box-shadow": "0px 0px 24px -4px #81DE53"});
 
         $("#panel-mixer").fadeOut(150);
         $("#panel-sequencer").fadeOut(150);
@@ -99,6 +103,14 @@ $(document).ready(function(){
 
 
     // Settings menu
+    $("#settingsIcon").on("click", function() {
+        uiTrack.sound("click");
+        $("#settings").fadeIn(200);
+    });
+    $("#closeSettings").on("click", function() {
+        uiTrack.sound("click");
+        $("#settings").fadeOut(200);
+    });
     $("#muteUI").on("click", function() {
         if ($(this).is(":checked")) {
             uiTrack.unmute();

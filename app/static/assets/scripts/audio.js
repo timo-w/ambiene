@@ -484,7 +484,7 @@ Sequencer.prototype.playSound = function(sound) {
             console.error('Unknown sequencer sound provided.');
             break;
     }
-	this.ctl.gainNode.gain.value = parseInt(document.getElementById("sequencer-volume").value) / 100;
+	this.ctl.gainNode.gain.value = parseInt(document.getElementById("sequencer-master-volume").value) / 100;
     let filterValue = parseInt(document.getElementById("sequencer-filter").value);
     determineFilter(this.ctl.filter, filterValue);
 	let onName = this.ctl.source.start ? 'start' : 'noteOn';

@@ -1,9 +1,6 @@
 {% load static %}
 
-<h2>Ambience Mix</h2>
-
-<a id="mixer-start" class="btn btn-light" onclick="ambienceTrack.toggle()" >Start/Stop</a>
-<br>
+<h1 class="panel-title"><a style="color:#39b0f9">Ambi</a>ence</h1>
 
 <h3>Presets</h3>
 <a id="mixer-reset" class="btn btn-light">Reset</a>
@@ -14,11 +11,6 @@
 <a id="mixer-preset-5" class="btn btn-light">Midnight Thunder</a>
 <a id="mixer-preset-6" class="btn btn-light">Morning in the Park</a>
 
-<div>
-    <hr>
-    <label for="ambience-master-volume">Master Volume:</label><br>
-    <input id="ambience-master-volume" type="range" min="0" max="200" value="100" oninput="ambienceTrack.setMaster()" />
-</div>
 
 <div class="mixer">
 
