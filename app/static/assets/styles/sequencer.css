@@ -5,7 +5,7 @@
     height: 30rem;
     width: 60rem;
     transform: translateX(-50%);
-    background-color: #484f55;
+    background-color: #272b2c;
 
     .lighter-bg-1, .lighter-bg-2 {
         background-color: #51585f;
@@ -22,6 +22,14 @@
 
 }
 
+.sequencer-main {
+    position: absolute;
+    height: 86%;
+    width: 100%;
+    bottom: 0;
+    background-color: #484f55;
+}
+
 .drum-label-container {
     position: absolute;
     height: 100%;
@@ -32,21 +40,22 @@
 
 .drum-label {
     position: relative;
-    height: calc((100% / 8) - 0.45rem);
-    width: calc(100% - 0.8rem);
-    margin: 0.4rem;
-    padding-top: 0.65rem;
+    width: calc(100% - 1rem);
+    height: 2.41rem;
+    margin: 0.8rem 0.5rem 0.8rem 0.5rem;
     background-color: #484f55;
     border-radius: 0.15rem;
     text-align: center;
     font-weight: bold;
+    transform: translateY(-0.35rem);
+    padding-top: 0.4rem;
+    transition: 0.15s ease-in-out;
 }
 .drum-muted {
     font-style: italic;
     color: #272b2c;
 }
 .drum-label:hover {
-    transition: 0.15s ease-in-out;
     cursor: pointer;
     background-color: #51585f;
 }
@@ -94,4 +103,71 @@
         transform: scale(1.05);
     }
 
+}
+
+.sequencer-controls {
+    position: absolute;
+    height: 14%;
+    width: 100%;
+    top: 0;
+    border-bottom: 1px solid #DDD;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+}
+
+.sequencer-filter-container {
+    position: relative;
+    background-color: #484f55;
+    width: 50%;
+    height: 70%;
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.15s ease-in-out;
+
+    input {
+        width: 90%;
+        background-color: #DDD;
+        height: 0.3rem;
+    }
+    input::-webkit-slider-thumb { 
+        -webkit-appearance: none !important;
+        background-color: #DDD;
+        cursor: col-resize;
+        height: 1.8rem;
+        width: 0.6rem;
+        border-radius: 0.1rem;
+        z-index: 10;
+        transition: 0.1s ease-in-out;
+    }
+    input::-webkit-slider-thumb:hover { 
+        width: 0.8rem;
+        background-color: #EC5E47;
+    }
+}
+.sequencer-filter-container:hover {
+    background-color: #51585f;
+}
+.sequencer-reset-container {
+    position: relative;
+    background-color: #484f55;
+    width: 15%;
+    height: 70%;
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.15s ease-in-out;
+
+    a {
+        font-weight: bold;
+    }
+}
+.sequencer-reset-container:hover {
+    cursor: pointer;
+    background-color: #51585f;
 }

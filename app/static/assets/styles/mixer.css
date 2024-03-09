@@ -12,14 +12,14 @@
     position: relative;
     background-color: #484f55;
     float: left;
-    height: 100%;
+    height: 86%;
     width: calc(100% / 8);
     transition: 0.3s ease-out;
     
     a {
         background: #272b2c;
         border-radius: 0.15rem;
-        top: 4.8rem;
+        top: 4rem;
         padding-top: 0.28rem;
         cursor: pointer;
         display: block;
@@ -54,13 +54,13 @@
 
     img {
         position: absolute;
-        top: -0.5rem;
+        top: -1rem;
         left: 0.2rem;
         height: 7rem;
     }
 
     p {
-        bottom: 1rem;
+        bottom: 0;
         position: absolute;
         text-align: center;
         width: 50%;
@@ -88,19 +88,18 @@
 }
 
 .slider {
-    bottom: 3rem;
-    left: -3.75rem;
+    bottom: 0.8rem;
+    left: -3.23rem;
     position: absolute; 
     transform: rotate(270deg) translate(10rem);
 }
-
 
 input[type='range'] {
     appearance: none !important;
     background: #1f1f1f;
     border-radius: 1rem;
     height: 0.8rem;
-    width: 15rem;
+    width: 14rem;
     transition: 0.15s ease-in-out;
 }
 input[type='range'].slider::-webkit-slider-thumb { 
@@ -116,4 +115,27 @@ input[type='range'].slider::-webkit-slider-thumb:hover {
     background-color: #39b0f9;
     box-shadow: 0px 0px 24px -4px #39b0f9;
     height: 4rem;
+}
+
+.mixer-preset-container {
+    position: absolute;
+    width: 60rem;
+    height: 14%;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    padding: 0 1rem;
+}
+.mixer-preset {
+    background-color: #484f55;
+    padding: 0.6rem 1rem;
+    border-radius: 0.5rem;
+    transition: 0.15s ease-in-out;
+}
+.mixer-preset:hover {
+    cursor: pointer;
+    background-color: #51585f;
+    transform: scale(1.02);
 }

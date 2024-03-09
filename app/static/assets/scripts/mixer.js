@@ -26,7 +26,7 @@ function slideChannel(channelID, target) {
                 channel.style.backgroundColor = "";
             }
             $(channel).trigger("input");
-        }, 10 // <- delay in ms
+        }, 8 // <- delay in ms
     );
 }
 
@@ -163,13 +163,6 @@ $(document).ready(function(){
             3: 90,
             5: 20,
             7: 28,
-        });
-    });
-    $("#mixer-preset-4").click(function() {
-        setPreset({
-            3: 20,
-            5: 90,
-            7: 80,
         });
     });
     $("#mixer-preset-4").click(function() {

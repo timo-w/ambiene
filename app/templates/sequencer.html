@@ -1,55 +1,61 @@
 <h1 class="panel-title"><a style="color:#EC5E47">Sequ</a>encer</h1>
 
-<a id="sequencer-reset" class="btn btn-light" onclick="resetSequencer()" >Clear Sequencer</a>
-
-<div>
-    <label for="sequencer-filter">Filter:</label><br>
-    <input id="sequencer-filter" type="range" min="0" max="200" value="100" />
-</div>
-
-
 <section class="sequencer">
 
-    <div class="drum-label-container">
-        <div class="drum-label">Kick</div>
-        <div class="drum-label">Snare</div>
-        <div class="drum-label">Closed Hi-Hat</div>
-        <div class="drum-label">Open Hi-hat</div>
-        <div class="drum-label">Clap</div>
-        <div class="drum-label">Crunch</div>
-        <div class="drum-label">Shaker</div>
-        <div class="drum-label">Cowbell</div>
+    <div class="sequencer-controls">
+        <div class="sequencer-filter-container">
+            <input id="sequencer-filter" type="range" min="0" max="200" value="100" />
+        </div>
+        <div class="sequencer-reset-container">
+            <a id="sequencer-reset" onclick="resetSequencer()">Clear All</a>
+        </div> 
+    </div>
+        
+    <div class=sequencer-main>
+
+        <div class="drum-label-container">
+            <div class="drum-label">Kick</div>
+            <div class="drum-label">Snare</div>
+            <div class="drum-label">Closed Hi-Hat</div>
+            <div class="drum-label">Open Hi-hat</div>
+            <div class="drum-label">Clap</div>
+            <div class="drum-label">Crunch</div>
+            <div class="drum-label">Shaker</div>
+            <div class="drum-label">Cowbell</div>
+        </div>
+    
+        <div class="drum-track-container">
+    
+            <div class="lighter-bg-1"></div>
+            <div class="lighter-bg-2"></div>
+    
+            <div class="drum-track">
+                <button class="beat current-beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button>
+            </div>
+            <div class="drum-track">
+                <button class="beat current-beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button>
+            </div>
+            <div class="drum-track">
+                <button class="beat current-beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button>
+            </div>
+            <div class="drum-track">
+                <button class="beat current-beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button>
+            </div>
+            <div class="drum-track">
+                <button class="beat current-beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button>
+            </div>
+            <div class="drum-track">
+                <button class="beat current-beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button>
+            </div>
+            <div class="drum-track">
+                <button class="beat current-beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button>
+            </div>
+            <div class="drum-track">
+                <button class="beat current-beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button>
+            </div>
+        </div>
+
     </div>
 
-    <div class="drum-track-container">
-
-        <div class="lighter-bg-1"></div>
-        <div class="lighter-bg-2"></div>
-
-        <div class="drum-track">
-            <button class="beat current-beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button>
-        </div>
-        <div class="drum-track">
-            <button class="beat current-beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button>
-        </div>
-        <div class="drum-track">
-            <button class="beat current-beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button>
-        </div>
-        <div class="drum-track">
-            <button class="beat current-beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button>
-        </div>
-        <div class="drum-track">
-            <button class="beat current-beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button>
-        </div>
-        <div class="drum-track">
-            <button class="beat current-beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button>
-        </div>
-        <div class="drum-track">
-            <button class="beat current-beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button>
-        </div>
-        <div class="drum-track">
-            <button class="beat current-beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button><button class="beat"></button>
-        </div>
-    </div>
 
 </section>
