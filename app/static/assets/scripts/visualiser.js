@@ -7,23 +7,28 @@ let windowHeight = window.innerHeight;
 canvasCtx.clearRect(0, 0, windowWidth, windowHeight);
 
 function draw() {
+        
     drawVisual = requestAnimationFrame(draw);
     analyser.getByteFrequencyData(dataArray);
+
     // Create gradient
     const grd = canvasCtx.createLinearGradient(0, 0, windowWidth, windowHeight);
     grd.addColorStop(0, "#333");
     grd.addColorStop(1, "#111");
     canvasCtx.fillStyle = grd;
     canvasCtx.fillRect(0, 0, windowWidth, windowHeight);
-    const barWidth = (windowWidth / bufferLength) * 2.5;
-    let barHeight;
-    let x = 0;
-    for (let i = 0; i < bufferLength; i++) {
-        barHeight = dataArray[i] * 5;
-        //canvasCtx.fillStyle = `rgb(${barHeight} ${barHeight} ${barHeight})`;
-        canvasCtx.fillStyle = `rgba(221,221,221,0.1)`;
-        canvasCtx.fillRect(x, windowHeight - barHeight / 2, barWidth, barHeight);
-        x += barWidth + 1;
+
+    if ($("#showVis").is(":checked")) {
+        const barWidth = (windowWidth / bufferLength) * 2.5;
+        let barHeight;
+        let x = 0;
+        for (let i = 0; i < bufferLength; i++) {
+            barHeight = dataArray[i] * 5;
+            //canvasCtx.fillStyle = `rgb(${barHeight} ${barHeight} ${barHeight})`;
+            canvasCtx.fillStyle = `rgba(221,221,221,0.1)`;
+            canvasCtx.fillRect(x, windowHeight - barHeight / 2, barWidth, barHeight);
+            x += barWidth + 1;
+        }
     }
 }
 

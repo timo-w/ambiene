@@ -7,7 +7,7 @@ $(document).ready(function(){
     $("#panel-nav-ambience").addClass("current-panel").css({"border": "2px solid #39b0f9", "box-shadow": "0px 0px 12px -4px #39b0f9"});
 
     // Ambience page
-    $("#panel-nav-ambience").on( "click", function() {
+    $("#panel-nav-ambience").on("click", function() {
         
         uiTrack.sound("ui");
         uiTrack.sound("click");
@@ -27,7 +27,7 @@ $(document).ready(function(){
     });
 
     // Sequencer page
-    $("#panel-nav-sequencer").on( "click", function() {
+    $("#panel-nav-sequencer").on("click", function() {
 
         uiTrack.sound("ui");
         uiTrack.sound("click");
@@ -47,7 +47,7 @@ $(document).ready(function(){
     });
 
     // Instrument page
-    $("#panel-nav-instrument").on( "click", function() {
+    $("#panel-nav-instrument").on("click", function() {
 
         uiTrack.sound("ui");
         uiTrack.sound("click");
@@ -95,6 +95,20 @@ $(document).ready(function(){
         } else if (event.key == "|") {
             uiTrack.sound("pipe");
         }
-    }); 
+    });
+
+
+    // Settings menu
+    $("#muteUI").on("click", function() {
+        if ($(this).is(":checked")) {
+            uiTrack.unmute();
+            uiTrack.sound("click");
+        } else {
+            uiTrack.mute();
+        }
+    });
+    $("#showVis").on("click", function() {
+        uiTrack.sound("click");
+    });
 
 });

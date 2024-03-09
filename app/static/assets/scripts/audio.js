@@ -293,6 +293,7 @@ let UI = function() {
         click: clickFile,
         pipe: pipeFile,
     });
+    this.muted = false;
 };
 
 UI.prototype.sound = function(sound) {
@@ -324,9 +325,23 @@ UI.prototype.sound = function(sound) {
             console.error('Unknown UI sound provided.');
             break;
     }
+    // Don't play if muted
+    if (this.muted) {
+        this.ctl.gainNode.gain.value = 0;
+    }
 	let onName = this.ctl.source.start ? 'start' : 'noteOn';
 	this.ctl.source[onName](0);
 };
+
+// Mute/unmute UI sounds
+UI.prototype.mute = function() {
+    this.muted = true;
+}
+UI.prototype.unmute = function() {
+    this.muted = false;
+}
+
+
 
 
 // Instrument track

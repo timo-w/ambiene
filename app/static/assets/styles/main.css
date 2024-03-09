@@ -47,6 +47,40 @@ html, body {
 }
 
 
+/* Settings menu */
+#settings {
+    position: absolute;
+    z-index: 2;
+    width: 16rem;
+    height: 10rem;
+    bottom: 4rem;
+    left: 4rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    background-color: rgba(17, 17, 17, 0.4);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(8px);
+    transition: 0.2s ease-in-out;
+
+    a {
+        position: absolute;
+        bottom: 1rem;
+        left: 50%;
+        border-radius: 0.3rem;
+        padding-top: 0.15rem;
+        text-align: center;
+        width: 5rem;
+        height: 2rem;
+        background-color: #333;
+        transform: translateX(-50%);
+        transition: 0.1s ease-in-out;
+    }
+    a:hover {
+        background-color: #484f55;
+        cursor: pointer;
+    }
+}
+
 /* Audio visualiser */
 #visualiser {
     position: absolute;
