@@ -37,17 +37,32 @@ Mixer Test
     </div>
     <div class="panel-nav-row-2">
         <div class="panel-nav-slider">
-            <input id="ambience-master-volume" type="range" min="0" max="200" value="100" oninput="ambienceTrack.setMaster()" />
+            <input id="ambience-master-volume" class="master-slider" type="range" min="0" max="200" value="100" oninput="ambienceTrack.setMaster()" />
         </div>
         <div class="panel-nav-slider">
-            <input id="sequencer-master-volume" type="range" min="0" max="100" value="50" />
+            <input id="sequencer-master-volume" class="master-slider" type="range" min="0" max="100" value="50" />
         </div>
         <div class="panel-nav-slider">
-            <input id="instrument-master-volume" type="range" min="0" max="200" value="100" oninput="instrumentTrack.setMaster()" />
+            <input id="instrument-master-volume" class="master-slider" type="range" min="0" max="200" value="100" oninput="instrumentTrack.setMaster()" />
         </div>
     </div>
 </div>    
 
+<!-- Chat box -->
+<div id="chatIcon">
+    <img src={% static 'assets/icons/chat.png' %} alt="Chat">
+</div>
+<section id="chat">
+    <h1>Chat</h1>
+    <textarea id="chatText" readonly></textarea>
+    <div class="user-message-container">
+        <input id="userMessage" type="text" placeholder="Enter message:">
+        <button><img src={% static 'assets/icons/send.png' %} alt="Send"></button>
+    </div>
+    <a id="closeChat">Close</a>
+</section>
+
+<!-- Settings menu -->
 <div id="settingsIcon">
     <img src={% static 'assets/icons/settings.png' %} alt="Settings">
 </div>

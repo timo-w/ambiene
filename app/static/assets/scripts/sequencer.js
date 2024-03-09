@@ -2,14 +2,23 @@ console.log("Sanity check from drum.js.");
 
 const sequencer_buttons = document.getElementsByClassName("beat");
 const sequencer_label_buttons = document.getElementsByClassName("drum-label");
+const sequencer_filter = document.getElementById("sequencer-filter");
 let sequencer_state = [];
 let current_beat = 0;
 
 // Clear sequencer
 function resetSequencer() {
+    uiTrack.sound("button");
+    // Turn off all beats
     for (let i=0; i<sequencer_buttons.length; i++) {
         $(sequencer_buttons.item(i)).removeClass("active-beat");
     };
+    // Reset filter
+    sequencer_filter.value = 100;
+    // Turn on all tracks
+    for (let i=0; i<sequencer_label_buttons.length; i++) {
+        $(sequencer_label_buttons.item(i)).removeClass("drum-muted");
+    }
     // Update state
     getSequencerState();
 }
@@ -90,6 +99,13 @@ $(document).ready(function(){
             getSequencerState();
         });
     };
+
+    // Filter slider
+    sequencer_filter.addEventListener("input", () => {
+        if (sequencer_filter.value % 10 == 0) {
+            uiTrack.sound("notch");
+        }
+    });
 
 
 });

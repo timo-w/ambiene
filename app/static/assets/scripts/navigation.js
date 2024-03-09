@@ -1,5 +1,6 @@
 let current_page = "ambience";
 
+const masterSliders = document.getElementsByClassName("master-slider");
 
 $(document).ready(function(){
 
@@ -71,7 +72,11 @@ $(document).ready(function(){
     });
 
     // Arrow key/A-D navigation
-    $(document).on('keyup', function(event) { 
+    $(document).on('keyup', function(event) {
+        // Ignore if user is typing in chat box
+        if (document.activeElement.nodeName == 'INPUT') {
+            return;
+        }
         if (event.key == "ArrowLeft" || event.key == "a") { 
             switch (current_page) {
                 case "sequencer":
@@ -102,10 +107,21 @@ $(document).ready(function(){
     });
 
 
+    // Master volume sliders
+    for (let i=0; i<masterSliders.length; i++) {
+        masterSliders.item(i).addEventListener("input", () => {
+            if (masterSliders.item(i).value % 10 == 0) {
+                uiTrack.sound("notch");
+            }
+        });
+    };
+
+
     // Settings menu
     $("#settingsIcon").on("click", function() {
         uiTrack.sound("click");
         $("#settings").fadeIn(200);
+        $("#chat").hide();
     });
     $("#closeSettings").on("click", function() {
         uiTrack.sound("click");
@@ -122,5 +138,28 @@ $(document).ready(function(){
     $("#showVis").on("click", function() {
         uiTrack.sound("click");
     });
+
+    // Chat box
+    $("#chatIcon").on("click", function() {
+        uiTrack.sound("click");
+        $("#chat").fadeIn(200);
+        $("#settings").hide();
+    });
+    $("#closeChat").on("click", function() {
+        uiTrack.sound("click");
+        $("#chat").fadeOut(200);
+    });
+    // Test messages;
+    console.log("test message");
+    document.getElementById("chatText").value += "Timo: This is a test\n"
+    document.getElementById("chatText").value += "AnotherUser: This is a another test\n"
+    document.getElementById("chatText").value += "AnotherUser: This is a another test\n"
+    document.getElementById("chatText").value += "AnotherUser: This is a another test\n"
+    document.getElementById("chatText").value += "AnotherUser: This is a another test\n"
+    document.getElementById("chatText").value += "AnotherUser: This is a another test\n"
+    document.getElementById("chatText").value += "AnotherUser: This is a another test\n"
+    document.getElementById("chatText").value += "AnotherUser: This is a another test\n"
+    document.getElementById("chatText").value += "AnotherUser: This is a another test\n"
+
 
 });
