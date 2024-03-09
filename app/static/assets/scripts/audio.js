@@ -3,17 +3,23 @@ console.log("Sanity check from audio.js.");
 // Audio context
 const context = new (window.AudioContext || window.webkitAudioContext)();
 
-// Display overlay if context suspended
-if (context.state === 'suspended') {
-    const overlay = document.getElementById('overlay');
-    overlay.className = 'overlay-visible';
-    document.addEventListener('click', () => {
-        context.resume().then(() => {
-            overlay.className = 'overlay-hidden';
-            uiTrack.sound("click");
-        });
-    }, {once: true});
+// Start all tracks
+function initialiseAudio() {
+    ambienceTrack.toggle();
+    startSequencer();
+    startInstruments();
 }
+
+// Display overlay in case of suspended context
+const overlay = document.getElementById('overlay');
+document.addEventListener("click", () => {
+    context.resume().then(() => {
+        overlay.className = "overlay-hidden";
+        uiTrack.sound("click");
+        initialiseAudio();
+    });
+}, {once: true});
+
 
 // For audio visualisation
 const analyser = context.createAnalyser();
@@ -258,11 +264,11 @@ Ambience.prototype.setCrickets = function(value) {
     this.ctlcrickets.gainNode.gain.value = this.ctlcrickets.volume * this.masterVolume;
 };
 Ambience.prototype.setHarbour = function(value) {
-	this.ctlharbour.volume = $("#toggle-shop").hasClass("active") ? value : 0;
+	this.ctlharbour.volume = $("#toggle-harbour").hasClass("active") ? value : 0;
     this.ctlharbour.gainNode.gain.value = this.ctlharbour.volume * this.masterVolume;
 };
 Ambience.prototype.setThunder = function(value) {
-	this.ctlthunder.volume = $("#toggle-shop").hasClass("active") ? value : 0;
+	this.ctlthunder.volume = $("#toggle-thunder").hasClass("active") ? value : 0;
     this.ctlthunder.gainNode.gain.value = this.ctlthunder.volume * this.masterVolume;
 };
 
@@ -294,27 +300,29 @@ UI.prototype.sound = function(sound) {
         case "ui":
             this.ctl = createSource(this.ui, doNotAnalyse=true);
             // Pick a note from pentatonic scale
-            this.ctl.source.detune.value = noteCentsOffsets[pentatonic_scale[Math.floor(Math.random() * 8) + 6]];
+            this.ctl.source.detune.value = noteCentsOffsets[pentatonic_scale[Math.floor(Math.random() * 6) + 6]];
+            this.ctl.gainNode.gain.value = 0.8;
             break;
         case "button":
             this.ctl = createSource(this.button, doNotAnalyse=true);
+            this.ctl.gainNode.gain.value = 0.8;
             break;
         case "notch":
             this.ctl = createSource(this.notch, doNotAnalyse=true);
+            this.ctl.source.detune.value = noteCentsOffsets[pentatonic_scale[17]];
+            this.ctl.gainNode.gain.value = 0.3;
             break;
         case "click":
             this.ctl = createSource(this.click, doNotAnalyse=true);
+            this.ctl.gainNode.gain.value = 0.7;
             break;
         case "pipe":
             this.ctl = createSource(this.pipe);
+            this.ctl.gainNode.gain.value = 5;
             break;
         default:
             console.error('Unknown UI sound provided.');
             break;
-    }
-	this.ctl.gainNode.gain.value = 0.8;
-    if (sound == "pipe") {
-        this.ctl.gainNode.gain.value = 5;
     }
 	let onName = this.ctl.source.start ? 'start' : 'noteOn';
 	this.ctl.source[onName](0);

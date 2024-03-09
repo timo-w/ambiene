@@ -5,9 +5,14 @@ const slider_labels = document.getElementsByClassName("slider-label");
 const slider_toggles = document.getElementsByClassName("slider-toggle");
 
 // Slide volume slider to target
-function slideChannel(channel, label, target) {
+function slideChannel(channelID, target) {
+    const channel = sliders[channelID];
+    const label = slider_labels[channelID]
     const slideInterval = setInterval(
         () => {
+            if (channel.value % 10 == 0) {
+                uiTrack.sound("notch");
+            }
             if (channel.value > target) {
                 channel.value--;
                 channel.style.backgroundColor = "#DDD";
@@ -23,6 +28,37 @@ function slideChannel(channel, label, target) {
             $(channel).trigger("input");
         }, 10 // <- delay in ms
     );
+}
+
+// Turn on/off tracks (for presets)
+function channelOn(channelID, target) {
+    const channelButton = slider_toggles[channelID];
+    slideChannel(channelID, target);
+    if (!$(channelButton).hasClass("active")) {
+        $(channelButton).trigger("click");
+    }
+}
+function channelOff(channelID) {
+    const channelButton = slider_toggles[channelID];
+    // Reset filter track to 50, rest to 0
+    if (channelID == 7) {
+        slideChannel(channelID, 50);
+    } else {
+        slideChannel(channelID, 0);
+    }
+    if ($(channelButton).hasClass("active")) {
+        $(channelButton).trigger("click");
+    }
+}
+// Slide channels to preset
+function setPreset(state) {
+    for (let i=0; i<sliders.length; i++) {
+        if (i in state) {
+            channelOn(i, state[i]);
+        } else {
+            channelOff(i);
+        }
+    }
 }
 
 
@@ -76,11 +112,11 @@ $(document).ready(function(){
     $("#toggle-rain").on("click", () => {
         $("#slider-rain").trigger("input");
     });
+    $("#toggle-shop").on("click", () => {
+        $("#slider-shop").trigger("input");
+    });
     $("#toggle-crickets").on("click", () => {
         $("#slider-crickets").trigger("input");
-    });
-    $("#toggle-filter").on("click", () => {
-        $("#slider-filter").trigger("input");
     });
     $("#toggle-harbour").on("click", () => {
         $("#slider-harbour").trigger("input");
@@ -94,32 +130,82 @@ $(document).ready(function(){
 
     // Reset mixer to default state
     $("#mixer-reset").click(function() {
-        uiTrack.sound("button");
-        for (let i=0; i<sliders.length-1; i++) {
-            slideChannel(sliders.item(i), slider_labels.item(i), 0);
-            $(slider_toggles.item(i)).addClass("active").text('ON');
-        }
-        slideChannel(sliders.item(7), slider_labels.item(7), 50);
-        $(slider_toggles.item(7)).addClass("active").text('ON');
+        setPreset({
+            0: 0,
+            1: 0,
+            2: 0,
+            3: 0,
+            4: 0,
+            5: 0,
+            6: 0,
+            7: 50
+        });
     });
 
     // Set mixer to preset values
     $("#mixer-preset-1").click(function() {
-        uiTrack.sound("button");
-        slideChannel(sliders.item(0), slider_labels.item(0), 0);
-        slideChannel(sliders.item(1), slider_labels.item(1), 100);
-        slideChannel(sliders.item(2), slider_labels.item(2), 52);
-        slideChannel(sliders.item(3), slider_labels.item(3), 13);
-        slideChannel(sliders.item(4), slider_labels.item(4), 86);
+        setPreset({
+            0: 80,
+            2: 10,
+        });
     });
+    // $("#mixer-preset-2").click(function() {
+    //     setPreset({
+    //         0: 10,
+    //         1: 20,
+    //         2: 30,
+    //         3: 40,
+    //         4: 50,
+    //         5: 60,
+    //         6: 70,
+    //         7: 80,
+    //     });
+    // });
     $("#mixer-preset-2").click(function() {
-        uiTrack.sound("button");
-        slideChannel(sliders.item(0), slider_labels.item(0), 75);
-        slideChannel(sliders.item(1), slider_labels.item(1), 0);
-        slideChannel(sliders.item(2), slider_labels.item(2), 62);
-        slideChannel(sliders.item(3), slider_labels.item(3), 93);
-        slideChannel(sliders.item(4), slider_labels.item(4), 0);
+        setPreset({
+            1: 70,
+            4: 26,
+            6: 12,
+            7: 40,
+        });
     });
-    
+    $("#mixer-preset-3").click(function() {
+        setPreset({
+            2: 42,
+            3: 90,
+            5: 20,
+            7: 28,
+        });
+    });
+    $("#mixer-preset-4").click(function() {
+        setPreset({
+            3: 20,
+            5: 90,
+            7: 80,
+        });
+    });
+    $("#mixer-preset-4").click(function() {
+        setPreset({
+            3: 20,
+            5: 90,
+            7: 80,
+        });
+    });
+    $("#mixer-preset-5").click(function() {
+        setPreset({
+            2: 70,
+            6: 56,
+            7: 20,
+        });
+    });
+    $("#mixer-preset-6").click(function() {
+        setPreset({
+            0: 64,
+            1: 4,
+            3: 5,
+            5: 15,
+            7: 70,
+        });
+    });
 
 });

@@ -55,7 +55,7 @@ function playSequencerAt(beat) {
 }
 
 // Play the next sequencer beat
-function playNextBeat() {
+function stepSequencer() {
     if (current_beat < 15) {
         current_beat++;
     } else {
@@ -64,14 +64,17 @@ function playNextBeat() {
     playSequencerAt(current_beat);
 }
 
+function startSequencer() {
+    setTimeout(() => {
+        setInterval(stepSequencer, 200);
+    }, timeUntilNextSecond());
+}
+
 $(document).ready(function(){
 
     // Set initial sequencer state on page load
     getSequencerState();
 
-    setTimeout(() => {
-        setInterval(playNextBeat, 200);
-    }, timeUntilNextSecond());
     // Track label buttons on click
     for (let i=0; i<sequencer_label_buttons.length; i++) {
         sequencer_label_buttons.item(i).addEventListener("click", () => {

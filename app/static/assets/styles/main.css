@@ -17,14 +17,14 @@ html, body {
     backdrop-filter: blur(10px);
     width: 100%;
     height: 100%;
-    display: none;
+    display: flex;
     justify-content: center;
     padding-top: 32rem;
     box-sizing: border-box;
     font-size: 32px;
 }
-#overlay.overlay-visible {
-    display: flex;
+#overlay.overlay-hidden {
+    display: none;
 }
 
 
@@ -123,5 +123,4 @@ html, body {
 .panel-nav:hover {
     background-color: rgba(17, 17, 17, 0.6);
     backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
 }

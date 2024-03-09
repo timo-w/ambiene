@@ -12,7 +12,12 @@ function getRandomNote(minIndex, maxIndex) {
 }
 // Sound marimba
 function soundMarimba() {
-    instrumentTrack.sound("marimba", getRandomNote(5,14));
+    const variation = Math.floor(Math.random() * parseInt($("#marimba-density").val()));
+    switch (variation) {
+        case 0:
+            instrumentTrack.sound("marimba", getRandomNote(5,14));
+            break;
+    }
 }
 // Sound synth
 function soundSynth() {
@@ -20,7 +25,7 @@ function soundSynth() {
 }
 // Sound flute
 function soundFlute() {
-    let chord = [getRandomNote(8, 12), getRandomNote(10, 14)]
+    let chord = [getRandomNote(6, 10), getRandomNote(4, 8)]
     for (let i=0; i<chord.length; i++) {
         instrumentTrack.sound("flute", chord[i]);
     }  
@@ -32,7 +37,7 @@ function soundPad() {
 // Sound piano
 function soundPiano() {
     // Pick a random number
-    let variation = Math.floor(Math.random() * parseInt($("#piano-density").val()));
+    const variation = Math.floor(Math.random() * parseInt($("#piano-density").val()));
     switch (variation) {
         // Play a chord
         case 0:
@@ -94,6 +99,19 @@ function nextGuitarSample() {
 }
 
 
+// Start instruments
+function startInstruments() {
+    setTimeout(() => {
+        nextGuitarSample(); setInterval(nextGuitarSample, 6400);
+        setInterval(soundMarimba, 200);
+        setInterval(soundSynth, 400);
+        setInterval(soundFlute, 800);
+        setInterval(soundPiano, 400);
+        setInterval(soundPad, 6400);
+    }, timeUntilNextSecond());
+}
+
+
 $(document).ready(function(){
 
     // Listen to guitar sliders
@@ -103,61 +121,5 @@ $(document).ready(function(){
     document.getElementById("guitar-density").addEventListener("input", () => {
         guitar_density = document.getElementById("guitar-density").value;
     });
-
-    // Start guitar
-    $("#guitar").click(function() {
-        uiTrack.sound("button");
-        setTimeout(() => {
-            nextGuitarSample();
-            setInterval(nextGuitarSample, 6400);
-        }, timeUntilNextSecond());
-    });
-
-    // Start marimba
-    $("#marimba").click(function() {
-        uiTrack.sound("button");
-        setTimeout(() => {
-            soundMarimba();
-            setInterval(soundMarimba, 200);
-        }, timeUntilNextSecond());
-    });
-
-    // Start synth
-    $("#synth").click(function() {
-        uiTrack.sound("button");
-        setTimeout(() => {
-            soundSynth();
-            setInterval(soundSynth, 400);
-        }, timeUntilNextSecond());
-    });
-
-    // Start flute
-    $("#flute").click(function() {
-        uiTrack.sound("button");
-        setTimeout(() => {
-            soundFlute();
-            setInterval(soundFlute, 800);
-        }, timeUntilNextSecond());
-    });
-
-    // Start piano
-    $("#piano").click(function() {
-        uiTrack.sound("button");
-        setTimeout(() => {
-            soundPiano();
-            setInterval(soundPiano, 400);
-        }, timeUntilNextSecond());
-    });
-
-    // Start pad
-    $("#pad").click(function() {
-        uiTrack.sound("button");
-        setTimeout(() => {
-            soundPad();
-            setInterval(soundPad, 6400);
-        }, timeUntilNextSecond());
-    });
-
-
 
 });

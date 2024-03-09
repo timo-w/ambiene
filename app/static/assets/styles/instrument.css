@@ -16,6 +16,6 @@
     padding: 1rem;
     float: left;
 }
-#piano-density {
+.reversed {
     direction: rtl
 }

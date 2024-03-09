@@ -3,6 +3,9 @@ let current_page = "ambience";
 
 $(document).ready(function(){
 
+    // Set ambience as initial page
+    $("#panel-nav-ambience").addClass("current-panel").css({"border": "2px solid #39b0f9", "box-shadow": "0px 0px 12px -4px #39b0f9"});
+
     // Ambience page
     $("#panel-nav-ambience").on( "click", function() {
         
