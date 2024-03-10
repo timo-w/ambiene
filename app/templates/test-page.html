@@ -13,13 +13,33 @@ Mixer Test
 {% endblock %}
 
 {% block body %}
-                                            
+
 <!-- Overlay to enable audio -->
 <div id="overlay"><h1>Click to start</h1></div>
 <!-- Audio visualiser background -->
 <canvas id="visualiser"></canvas>
 
 
+<!-- Panels -->
+<section id="panel-mixer">
+    {% include "mixer.html" %}
+</section>
+
+
+<section id="panel-sequencer">
+    {% include "sequencer.html" %}
+</section>
+
+
+<section id="panel-instrument">
+    {% include "instrument.html" %}
+</section>
+
+
+<section id="panel-base" class="panel"></section>
+
+
+<!-- Nav bar -->
 <div class="panel-nav">
     <div class="panel-nav-row">
         <div id="panel-nav-ambience" class="panel-nav-container">
@@ -46,7 +66,8 @@ Mixer Test
             <input id="instrument-master-volume" class="master-slider" type="range" min="0" max="200" value="100" oninput="instrumentTrack.setMaster()" />
         </div>
     </div>
-</div>    
+</div>
+
 
 <!-- Chat box -->
 <div id="chatIcon">
@@ -75,24 +96,6 @@ Mixer Test
     <label for="showVis">Show visualiser</label>
     <a id="closeSettings">Close</a>
 </section>
-
-
-<section id="panel-mixer">
-    {% include "mixer.html" %}
-</section>
-
-
-<section id="panel-sequencer">
-    {% include "sequencer.html" %}
-</section>
-
-
-<section id="panel-instrument">
-    {% include "instrument.html" %}
-</section>
-
-<section id="panel-base"></section>
-
 
 
 <script>

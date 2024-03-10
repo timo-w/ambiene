@@ -1,0 +1,15 @@
+@media only screen and (max-width: 1200px) {
+    
+    .panel {
+        position: relative;
+        width: 100%;
+    }
+    .panel-nav {
+        position: relative;
+        width: 100%;
+    }
+    #panel-base, .panel-title {
+        display: none;
+    }
+
+}

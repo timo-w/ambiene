@@ -2,6 +2,11 @@ let current_page = "ambience";
 
 const masterSliders = document.getElementsByClassName("master-slider");
 
+// Disable right-click menu
+document.addEventListener("contextmenu", (event) => {
+    event.preventDefault();
+});
+
 $(document).ready(function(){
 
     // Set ambience as initial page

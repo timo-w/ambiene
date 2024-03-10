@@ -1,15 +1,8 @@
 .instrument-container {
-    position: absolute;
-    top: 20rem;
-    left: 50%;
-    height: 30rem;
-    width: 60rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-direction: column;
-    transform: translateX(-50%);
-    background-color: #272b2c;
     padding: 0.25rem 0;
 }
 .instrument-container-row {

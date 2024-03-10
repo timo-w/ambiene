@@ -19,7 +19,7 @@ function draw() {
     canvasCtx.fillRect(0, 0, windowWidth, windowHeight);
 
     if ($("#showVis").is(":checked")) {
-        const barWidth = (windowWidth / bufferLength) * 2.5;
+        const barWidth = (windowWidth / bufferLength) * 1.5;
         let barHeight;
         let x = 0;
         for (let i = 0; i < bufferLength; i++) {

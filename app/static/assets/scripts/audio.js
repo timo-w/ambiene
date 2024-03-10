@@ -21,7 +21,7 @@ document.addEventListener("click", () => {
 }, {once: true});
 
 
-// For audio visualisation
+// For audio visualiser
 const analyser = context.createAnalyser();
 analyser.fftSize = 256;
 const bufferLength = analyser.frequencyBinCount;
@@ -136,11 +136,11 @@ function timeUntilNextSecond() {
 function determineFilter(filterNode, value) {
     if (value >= 0 && value <= 100) {
         filterNode.type = "lowpass";
-        value = Math.round(Math.exp(value / 100 * Math.log(20000)) + 200);
+        value = Math.round(Math.exp(value / 100 * Math.log(20000)) + 99);
         filterNode.frequency.setTargetAtTime(value, context.currentTime, 0);
     } else if (value > 100 && value <= 200) {
         filterNode.type = "highpass";
-        value = ((Math.log(value) - Math.log(100)) / (Math.log(200) - Math.log(100))) * Math.log(4000);
+        value = ((Math.log(value) - Math.log(100)) / (Math.log(200) - Math.log(100))) * Math.log(16000);
         filterNode.frequency.setTargetAtTime(Math.round(Math.exp(value)), context.currentTime, 0);
     } else {
         console.error("Invalid filter value provided");

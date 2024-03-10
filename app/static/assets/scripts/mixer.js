@@ -7,23 +7,30 @@ const slider_toggles = document.getElementsByClassName("slider-toggle");
 // Slide volume slider to target
 function slideChannel(channelID, target) {
     const channel = sliders[channelID];
-    const label = slider_labels[channelID]
+    const label = slider_labels[channelID];
+    let numberOfTries = 0;
     const slideInterval = setInterval(
         () => {
             if (channel.value % 10 == 0) {
                 uiTrack.sound("notch");
             }
+            // Prevent from getting stuck
+            if (numberOfTries > 100) {
+                clearInterval(slideInterval);
+            }
             if (channel.value > target) {
                 channel.value--;
                 channel.style.backgroundColor = "#DDD";
                 label.innerHTML = channel.value;
+                numberOfTries++;
             } else if (channel.value < target) {
                 channel.value++;
                 channel.style.backgroundColor = "#DDD";
                 label.innerHTML = channel.value;
+                numberOfTries++;
             } else {
-                clearInterval(slideInterval);
                 channel.style.backgroundColor = "";
+                clearInterval(slideInterval);
             }
             $(channel).trigger("input");
         }, 8 // <- delay in ms
@@ -169,7 +176,7 @@ $(document).ready(function(){
         setPreset({
             3: 20,
             5: 90,
-            7: 80,
+            7: 60,
         });
     });
     $("#mixer-preset-5").click(function() {
@@ -185,7 +192,7 @@ $(document).ready(function(){
             1: 4,
             3: 5,
             5: 15,
-            7: 70,
+            7: 56,
         });
     });
 

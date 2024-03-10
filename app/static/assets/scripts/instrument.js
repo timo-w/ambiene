@@ -122,9 +122,45 @@ for (let i=0; i<instrument_control_sliders.length; i++) {
         function() {
             const id = $(this).attr("id");
             const text = id.split("-")[1];
-            $(this).parent().parent().parent().find("h1").text(text);
+            let setText = function(element, value) {
+                $(element).parent().parent().parent().find("h1").text(value);
+            }
+            setText($(this), text);
             $(this).on("input", () => {
-                $(this).parent().parent().parent().find("h1").text($(this).val());
+                switch (text) {
+                    case "volume":
+                        switch ($(this).val()) {
+                            case '0':
+                                setText($(this), "Off");
+                                break;
+                            case '100':
+                                setText($(this), "Max");
+                                break;
+                            default:
+                                setText($(this), ($(this).val() + "%"));
+                                break;
+                        }
+                        if ($(this).val() % 10 == 0) {
+                            uiTrack.sound("notch");
+                        }
+                        break;
+                    case "filter":
+                        if ($(this).val() < 98 && $(this).val() >= 0) {
+                            setText($(this), ("LP: " + Math.round(Math.exp($(this).val() / 100 * Math.log(20000)) + 99) + "Hz"));
+                        } else if ($(this).val() > 102 && $(this).val() <= 200) {
+                            setText($(this), ("HP: " + Math.round(Math.exp(((Math.log($(this).val()) - Math.log(100)) / (Math.log(200) - Math.log(100))) * Math.log(16000))) + "Hz"));
+                        } else {
+                            setText($(this), "None");
+                        }
+                        if ($(this).val() % 20 == 0) {
+                            uiTrack.sound("notch");
+                        }
+                        break;
+                    default:
+                        uiTrack.sound("notch");
+                        setText($(this), $(this).val());
+                        break;
+                }
             });
         },
         // Hover off

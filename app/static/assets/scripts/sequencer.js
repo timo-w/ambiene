@@ -86,19 +86,32 @@ $(document).ready(function(){
 
     // Track label buttons on click
     for (let i=0; i<sequencer_label_buttons.length; i++) {
+        // Left-click - mute/unmute track
         sequencer_label_buttons.item(i).addEventListener("click", () => {
             uiTrack.sound("button");
             $(sequencer_label_buttons.item(i)).toggleClass("drum-muted");
         });
+        // Right-click - test sample
+        sequencer_label_buttons.item(i).addEventListener("contextmenu", (event) => {
+            event.preventDefault();
+            sequencerTrack.playSound(i);
+        });
     };
     // Beat button on click
     for (let i=0; i<sequencer_buttons.length; i++) {
+        // Left-click - enable beat
         sequencer_buttons.item(i).addEventListener("click", () => {
             uiTrack.sound("button");
             $(sequencer_buttons.item(i)).toggleClass("active-beat");
             getSequencerState();
         });
+        // Right-click - test sample
+        sequencer_buttons.item(i).addEventListener("contextmenu", (event) => {
+            event.preventDefault();
+            sequencerTrack.playSound(Math.floor(i / 16));
+        });
     };
+
 
     // Filter slider
     sequencer_filter.addEventListener("input", () => {
