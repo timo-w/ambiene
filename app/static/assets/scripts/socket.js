@@ -53,6 +53,25 @@ function decodeAudioMessage(message) {
     }
     switch (message["track"]) {
         case "ambience":
+            switch (message["type"]) {
+                case "preset":
+                    setPreset(ambience_presets[parseInt(message["preset"])]);
+                    ambienceTrack.stop();
+                    ambienceTrack.play();
+                    break;
+                case "toggle":
+                    if (message["enabled"]) {
+                        channelOn(parseInt(message["id"]));
+                    } else {
+                        channelOff(parseInt(message["id"]));
+                    }
+                    triggerAmbience();
+                    break;
+                case "slider":
+                    sliders.item(parseInt(message["slider"])).value = parseInt(message["target"]);
+                    slider_labels.item(parseInt(message["slider"])).innerHTML = message["target"];
+                    break;
+            }
             break;
         case "sequencer":
             switch (message["type"]) {
@@ -64,6 +83,7 @@ function decodeAudioMessage(message) {
                     break;
                 case "request":
                     socket.sendSequencerState();
+                    break;
             }
             break;
         case "instrument":
@@ -148,12 +168,48 @@ class Socket {
             }
         }));
     }
+    // Might make a requestState function which requests the entire system state instead
     requestSequencerState() {
         webSocket.send(JSON.stringify({
             type: "audio_message",
             message: {
                 "track": "sequencer",
                 "type": "request"
+            }
+        }));
+    }
+
+    sendAmbiencePreset(preset) {
+        webSocket.send(JSON.stringify({
+            type: "audio_message",
+            message: {
+                "track": "ambience",
+                "type": "preset",
+                "preset": preset
+            }
+        }));
+    }
+
+    sendAmbienceToggle(id, enabled) {
+        webSocket.send(JSON.stringify({
+            type: "audio_message",
+            message: {
+                "track": "ambience",
+                "type": "toggle",
+                "id": id,
+                "enabled": enabled
+            }
+        }));
+    }
+
+    sendAmbienceSlider(slider, target) {
+        webSocket.send(JSON.stringify({
+            type: "audio_message",
+            message: {
+                "track": "ambience",
+                "type": "slider",
+                "slider": slider,
+                "target": target
             }
         }));
     }

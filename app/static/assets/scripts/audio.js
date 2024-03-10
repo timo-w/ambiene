@@ -15,10 +15,11 @@ function initialiseAudio() {
     uiTrack = new UI();
     instrumentTrack = new Instrument();
     sequencerTrack = new Sequencer();
-    ambienceTrack.toggle();
-    socket.requestSequencerState();
+    ambienceTrack.play();
+    //socket.requestSequencerState();
     startInstruments();
 }
+
 
 // Display overlay in case of suspended context
 const overlay = document.getElementById('overlay');
