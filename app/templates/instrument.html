@@ -1,42 +1,66 @@
-<h1 class="panel-title"><a style="color:#81DE53">Instru</a>ments</h1>
+{% load static %}
 
+<h1 class="panel-title"><a style="color:#81DE53">Instru</a>ments</h1>
 
 <section class="instrument-container">
 
     <div class="instrument-container-row">
 
         <div class="instrument">
-            <h3>Marimba</h3>
-            <label for="marimba-volume">Volume:</label><br>
-            <input id="marimba-volume" type="range" min="0" max="100" value="0" />
-            <br>
-            <label for="marimba-filter">Filter:</label><br>
-            <input id="marimba-filter" type="range" min="0" max="200" value="100" />
-            <br>
-            <label for="marimba-density">Density:</label><br>
-            <input id="marimba-density" class="reversed" type="range" min="0" max="4" value="2" />
+
+            <div class="instrument-title"><h1>Marimba</h1></div>
+            <div class="instrument-gradient"></div>
+            <div class="instrument-icon"><img src={% static 'assets/icons/instrument/marimba.png' %} alt="Marimba"></div>
+
+            <div class="instrument-slider-container">
+                <div class="instrument-slider">
+                    <input id="marimba-volume" type="range" min="0" max="100" value="0" />
+                </div>
+                <div class="instrument-slider">
+                    <input id="marimba-filter" type="range" min="0" max="200" value="100" />
+                </div>
+                <div class="instrument-slider">
+                    <input id="marimba-density" class="reversed" type="range" min="0" max="4" value="2" />
+                </div>
+            </div>
+            
         </div>
-    
+
         <div class="instrument">
-            <h3>Bass Synth</h3> 
-            <br><label for="synth-volume">Volume:</label><br>
-            <input id="synth-volume" type="range" min="0" max="100" value="0" />
-            <br>
-            <label for="synth-filter">Filter:</label><br>
-            <input id="synth-filter" type="range" min="0" max="200" value="100" />
+
+            <div class="instrument-title"><h1>Bass</h1></div>
+            <div class="instrument-gradient"></div>
+            <div class="instrument-icon"><img src={% static 'assets/icons/instrument/synth.png' %} alt="Synth"></div>
+
+            <div class="instrument-slider-container">
+                <div class="instrument-slider">
+                    <input id="synth-volume" type="range" min="0" max="100" value="0" />
+                </div>
+                <div class="instrument-slider">
+                    <input id="synth-filter" type="range" min="0" max="200" value="100" />
+                </div>
+            </div>
+
         </div>
-    
+
         <div class="instrument">
-            <h3>Guitar</h3>
-            <br>
-            <label for="guitar-volume">Volume:</label><br>
-            <input id="guitar-volume" type="range" min="0" max="100" value="0" oninput="instrumentTrack.setGuitar(this)" />
-            <br>
-            <label for="guitar-intensity">Intensity:</label><br>
-            <input id="guitar-intensity" type="range" min="0" max="2" value="0" />
-            <br>
-            <label for="guitar-density">Density:</label><br>
-            <input id="guitar-density" type="range" min="0" max="2" value="1" />
+
+            <div class="instrument-title"><h1>Guitar</h1></div>
+            <div class="instrument-gradient"></div>
+            <div class="instrument-icon"><img src={% static 'assets/icons/instrument/guitar.png' %} alt="Guitar"></div>
+
+            <div class="instrument-slider-container">
+                <div class="instrument-slider">
+                    <input id="guitar-volume" type="range" min="0" max="100" value="0" oninput="instrumentTrack.setGuitar(this)" />
+                </div>
+                <div class="instrument-slider">
+                    <input id="guitar-intensity" type="range" min="0" max="2" value="0" />
+                </div>
+                <div class="instrument-slider">
+                    <input id="guitar-density" type="range" min="0" max="2" value="1" />
+                </div>
+            </div>
+
         </div>
 
     </div>
@@ -44,36 +68,57 @@
     <div class="instrument-container-row">
 
         <div class="instrument">
-            <h3>Flute</h3>
-            <br>
-            <label for="flute-volume">Volume:</label><br>
-            <input id="flute-volume" type="range" min="0" max="100" value="0" />
-            <br>
-            <label for="flute-filter">Filter:</label><br>
-            <input id="flute-filter" type="range" min="0" max="200" value="100" />
+
+            <div class="instrument-title"><h1>Flute</h1></div>
+            <div class="instrument-gradient"></div>
+            <div class="instrument-icon"><img src={% static 'assets/icons/instrument/flute.png' %} alt="Flute"></div>
+
+            <div class="instrument-slider-container">
+                <div class="instrument-slider">
+                    <input id="flute-volume" type="range" min="0" max="100" value="0" />
+                </div>
+                <div class="instrument-slider">
+                    <input id="flute-filter" type="range" min="0" max="200" value="100" />
+                </div>
+            </div>
+
         </div>
-    
+
         <div class="instrument">
-            <h3>Piano</h3>
-            <br>
-            <label for="piano-volume">Volume:</label><br>
-            <input id="piano-volume" type="range" min="0" max="100" value="0" />
-            <br>
-            <label for="piano-filter">Filter:</label><br>
-            <input id="piano-filter" type="range" min="0" max="200" value="100" />
-            <br>
-            <label for="piano-density">Density:</label><br>
-            <input id="piano-density" class="reversed" type="range" min="6" max="26" value="16" />
+
+            <div class="instrument-title"><h1>Piano</h1></div>
+            <div class="instrument-gradient"></div>
+            <div class="instrument-icon"><img src={% static 'assets/icons/instrument/piano.png' %} alt="Piano"></div>
+
+            <div class="instrument-slider-container">
+                <div class="instrument-slider">
+                    <input id="piano-volume" type="range" min="0" max="100" value="0" />
+                </div>
+                <div class="instrument-slider">
+                    <input id="piano-filter" type="range" min="0" max="200" value="100" />
+                </div>
+                <div class="instrument-slider">
+                    <input id="piano-density" class="reversed" type="range" min="6" max="26" value="16" />
+                </div>
+            </div>
+
         </div>
-    
+
         <div class="instrument">
-            <h3>Pad</h3>
-            <br>
-            <label for="pad-volume">Volume:</label><br>
-            <input id="pad-volume" type="range" min="0" max="100" value="0" />
-            <br>
-            <label for="pad-filter">Filter:</label><br>
-            <input id="pad-filter" type="range" min="0" max="200" value="100" />
+
+            <div class="instrument-title"><h1>Pad</h1></div>
+            <div class="instrument-gradient"></div>
+            <div class="instrument-icon"><img src={% static 'assets/icons/instrument/pad.png' %} alt="Pad"></div>
+
+            <div class="instrument-slider-container">
+                <div class="instrument-slider">
+                    <input id="pad-volume" type="range" min="0" max="100" value="0" />
+                </div>
+                <div class="instrument-slider">
+                    <input id="pad-filter" type="range" min="0" max="200" value="100" />
+                </div>
+            </div>
+
         </div>
 
     </div>

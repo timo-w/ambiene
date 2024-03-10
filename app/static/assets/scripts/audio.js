@@ -437,6 +437,7 @@ Instrument.prototype.soundGuitar = function(intensity, density, variation) {
 
 Instrument.prototype.setGuitar = function(element) {
     this.ctlguitar.gainNode.gain.value = (parseInt(element.value) / parseInt(element.max)) * (parseInt(document.getElementById("instrument-master-volume").value) / 100);
+    console.log("Changing guitar volume");
 };
 
 

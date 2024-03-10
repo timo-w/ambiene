@@ -122,4 +122,8 @@ $(document).ready(function(){
         guitar_density = document.getElementById("guitar-density").value;
     });
 
+    $("#marimba-volume").hover(function() {
+        console.log("volume changed");
+    });
+
 });

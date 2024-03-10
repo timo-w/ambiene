@@ -149,8 +149,7 @@ $(document).ready(function(){
         uiTrack.sound("click");
         $("#chat").fadeOut(200);
     });
-    // Test messages;
-    console.log("test message");
+    // Test messages
     document.getElementById("chatText").value += "Timo: This is a test\n"
     document.getElementById("chatText").value += "AnotherUser: This is a another test\n"
     document.getElementById("chatText").value += "AnotherUser: This is a another test\n"

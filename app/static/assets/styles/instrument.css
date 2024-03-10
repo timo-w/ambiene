@@ -9,21 +9,111 @@
     align-items: center;
     flex-direction: column;
     transform: translateX(-50%);
-    background-color: #484f55;
+    background-color: #272b2c;
+    padding: 0.25rem 0;
 }
 .instrument-container-row {
     position: relative;
     display: flex;
+    height: 50%;
+    width: 100%;
     justify-content: space-between;
     align-items: center;
     flex-direction: row;
+    gap: 0.5rem;
+    padding: 0.25rem 0.5rem;
 }
 
 .instrument {
-    width: calc(100% / 3);
+    position: relative;
+    width: 100%;
     height: 100%;
-    padding: 1rem;
     border: 1px solid #333;
+    background-color: #484f55;
+    border-radius: 0.5rem;
+    transition: 0.2s ease-out;
+
+    .instrument-title {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    h1 {
+        margin-top: -0rem;
+        font-size: 76px;
+        text-align: center;
+    }
+    .instrument-gradient {
+        position: absolute;
+        height: 38%;
+        width: 100%;
+        border-radius: 0.5rem;
+        background-color: #272b2c;
+        background: linear-gradient(0deg, rgba(72,79,85,1) 6%, rgba(0,0,0,0) 60%);
+    }
+    .instrument-icon {
+        position: absolute;
+        top: 15%;
+        height: 85%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        filter: opacity(0.1);
+
+        img {
+            height: 100%;
+        }
+    }
+    .instrument-slider-container {
+        position: absolute;
+        height: 62%;
+        width: 100%;
+        top: 34%;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        flex-direction: column;
+    }
+    .instrument-slider {
+        position: relative;
+        width: 100%;
+        height: calc(100% / 3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        
+        input {
+            position: absolute;
+            width: 80%;
+            background: #1f1f1f;
+            height: 5px;
+        }
+        input:hover {
+            background-color: #DDD;
+        }
+        input::-webkit-slider-thumb { 
+            -webkit-appearance: none !important;
+            background-color: #DDD;
+            cursor: col-resize;
+            height: 1.8rem;
+            width: 0.6rem;
+            border-radius: 0.1rem;
+            z-index: 10;
+            transition: 0.1s ease-in-out;
+        }
+        input::-webkit-slider-thumb:hover { 
+            width: 0.8rem;
+            background-color: #81DE53;
+            box-shadow: 0px 0px 24px -4px #81DE53;
+        }
+    }
+}
+.instrument:hover {
+    transform: scale(1.01);
 }
 
 .reversed {

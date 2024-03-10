@@ -131,8 +131,11 @@
 
     input {
         width: 90%;
-        background-color: #DDD;
+        background-color: #1f1f1f;
         height: 0.3rem;
+    }
+    input:hover {
+        background-color: #DDD;
     }
     input::-webkit-slider-thumb { 
         -webkit-appearance: none !important;
@@ -147,6 +150,7 @@
     input::-webkit-slider-thumb:hover { 
         width: 0.8rem;
         background-color: #EC5E47;
+        box-shadow: 0px 0px 24px -4px #EC5E47;
     }
 }
 .sequencer-filter-container:hover {
