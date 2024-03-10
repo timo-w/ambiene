@@ -115,9 +115,15 @@ $(document).ready(function(){
     // Master volume sliders
     for (let i=0; i<masterSliders.length; i++) {
         masterSliders.item(i).addEventListener("input", () => {
-            if (masterSliders.item(i).value % 10 == 0) {
+            if (masterSliders.item(i).value % 20 == 0) {
                 uiTrack.sound("notch");
             }
+            if (masterSliders.item(i).value % 2 == 0) {
+                socket.sendMaster(i, masterSliders.item(i).value);
+            }
+        });
+        $(masterSliders.item(i)).on("mouseup", function() {
+            socket.sendMaster(i, masterSliders.item(i).value);
         });
     };
 

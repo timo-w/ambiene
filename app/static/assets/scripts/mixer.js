@@ -45,7 +45,7 @@ function slideChannel(channelID, target) {
                 clearInterval(slideInterval);
             }
             $(channel).trigger("input");
-        }, 6 // <- delay in ms
+        }, 10 // <- delay in ms
     );
 }
 

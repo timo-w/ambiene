@@ -52,6 +52,9 @@ function decodeAudioMessage(message) {
         uiTrack.sound("pipe");
     }
     switch (message["track"]) {
+        case "master":
+            masterSliders.item(parseInt(message["trackID"])).value = message["target"];
+            break;
         case "ambience":
             switch (message["type"]) {
                 case "preset":
@@ -155,6 +158,17 @@ class Socket {
         webSocket.send(JSON.stringify({
             type: "audio_message",
             message: "PIPE"
+        }));
+    }
+
+    sendMaster(trackID, target) {
+        webSocket.send(JSON.stringify({
+            type: "audio_message",
+            message: {
+                "track": "master",
+                "trackID": trackID,
+                "target": target
+            }
         }));
     }
 
