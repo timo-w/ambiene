@@ -1,5 +1,7 @@
 console.log("Sanity check from instrument.js.");
 
+const instrument_control_sliders = document.getElementsByClassName("instrument-slider");
+
 let guitar_intensity = 0;
 let guitar_density = 1;
 
@@ -112,6 +114,29 @@ function startInstruments() {
 }
 
 
+// Change label on slider hover/input
+for (let i=0; i<instrument_control_sliders.length; i++) {
+    $(instrument_control_sliders.item(i).children[0]).hover(
+
+        // Hover on
+        function() {
+            const id = $(this).attr("id");
+            const text = id.split("-")[1];
+            $(this).parent().parent().parent().find("h1").text(text);
+            $(this).on("input", () => {
+                $(this).parent().parent().parent().find("h1").text($(this).val());
+            });
+        },
+        // Hover off
+        function() {
+            const id = $(this).attr("id");
+            const text = id.split("-")[0];
+            $(this).parent().parent().parent().find("h1").text(text)
+        }
+
+    );
+};
+
 $(document).ready(function(){
 
     // Listen to guitar sliders
@@ -120,10 +145,6 @@ $(document).ready(function(){
     });
     document.getElementById("guitar-density").addEventListener("input", () => {
         guitar_density = document.getElementById("guitar-density").value;
-    });
-
-    $("#marimba-volume").hover(function() {
-        console.log("volume changed");
     });
 
 });

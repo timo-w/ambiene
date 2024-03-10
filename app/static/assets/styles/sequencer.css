@@ -46,9 +46,8 @@
     background-color: #484f55;
     border-radius: 0.15rem;
     text-align: center;
-    font-weight: bold;
     transform: translateY(-0.35rem);
-    padding-top: 0.4rem;
+    padding-top: 0.45rem;
     transition: 0.15s ease-in-out;
 }
 .drum-muted {
@@ -131,24 +130,8 @@
 
     input {
         width: 90%;
-        background-color: #1f1f1f;
-        height: 0.3rem;
-    }
-    input:hover {
-        background-color: #DDD;
-    }
-    input::-webkit-slider-thumb { 
-        -webkit-appearance: none !important;
-        background-color: #DDD;
-        cursor: col-resize;
-        height: 1.8rem;
-        width: 0.6rem;
-        border-radius: 0.1rem;
-        z-index: 10;
-        transition: 0.1s ease-in-out;
     }
     input::-webkit-slider-thumb:hover { 
-        width: 0.8rem;
         background-color: #EC5E47;
         box-shadow: 0px 0px 24px -4px #EC5E47;
     }
@@ -166,10 +149,6 @@
     justify-content: center;
     align-items: center;
     transition: 0.15s ease-in-out;
-
-    a {
-        font-weight: bold;
-    }
 }
 .sequencer-reset-container:hover {
     cursor: pointer;

@@ -366,8 +366,8 @@ Instrument.prototype.sound = function(sound, note) {
             break;
         case "synth":
             this.ctl = createSource(this.synth);
-            this.ctl.gainNode.gain.value = (parseInt(document.getElementById("synth-volume").value) / 100) * this.masterVolume;
-            filterValue = parseInt(document.getElementById("synth-filter").value);
+            this.ctl.gainNode.gain.value = (parseInt(document.getElementById("bass-volume").value) / 100) * this.masterVolume;
+            filterValue = parseInt(document.getElementById("bass-filter").value);
             break;
         case "flute":
             this.ctl = createSource(this.flute);
@@ -437,7 +437,6 @@ Instrument.prototype.soundGuitar = function(intensity, density, variation) {
 
 Instrument.prototype.setGuitar = function(element) {
     this.ctlguitar.gainNode.gain.value = (parseInt(element.value) / parseInt(element.max)) * (parseInt(document.getElementById("instrument-master-volume").value) / 100);
-    console.log("Changing guitar volume");
 };
 
 

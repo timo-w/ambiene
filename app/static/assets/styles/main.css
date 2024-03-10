@@ -21,6 +21,30 @@ h1 {
     text-align: center;
 }
 
+/*  Sliders */
+input[type="range"] {
+    appearance: none !important;
+    background-color: #1f1f1f;
+    height: 0.3rem;
+    transition: 0.15s ease-in-out;
+}
+input[type="range"]:hover {
+    background-color: #DDD;
+}
+input[type="range"]::-webkit-slider-thumb { 
+    -webkit-appearance: none !important;
+    background-color: #DDD;
+    cursor: row-resize;
+    z-index: 10;
+    height: 1.8rem;
+    width: 0.6rem;
+    transition: 0.15s ease-in-out;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+    cursor: col-resize;
+    width: 0.8rem;
+}
+
 /* Overlay */
 #overlay {
     position: absolute;
@@ -360,6 +384,9 @@ h1 {
             height: 100%;
             border: none;
             font-size: 16px;
+            background-color: #DDD;
+            border-radius: 0.3rem;
+            padding: 0 0.3rem;
         }
         input:focus {
             outline: none;
