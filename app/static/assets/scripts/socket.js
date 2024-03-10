@@ -90,7 +90,34 @@ function decodeAudioMessage(message) {
             }
             break;
         case "instrument":
-            $(instrument_control_sliders[ parseInt(message["slider"]) ]).find("input").val(message["target"]);
+            switch (message["type"]) {
+                case "slider":
+                    $(instrument_control_sliders[parseInt(message["slider"])]).find("input").val(message["target"]);
+                    break;
+                case "instrument":
+                    switch (message["instrument"]) {
+                        case "guitar":
+                            nextGuitarSample(message["variation"]);
+                            break;
+                        case "pad":
+                            soundPad(message["note"]);
+                            break;
+                        case "flute":
+                            soundFlute(message["note1"], message["note2"]);
+                            break;
+                        case "marimba":
+                            soundMarimba(message["note"]);
+                            break;
+                        case "synth":
+                            soundSynth(message["note"]);
+                            break;
+                        case "piano":
+                            let notes = message["notes"];
+                            soundPiano(notes);
+                            break;
+                    }
+                    break;
+            }
             break;
     }
 }
@@ -234,6 +261,7 @@ class Socket {
             type: "audio_message",
             message: {
                 "track": "instrument",
+                "type": "slider",
                 "slider": slider,
                 "target": target
             }

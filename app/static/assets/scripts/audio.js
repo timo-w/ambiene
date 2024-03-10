@@ -16,8 +16,6 @@ function initialiseAudio() {
     instrumentTrack = new Instrument();
     sequencerTrack = new Sequencer();
     ambienceTrack.play();
-    //socket.requestSequencerState();
-    startInstruments();
 }
 
 

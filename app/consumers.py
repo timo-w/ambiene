@@ -1,5 +1,6 @@
 import json
 import asyncio
+from random import randint
 
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
@@ -118,11 +119,12 @@ class RoomConsumer(AsyncWebsocketConsumer):
         beat = 0
         while online_count > 0:
             online_count = await sync_to_async(self.room.get_online_count)()
-            if beat < 15:
+            if beat < 31:
                 beat += 1
             else:
                 beat = 0
-            await asyncio.sleep(0.2)
+            await asyncio.sleep(0.19) # Slightly sped up to account for lag
+
             await self.channel_layer.group_send(
                 self.room_group_name,
                     {
@@ -130,10 +132,99 @@ class RoomConsumer(AsyncWebsocketConsumer):
                         'message': {
                             'track': 'sequencer',
                             'type': 'beat',
-                            'beat': beat
+                            'beat': beat % 16
                         },
                     }
             )
+
+            # Trigger instruments based on current beat
+
+
+            # Marimba
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                    {
+                        'type': 'audio_message',
+                        'message': {
+                            'track': 'instrument',
+                            'type': 'instrument',
+                            'instrument': 'marimba',
+                            'note': randint(5, 14)
+                        },
+                    }
+            )
+
+            if beat == 0:
+                # Guitar
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                        {
+                            'type': 'audio_message',
+                            'message': {
+                                'track': 'instrument',
+                                'type': 'instrument',
+                                'instrument': 'guitar',
+                                'variation': randint(0, 7)
+                            },
+                        }
+                )
+                # Pad
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                        {
+                            'type': 'audio_message',
+                            'message': {
+                                'track': 'instrument',
+                                'type': 'instrument',
+                                'instrument': 'pad',
+                                'note': randint(7, 17)
+                            },
+                        }
+                )
+            if beat % 4 == 0:
+                # Flute
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                        {
+                            'type': 'audio_message',
+                            'message': {
+                                'track': 'instrument',
+                                'type': 'instrument',
+                                'instrument': 'flute',
+                                'note1': randint(4, 8),
+                                'note2': randint(6, 10)
+                            },
+                        }
+                )
+            if beat % 2 == 1:
+                # Bass synth
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                        {
+                            'type': 'audio_message',
+                            'message': {
+                                'track': 'instrument',
+                                'type': 'instrument',
+                                'instrument': 'synth',
+                                'note': randint(0, 9)
+                            },
+                        }
+                )
+            if beat % 2 == 0:
+                # Piano
+                notes = [randint(0, 9), randint(5, 14), randint(9, 17), randint(6, 10), randint(8, 16), randint(8, 14), randint(10, 16), randint(8, 16), randint(8, 16)]
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                        {
+                            'type': 'audio_message',
+                            'message': {
+                                'track': 'instrument',
+                                'type': 'instrument',
+                                'instrument': 'piano',
+                                'notes': notes
+                            },
+                        }
+                )
 
 
     async def chat_message(self, event):

@@ -17,7 +17,6 @@ const ambience_presets = [
 
 // Slide volume slider to target
 function slideChannel(channelID, target) {
-    console.log("slideChannel: sliding " + channelID + " to " + target);
     const channel = sliders[channelID];
     const label = slider_labels[channelID];
     let numberOfTries = 0;
