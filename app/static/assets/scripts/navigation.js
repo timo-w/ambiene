@@ -107,7 +107,7 @@ $(document).ready(function(){
                     break;
             }
         } else if (event.key == "|") {
-            uiTrack.sound("pipe");
+            socket.pipe();
         }
     });
 

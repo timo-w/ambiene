@@ -1,12 +1,22 @@
 console.log("Sanity check from audio.js.");
 
+// Audio tracks
+let ambienceTrack;
+let uiTrack;
+let instrumentTrack;
+let sequencerTrack;
+
 // Audio context
 const context = new (window.AudioContext || window.webkitAudioContext)();
 
 // Start all tracks
 function initialiseAudio() {
+    ambienceTrack = new Ambience();
+    uiTrack = new UI();
+    instrumentTrack = new Instrument();
+    sequencerTrack = new Sequencer();
     ambienceTrack.toggle();
-    startSequencer();
+    socket.requestSequencerState();
     startInstruments();
 }
 
@@ -15,8 +25,8 @@ const overlay = document.getElementById('overlay');
 document.addEventListener("click", () => {
     context.resume().then(() => {
         overlay.className = "overlay-hidden";
-        uiTrack.sound("click");
         initialiseAudio();
+        uiTrack.sound("click");
     });
 }, {once: true});
 
@@ -491,9 +501,3 @@ Sequencer.prototype.playSound = function(sound) {
 	this.ctl.source[onName](0);
 };
 
-
-// Initialise tracks
-let ambienceTrack = new Ambience();
-let uiTrack = new UI();
-let instrumentTrack = new Instrument();
-let sequencerTrack = new Sequencer();

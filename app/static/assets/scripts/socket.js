@@ -1,6 +1,8 @@
 console.log("Sanity check from socket.js.");
 
 const roomName = JSON.parse(document.getElementById('roomName').textContent);
+let socket;
+let webSocket = null;
 
 let chatLog = document.querySelector("#chatLog");
 let chatMessageInput = document.querySelector("#chatMessageInput");
@@ -22,9 +24,6 @@ function onlineUsersSelectorRemove(value) {
     if (oldOption !== null) oldOption.remove();
 }
 
-// focus 'chatMessageInput' when user opens the page
-chatMessageInput.focus();
-
 // submit if the user presses the enter key
 chatMessageInput.onkeyup = function(e) {
     if (e.keyCode === 13) {  // enter key
@@ -35,7 +34,7 @@ chatMessageInput.onkeyup = function(e) {
 // clear the 'chatMessageInput' and forward the message
 chatMessageSend.onclick = function() {
     if (chatMessageInput.value.length === 0) return;
-    socket.send(JSON.stringify({
+    webSocket.send(JSON.stringify({
         type: "chat_message",
         message: chatMessageInput.value,
     }));
@@ -43,67 +42,125 @@ chatMessageSend.onclick = function() {
 };
 
 
-let socket = null;
-
-function connect() {
-    socket = new WebSocket("ws://" + window.location.host + "/ws/app/" + roomName + "/");
-
-    socket.onopen = function(e) {
-        console.log("Successfully connected to the WebSocket.");
+// Determine and trigger audio event
+function decodeAudioMessage(message) {
+    // Don't read messages until user closes overlay
+    if (!$(overlay).hasClass("overlay-hidden")) {
+        return;
     }
-
-    socket.onclose = function(e) {
-        console.log("WebSocket connection closed unexpectedly. Trying to reconnect in 2s...");
-        setTimeout(function() {
-            console.log("Reconnecting...");
-            connect();
-        }, 2000);
-    };
-
-    socket.onmessage = function(e) {
-        const data = JSON.parse(e.data);
-        console.log(data);
-    
-        switch (data.type) {
-            case "chat_message":
-                chatLog.value += data.user + ": " + data.message + "\n";
-                break;
-            case "user_list":
-                for (let i = 0; i < data.users.length; i++) {
-                    onlineUsersSelectorAdd(data.users[i]);
-                }
-                break;
-            case "user_join":
-                chatLog.value += data.user + " joined the room.\n";
-                onlineUsersSelectorAdd(data.user);
-                break;
-            case "user_leave":
-                chatLog.value += data.user + " left the room.\n";
-                onlineUsersSelectorRemove(data.user);
-                break;
-            case "audio_message":
-                if (data.message == "PIPE") {
-                    playAudioFile(pipeAudioFile, 0.5);
-                    chatLog.value += "[PIPE] ";
-                } else {
-                    playNote(data.message.note, data.message.wave, data.message.gain);
-                    chatLog.value += data.message.note + " ";
-                }
-                break;
-            default:
-                console.error("Unknown message type!");
-                break;
-        }
-    
-        // scroll 'chatLog' to the bottom
-        chatLog.scrollTop = chatLog.scrollHeight;
-    };
-
-    socket.onerror = function(err) {
-        console.log("WebSocket encountered an error: " + err.message);
-        console.log("Closing the socket.");
-        socket.close();
+    if (message == "PIPE") {
+        uiTrack.sound("pipe");
+    }
+    switch (message["track"]) {
+        case "ambience":
+            break;
+        case "sequencer":
+            switch (message["type"]) {
+                case "beat":
+                    playSequencerAt(message["beat"]);
+                    break;
+                case "state":
+                    setSequencerState(JSON.parse(message["state"]));
+                    break;
+                case "request":
+                    socket.sendSequencerState();
+            }
+            break;
+        case "instrument":
+            break;
     }
 }
 
-connect();
+
+
+// Socket
+class Socket {
+
+    connect() {
+        webSocket = new WebSocket("ws://" + window.location.host + "/ws/app/" + roomName + "/");
+    
+        webSocket.onopen = function(e) {
+            console.info("Successfully connected to the WebSocket.");
+        }
+    
+        webSocket.onclose = function(e) {
+            console.info("WebSocket connection closed unexpectedly. Trying to reconnect in 2s...");
+            setTimeout(function() {
+                console.info("Reconnecting...");
+                socket.connect();
+            }, 2000);
+        };
+    
+        webSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            console.debug(data);
+        
+            switch (data.type) {
+                case "chat_message":
+                    chatLog.value += data.user + ": " + data.message + "\n";
+                    break;
+                case "user_list":
+                    for (let i = 0; i < data.users.length; i++) {
+                        onlineUsersSelectorAdd(data.users[i]);
+                    }
+                    break;
+                case "user_join":
+                    chatLog.value += data.user + " joined the room.\n";
+                    onlineUsersSelectorAdd(data.user);
+                    break;
+                case "user_leave":
+                    chatLog.value += data.user + " left the room.\n";
+                    onlineUsersSelectorRemove(data.user);
+                    break;
+                case "audio_message":
+                    decodeAudioMessage(data.message);
+                    break;
+                default:
+                    console.error("Unknown message type!");
+                    break;
+            }
+        
+            // scroll 'chatLog' to the bottom
+            chatLog.scrollTop = chatLog.scrollHeight;
+        };
+    
+        webSocket.onerror = function(err) {
+            console.info("WebSocket encountered an error: " + err.message);
+            console.info("Closing the socket.");
+            webSocket.close();
+        }
+    }
+
+    pipe() {
+        webSocket.send(JSON.stringify({
+            type: "audio_message",
+            message: "PIPE"
+        }));
+    }
+
+    sendSequencerState() {
+        webSocket.send(JSON.stringify({
+            type: "audio_message",
+            message: {
+                "track": "sequencer",
+                "type": "state",
+                "state": JSON.stringify(getSequencerState())
+            }
+        }));
+    }
+    requestSequencerState() {
+        webSocket.send(JSON.stringify({
+            type: "audio_message",
+            message: {
+                "track": "sequencer",
+                "type": "request"
+            }
+        }));
+    }
+
+}
+
+
+// Initialise socket
+socket = new Socket();
+socket.connect();
