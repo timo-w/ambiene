@@ -3,6 +3,17 @@ console.log("Sanity check from mixer.js.");
 const sliders = document.getElementsByClassName("slider");
 const slider_labels = document.getElementsByClassName("slider-label");
 const slider_toggles = document.getElementsByClassName("slider-toggle");
+const preset_buttons = document.getElementsByClassName("mixer-preset");
+
+const ambience_presets = [
+    {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 50},
+    {0: 80, 2: 10},
+    {1: 70, 4: 26, 6: 12, 7: 40},
+    {2: 42, 3: 90, 5: 20, 7: 28},
+    {3: 20, 5: 90, 7: 60},
+    {2: 70, 6: 56, 7: 20},
+    {0: 64, 1: 4, 3: 5, 5: 15, 7: 56}
+];
 
 // Slide volume slider to target
 function slideChannel(channelID, target) {
@@ -33,51 +44,53 @@ function slideChannel(channelID, target) {
                 clearInterval(slideInterval);
             }
             $(channel).trigger("input");
-        }, 8 // <- delay in ms
+        }, 10 // <- delay in ms
     );
 }
 
 // Turn on/off tracks (for presets)
-function channelOn(channelID, target) {
+function channelOn(channelID) {
     const channelButton = slider_toggles[channelID];
-    slideChannel(channelID, target);
     if (!$(channelButton).hasClass("active")) {
-        $(channelButton).trigger("click");
+        $(channelButton).addClass("active");
+        $(channelButton).text("ON");
     }
 }
 function channelOff(channelID) {
     const channelButton = slider_toggles[channelID];
-    // Reset filter track to 50, rest to 0
-    if (channelID == 7) {
-        slideChannel(channelID, 50);
-    } else {
-        slideChannel(channelID, 0);
-    }
     if ($(channelButton).hasClass("active")) {
-        $(channelButton).trigger("click");
+        $(channelButton).removeClass("active");
+        $(channelButton).text("OFF");
     }
 }
 // Slide channels to preset
 function setPreset(state) {
     for (let i=0; i<sliders.length; i++) {
         if (i in state) {
-            channelOn(i, state[i]);
+            channelOn(i);
+            slideChannel(i, state[i]);
         } else {
+            // Reset filter track to 50, rest to 0
+            if (i == 7) {
+                slideChannel(i, 50);
+            } else {
+                slideChannel(i, 0);
+            }
             channelOff(i);
         }
     }
 }
 
 
-$(document).ready(function(){
-    
+// Trigger input on all sliders to force update
+function triggerAmbience() {
+    for (let i=0; i<sliders.length; i++) {
+        $(sliders.item(i)).trigger("input");
+    };
+}
 
-    // Enable/disable tracks
-    $(".channel a").click(function() {
-        $(this).toggleClass("active");
-        uiTrack.sound("button");
-        this.innerHTML = $(this).hasClass("active") ? 'ON' : 'OFF';
-    });
+
+$(document).ready(function(){
 
     // Volume sliders
     for (let i=0; i<sliders.length; i++) {
@@ -86,8 +99,28 @@ $(document).ready(function(){
             if (sliders.item(i).value % 10 == 0) {
                 uiTrack.sound("notch");
             }
+            if (sliders.item(i).value % 2 == 0) {
+                socket.sendAmbienceSlider(i, sliders.item(i).value);
+            }
+        });
+        $(sliders.item(i)).on("mouseup", function() {
+            socket.sendAmbienceSlider(i, sliders.item(i).value);
         });
     };
+    // Preset buttons
+    for (let i=0; i<preset_buttons.length; i++) {
+        $(preset_buttons.item(i)).find("a").on("click", function() {
+            socket.sendAmbiencePreset(i);
+        });
+    };
+    // Slider toggles
+    for (let i=0; i<slider_toggles.length; i++) {
+        $(slider_toggles.item(i)).on("click", function() {
+            uiTrack.sound("button");
+            socket.sendAmbienceToggle(i, !$(this).hasClass("active"));
+        });
+    };
+
     $("#slider-birds").on("input", () => {
         ambienceTrack.setBirds($("#slider-birds").val()/100);
     });
@@ -135,65 +168,5 @@ $(document).ready(function(){
         $("#slider-filter").trigger("input");
     });
 
-    // Reset mixer to default state
-    $("#mixer-reset").click(function() {
-        setPreset({
-            0: 0,
-            1: 0,
-            2: 0,
-            3: 0,
-            4: 0,
-            5: 0,
-            6: 0,
-            7: 50
-        });
-    });
-
-    // Set mixer to preset values
-    $("#mixer-preset-1").click(function() {
-        setPreset({
-            0: 80,
-            2: 10,
-        });
-    });
-    $("#mixer-preset-2").click(function() {
-        setPreset({
-            1: 70,
-            4: 26,
-            6: 12,
-            7: 40,
-        });
-    });
-    $("#mixer-preset-3").click(function() {
-        setPreset({
-            2: 42,
-            3: 90,
-            5: 20,
-            7: 28,
-        });
-    });
-    $("#mixer-preset-4").click(function() {
-        setPreset({
-            3: 20,
-            5: 90,
-            7: 60,
-        });
-    });
-    $("#mixer-preset-5").click(function() {
-        setPreset({
-            2: 70,
-            6: 56,
-            7: 20,
-        });
-    });
-    $("#mixer-preset-6").click(function() {
-        setPreset({
-            0: 64,
-            1: 4,
-            3: 5,
-            5: 15,
-            7: 56,
-        });
-    });
 
 });

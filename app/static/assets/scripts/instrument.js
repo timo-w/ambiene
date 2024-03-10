@@ -1,6 +1,6 @@
 console.log("Sanity check from instrument.js.");
 
-const instrument_control_sliders = document.getElementsByClassName("instrument-slider");
+let instrument_control_sliders = document.getElementsByClassName("instrument-slider");
 
 let guitar_intensity = 0;
 let guitar_density = 1;
@@ -12,58 +12,60 @@ function getRandomNote(minIndex, maxIndex) {
     }
     return pentatonic_scale[Math.floor(Math.random() * (maxIndex - minIndex + 1)) + minIndex];
 }
+// Get predefined note from scale
+function getNote(index) {
+    return pentatonic_scale[index];
+}
 // Sound marimba
-function soundMarimba() {
+function soundMarimba(note) {
     const variation = Math.floor(Math.random() * parseInt($("#marimba-density").val()));
     switch (variation) {
         case 0:
-            instrumentTrack.sound("marimba", getRandomNote(5,14));
+            instrumentTrack.sound("marimba", getNote(note));
             break;
     }
 }
 // Sound synth
-function soundSynth() {
-    instrumentTrack.sound("synth", getRandomNote(0,9));
+function soundSynth(note) {
+    instrumentTrack.sound("synth", getNote(note));
 }
 // Sound flute
-function soundFlute() {
-    let chord = [getRandomNote(6, 10), getRandomNote(4, 8)]
-    for (let i=0; i<chord.length; i++) {
-        instrumentTrack.sound("flute", chord[i]);
-    }  
+function soundFlute(note1, note2) {
+    instrumentTrack.sound("flute", getNote(note1));
+    instrumentTrack.sound("flute", getNote(note2));
 }
 // Sound pad
-function soundPad() {
-    instrumentTrack.sound("pad", getRandomNote(7,17));
+function soundPad(note) {
+    instrumentTrack.sound("pad", getNote(note));
 }
 // Sound piano
-function soundPiano() {
+function soundPiano(notes) {
     // Pick a random number
     const variation = Math.floor(Math.random() * parseInt($("#piano-density").val()));
     switch (variation) {
         // Play a chord
         case 0:
-            instrumentTrack.sound("piano", getRandomNote(0, 9));
-            instrumentTrack.sound("piano", getRandomNote(5, 14));
-            instrumentTrack.sound("piano", getRandomNote(9, 17));
+            instrumentTrack.sound("piano", getNote(notes[0]));
+            instrumentTrack.sound("piano", getNote(notes[1]));
+            instrumentTrack.sound("piano", getNote(notes[2]));
             break;
         // Play two notes
         case 1:
-            instrumentTrack.sound("piano", getRandomNote(6, 10));
-            instrumentTrack.sound("piano", getRandomNote(8, 16));
+            instrumentTrack.sound("piano", getNote(notes[3]));
+            instrumentTrack.sound("piano", getNote(notes[4]));
             break;
         // Play a single note
         case 2:
-            instrumentTrack.sound("piano", getRandomNote(8, 14));
+            instrumentTrack.sound("piano", getNote(notes[5]));
             break;
         case 3:
-            instrumentTrack.sound("piano", getRandomNote(10, 16));
+            instrumentTrack.sound("piano", getNote(notes[6]));
             break;
         // Play two notes quickly
         case 4:
-            instrumentTrack.sound("piano", getRandomNote(8, 16));
+            instrumentTrack.sound("piano", getNote(notes[7]));
             setTimeout(() => {
-                instrumentTrack.sound("piano", getRandomNote(8, 16));
+                instrumentTrack.sound("piano", getNote(notes[8]));
             }, 200);
         // Otherwise do nothing
     }
@@ -71,10 +73,9 @@ function soundPiano() {
 
 
 // Trigger next guitar sample based on sliders
-function nextGuitarSample() {
+function nextGuitarSample(variation) {
     let intensity;
     let density;
-    let variation = Math.floor(Math.random() * 8); // random from 8 samples
     switch (parseInt(guitar_intensity)) {
         case 0:
             intensity = "gentle";
@@ -98,19 +99,6 @@ function nextGuitarSample() {
             break;
     }
     instrumentTrack.soundGuitar(intensity, density, variation);
-}
-
-
-// Start instruments
-function startInstruments() {
-    setTimeout(() => {
-        nextGuitarSample(); setInterval(nextGuitarSample, 6400);
-        setInterval(soundMarimba, 200);
-        setInterval(soundSynth, 400);
-        setInterval(soundFlute, 800);
-        setInterval(soundPiano, 400);
-        setInterval(soundPad, 6400);
-    }, timeUntilNextSecond());
 }
 
 
@@ -182,5 +170,19 @@ $(document).ready(function(){
     document.getElementById("guitar-density").addEventListener("input", () => {
         guitar_density = document.getElementById("guitar-density").value;
     });
+
+    // All sliders
+    for (let i=0; i<instrument_control_sliders.length; i++) {
+        $(instrument_control_sliders[i]).on("input", function() {
+            let value = $(instrument_control_sliders[i]).find("input").val();
+            // if (value % 2 == 0) {
+            //     socket.sendInstrumentSlider(i, value);
+            // }
+            socket.sendInstrumentSlider(i, value);
+        });
+        // $(sliders.item(i)).on("mouseup", function() {
+        //     socket.sendAmbienceSlider(i, sliders.item(i).value);
+        // });
+    };
 
 });

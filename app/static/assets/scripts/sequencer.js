@@ -3,45 +3,73 @@ console.log("Sanity check from drum.js.");
 const sequencer_buttons = document.getElementsByClassName("beat");
 const sequencer_label_buttons = document.getElementsByClassName("drum-label");
 const sequencer_filter = document.getElementById("sequencer-filter");
-let sequencer_state = [];
+let sequencer_state = {
+    "tracks": [],
+    "buttons": [],
+    "filter": 100
+};
 let current_beat = 0;
 
 // Clear sequencer
 function resetSequencer() {
     uiTrack.sound("button");
-    // Turn off all beats
-    for (let i=0; i<sequencer_buttons.length; i++) {
-        $(sequencer_buttons.item(i)).removeClass("active-beat");
+    state = {
+        "tracks": [],
+        "buttons": [],
+        "filter": 100
     };
-    // Reset filter
-    sequencer_filter.value = 100;
-    // Turn on all tracks
     for (let i=0; i<sequencer_label_buttons.length; i++) {
-        $(sequencer_label_buttons.item(i)).removeClass("drum-muted");
+        state["tracks"].push(true);
     }
-    // Update state
-    getSequencerState();
+    for (let i=0; i<sequencer_buttons.length; i++) {
+        state["buttons"].push(false);
+    }
+    setSequencerState(state);
+    socket.sendSequencerState();
 }
 
 // Get the sequencer's state
 function getSequencerState() {
-    const button_obj_array = Array.prototype.slice.call(sequencer_buttons);
-    const button_array = button_obj_array.map(function(btn) {
-        return {button: btn, active: $(btn).hasClass("active-beat")};
-    });
     // Reset and update state
-    sequencer_state = [];
-    for (let i=0; i<button_array.length; i+=16) {
-        sequencer_state.push(button_array.slice(i, i+16));
+    sequencer_state = {
+        "tracks": [],
+        "buttons": [],
+        "filter": 100
+    };
+    for (let i=0; i<sequencer_label_buttons.length; i++) {
+        sequencer_state["tracks"].push(!$(sequencer_label_buttons.item(i)).hasClass("drum-muted"));
     }
+    for (let i=0; i<sequencer_buttons.length; i++) {
+        sequencer_state["buttons"].push($(sequencer_buttons.item(i)).hasClass("active-beat"));
+    }
+    sequencer_state["filter"] = sequencer_filter.value;
     return sequencer_state;
+}
+
+// Set the sequencer's state
+function setSequencerState(state) {
+    for (let i=0; i<sequencer_label_buttons.length; i++) {
+        if (state["tracks"][i]) {
+            $(sequencer_label_buttons.item(i)).removeClass("drum-muted");
+        } else {
+            $(sequencer_label_buttons.item(i)).addClass("drum-muted");
+        }
+    }
+    for (let i=0; i<sequencer_buttons.length; i++) {
+        if (state["buttons"][i]) {
+            $(sequencer_buttons.item(i)).addClass("active-beat");
+        } else {
+            $(sequencer_buttons.item(i)).removeClass("active-beat");
+        }
+    }
+    sequencer_filter.value = state["filter"];
 }
 
 // Get a list of beat buttons at a specified beat
 function getSequencerAt(beat) {
     let beats = [];
-    for (let i=0; i<8; i++) {
-        beats.push(sequencer_state[i][beat]);
+    for (let i = 0; i < 8; i++) {
+        beats.push(i * 16 + beat);
     }
     return beats;
 }
@@ -55,34 +83,16 @@ function playSequencerAt(beat) {
     }
     // Set beat highlight
     for (let i=0; i<beats.length; i++) {
-        $(beats[i].button).addClass("current-beat");
+        $(sequencer_buttons.item(beats[i])).addClass("current-beat");
         // Play sample
-        if (beats[i].active && !$(sequencer_label_buttons[i]).hasClass("drum-muted")) {
+        if ($(sequencer_buttons.item(beats[i])).hasClass("active-beat") && !$(sequencer_label_buttons[i]).hasClass("drum-muted")) {
             sequencerTrack.playSound(i);
         }
     }
 }
 
-// Play the next sequencer beat
-function stepSequencer() {
-    if (current_beat < 15) {
-        current_beat++;
-    } else {
-        current_beat = 0;
-    }
-    playSequencerAt(current_beat);
-}
-
-function startSequencer() {
-    setTimeout(() => {
-        setInterval(stepSequencer, 200);
-    }, timeUntilNextSecond());
-}
 
 $(document).ready(function(){
-
-    // Set initial sequencer state on page load
-    getSequencerState();
 
     // Track label buttons on click
     for (let i=0; i<sequencer_label_buttons.length; i++) {
@@ -90,6 +100,7 @@ $(document).ready(function(){
         sequencer_label_buttons.item(i).addEventListener("click", () => {
             uiTrack.sound("button");
             $(sequencer_label_buttons.item(i)).toggleClass("drum-muted");
+            socket.sendSequencerState();
         });
         // Right-click - test sample
         sequencer_label_buttons.item(i).addEventListener("contextmenu", (event) => {
@@ -103,7 +114,7 @@ $(document).ready(function(){
         sequencer_buttons.item(i).addEventListener("click", () => {
             uiTrack.sound("button");
             $(sequencer_buttons.item(i)).toggleClass("active-beat");
-            getSequencerState();
+            socket.sendSequencerState();
         });
         // Right-click - test sample
         sequencer_buttons.item(i).addEventListener("contextmenu", (event) => {
@@ -118,6 +129,7 @@ $(document).ready(function(){
         if (sequencer_filter.value % 10 == 0) {
             uiTrack.sound("notch");
         }
+        socket.sendSequencerState();
     });
 
 
