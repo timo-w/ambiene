@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{{ room.name }}
+{% endblock %}
+
+{% block body %}
+
+<h2>Audio Room <i>#{{ room.name }}</i></h2>
+<hr><br>
+
+<!-- Buttons -->
+<div class="row">
+    <button class="col-sm m-2 btn btn-primary" id="pipeButton"><span>Pipe</span></button>
+    <button class="col-sm m-2 btn btn-primary" id="padButton"><span>Pad</span></button>
+</div>
+<div class="row">
+    <button class="col-sm m-2 btn btn-success" id="startTrebleButton"><span>Start Treble Notes</span></button>
+    <button class="col-sm m-2 btn btn-success" id="startBassButton"><span>Start Bass Notes</span></button>
+    <button class="col-sm m-2 btn btn-success" id="startArpButton"><span>Start Arp</span></button>
+</div>
+<div class="row">
+    <button class="col-sm m-2 btn btn-danger" id="stopTrebleButton"><span>Stop Treble Notes</span></button>
+    <button class="col-sm m-2 btn btn-danger" id="stopBassButton"><span>Stop Bass Notes</span></button>
+    <button class="col-sm m-2 btn btn-danger" id="stopArpButton"><span>Stop Arp</span></button>
+</div>
+<hr>
+<div id="keygrid-container">
+    <div class="row">
+        <button class="col-sm p-2 btn btn-primary keygrid" value="C8"><span>C8</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="D8"><span>D8</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="F8"><span>F8</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="G8"><span>G8</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="A8"><span>A8</span></button>
+    </div>
+    <div class="row">
+        <button class="col-sm p-2 btn btn-primary keygrid" value="C7"><span>C7</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="D7"><span>D7</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="F7"><span>F7</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="G7"><span>G7</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="A7"><span>A7</span></button>
+    </div>
+    <div class="row">
+        <button class="col-sm p-2 btn btn-primary keygrid" value="C6"><span>C6</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="D6"><span>D6</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="F6"><span>F6</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="G6"><span>G6</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="A6"><span>A6</span></button>
+    </div>
+    <div class="row">
+        <button class="col-sm p-2 btn btn-primary keygrid" value="C5"><span>C5</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="D5"><span>D5</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="F5"><span>F5</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="G5"><span>G5</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="A5"><span>A5</span></button>
+    </div>
+    <div class="row">
+        <button class="col-sm p-2 btn btn-primary keygrid" value="C4"><span>C4</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="D4"><span>D4</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="F4"><span>F4</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="G4"><span>G4</span></button>
+        <button class="col-sm p-2 btn btn-primary keygrid" value="A4"><span>A4</span></button>
+    </div>
+</div>
+
+<br><hr><br>
+
+<!-- Chat Room -->
+<div class="row">
+    <div class="col-12 col-md-8">
+        <div class="mb-2">
+            <label for="chatLog">Room Log:</label>
+            <textarea class="form-control" id="chatLog" readonly></textarea>
+        </div>
+        <div class="input-group">
+            <input type="text" class="form-control" id="chatMessageInput" placeholder="Enter message:">
+            <div class="input-group-append">
+                <button class="mx-2 btn btn-primary" id="chatMessageSend" type="button">Send</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <label for="onlineUsers">Currently Connected:</label>
+        <select multiple class="form-control" id="onlineUsersSelector">
+        </select>
+    </div>
+</div>
+
+{{ room.name|json_script:"roomName" }}
+
+<script>
+    // To pass into audio.js
+    let testAudioFile = "{% static 'assets/sounds/test.mp3' %}"
+    let padAudioFile = "{% static 'assets/sounds/pad.mp3' %}"
+    let pipeAudioFile = "{% static 'assets/sounds/pipe.mp3' %}"
+
+    let ambient_birds = "{% static 'assets/sounds/ambient/birds.mp3' %}"
+    let ambient_wind = "{% static 'assets/sounds/ambient/wind.mp3' %}"
+    let ambient_rain = "{% static 'assets/sounds/ambient/rain.mp3' %}"
+    let ambient_fire = "{% static 'assets/sounds/ambient/fire.mp3' %}"
+</script>
+
+<script src="http://reverbjs.org/reverb.js"></script>
+<script src="{% static 'room.js' %}"></script>
+<script src="{% static 'audio.js' %}"></script>
+
+{% endblock %}

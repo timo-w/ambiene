@@ -5,104 +5,251 @@
 {{ room.name }}
 {% endblock %}
 
+{% block head %}
+<link rel="stylesheet" href={% static 'assets/styles/mixer.css' %}>
+<link rel="stylesheet" href={% static 'assets/styles/sequencer.css' %}>
+<link rel="stylesheet" href={% static 'assets/styles/instrument.css' %}>
+<script src="{% static 'assets/scripts/navigation.js' %}"></script>
+{% endblock %}
+
 {% block body %}
-
-<h2>Audio Room <i>#{{ room.name }}</i></h2>
-<hr><br>
-
-<!-- Buttons -->
-<div class="row">
-    <button class="col-sm m-2 btn btn-primary" id="pipeButton"><span>Pipe</span></button>
-    <button class="col-sm m-2 btn btn-primary" id="padButton"><span>Pad</span></button>
-</div>
-<div class="row">
-    <button class="col-sm m-2 btn btn-success" id="startTrebleButton"><span>Start Treble Notes</span></button>
-    <button class="col-sm m-2 btn btn-success" id="startBassButton"><span>Start Bass Notes</span></button>
-    <button class="col-sm m-2 btn btn-success" id="startArpButton"><span>Start Arp</span></button>
-</div>
-<div class="row">
-    <button class="col-sm m-2 btn btn-danger" id="stopTrebleButton"><span>Stop Treble Notes</span></button>
-    <button class="col-sm m-2 btn btn-danger" id="stopBassButton"><span>Stop Bass Notes</span></button>
-    <button class="col-sm m-2 btn btn-danger" id="stopArpButton"><span>Stop Arp</span></button>
-</div>
-<hr>
-<div id="keygrid-container">
-    <div class="row">
-        <button class="col-sm p-2 btn btn-primary keygrid" value="C8"><span>C8</span></button>
-        <button class="col-sm p-2 btn btn-primary keygrid" value="D8"><span>D8</span></button>
-        <button class="col-sm p-2 btn btn-primary keygrid" value="F8"><span>F8</span></button>
-        <button class="col-sm p-2 btn btn-primary keygrid" value="G8"><span>G8</span></button>
-        <button class="col-sm p-2 btn btn-primary keygrid" value="A8"><span>A8</span></button>
-    </div>
-    <div class="row">
-        <button class="col-sm p-2 btn btn-primary keygrid" value="C7"><span>C7</span></button>
-        <button class="col-sm p-2 btn btn-primary keygrid" value="D7"><span>D7</span></button>
-        <button class="col-sm p-2 btn btn-primary keygrid" value="F7"><span>F7</span></button>
-        <button class="col-sm p-2 btn btn-primary keygrid" value="G7"><span>G7</span></button>
-        <button class="col-sm p-2 btn btn-primary keygrid" value="A7"><span>A7</span></button>
-    </div>
-    <div class="row">
-        <button class="col-sm p-2 btn btn-primary keygrid" value="C6"><span>C6</span></button>
-        <button class="col-sm p-2 btn btn-primary keygrid" value="D6"><span>D6</span></button>
-        <button class="col-sm p-2 btn btn-primary keygrid" value="F6"><span>F6</span></button>
-        <button class="col-sm p-2 btn btn-primary keygrid" value="G6"><span>G6</span></button>
-        <button class="col-sm p-2 btn btn-primary keygrid" value="A6"><span>A6</span></button>
-    </div>
-    <div class="row">
-        <button class="col-sm p-2 btn btn-primary keygrid" value="C5"><span>C5</span></button>
-        <button class="col-sm p-2 btn btn-primary keygrid" value="D5"><span>D5</span></button>
-        <button class="col-sm p-2 btn btn-primary keygrid" value="F5"><span>F5</span></button>
-        <button class="col-sm p-2 btn btn-primary keygrid" value="G5"><span>G5</span></button>
-        <button class="col-sm p-2 btn btn-primary keygrid" value="A5"><span>A5</span></button>
-    </div>
-    <div class="row">
-        <button class="col-sm p-2 btn btn-primary keygrid" value="C4"><span>C4</span></button>
-        <button class="col-sm p-2 btn btn-primary keygrid" value="D4"><span>D4</span></button>
-        <button class="col-sm p-2 btn btn-primary keygrid" value="F4"><span>F4</span></button>
-        <button class="col-sm p-2 btn btn-primary keygrid" value="G4"><span>G4</span></button>
-        <button class="col-sm p-2 btn btn-primary keygrid" value="A4"><span>A4</span></button>
-    </div>
-</div>
-
-<br><hr><br>
-
-<!-- Chat Room -->
-<div class="row">
-    <div class="col-12 col-md-8">
-        <div class="mb-2">
-            <label for="chatLog">Room Log:</label>
-            <textarea class="form-control" id="chatLog" readonly></textarea>
-        </div>
-        <div class="input-group">
-            <input type="text" class="form-control" id="chatMessageInput" placeholder="Enter message:">
-            <div class="input-group-append">
-                <button class="mx-2 btn btn-primary" id="chatMessageSend" type="button">Send</button>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-md-4">
-        <label for="onlineUsers">Currently Connected:</label>
-        <select multiple class="form-control" id="onlineUsersSelector">
-        </select>
-    </div>
-</div>
 
 {{ room.name|json_script:"roomName" }}
 
+<!-- Overlay to enable audio -->
+<div id="overlay"><h1>Click to start</h1></div>
+<!-- Audio visualiser background -->
+<canvas id="visualiser"></canvas>
+
+
+<!-- Panels -->
+<section id="panel-mixer">
+    {% include "mixer.html" %}
+</section>
+
+
+<section id="panel-sequencer">
+    {% include "sequencer.html" %}
+</section>
+
+
+<section id="panel-instrument">
+    {% include "instrument.html" %}
+</section>
+
+
+<section id="panel-base" class="panel"></section>
+
+
+<!-- Nav bar -->
+<div class="panel-nav">
+    <div class="panel-nav-row">
+        <div id="panel-nav-ambience" class="panel-nav-container">
+            <img src={% static 'assets/icons/tree.png' %}>
+            <a>Ambience</a>
+        </div>
+        <div id="panel-nav-sequencer" class="panel-nav-container">
+            <img src={% static 'assets/icons/drum.png' %}>
+            <a>Sequencer</a>
+        </div>
+        <div id="panel-nav-instrument" class="panel-nav-container">
+            <img src={% static 'assets/icons/wave.png' %}>
+            <a>Instruments</a>
+        </div>
+    </div>
+    <div class="panel-nav-row-2">
+        <div class="panel-nav-slider">
+            <input id="ambience-master-volume" class="master-slider" type="range" min="0" max="200" value="100" oninput="ambienceTrack.setMaster()" />
+        </div>
+        <div class="panel-nav-slider">
+            <input id="sequencer-master-volume" class="master-slider" type="range" min="0" max="100" value="50" />
+        </div>
+        <div class="panel-nav-slider">
+            <input id="instrument-master-volume" class="master-slider" type="range" min="0" max="200" value="100" oninput="instrumentTrack.setMaster()" />
+        </div>
+    </div>
+</div>
+
+
+<!-- Chat box -->
+<div id="chatIcon">
+    <img src={% static 'assets/icons/chat.png' %} alt="Chat">
+</div>
+<section id="chat">
+    <h1>#{{ room.name }} Chat</h1>
+    <!-- <textarea id="onlineUsersSelector" readonly></textarea> -->
+    <select multiple id="onlineUsersSelector"></select>
+    <textarea id="chatLog" readonly></textarea>
+    <div class="user-message-container">
+        <input id="chatMessageInput" type="text" placeholder="Enter message:">
+        <button id="chatMessageSend"><img src={% static 'assets/icons/send.png' %} alt="Send"></button>
+    </div>
+    <a id="closeChat">Close</a>
+</section>
+
+<!-- Settings menu -->
+<div id="settingsIcon">
+    <img src={% static 'assets/icons/settings.png' %} alt="Settings">
+</div>
+<section id="settings">
+    <h1>Settings</h1>
+    <input type="checkbox" id="muteUI" checked />
+    <label for="muteUI">Play UI sounds</label>
+    <br>
+    <input type="checkbox" id="showVis" checked />
+    <label for="showVis">Show visualiser</label>
+    <a id="closeSettings">Close</a>
+</section>
+
+
 <script>
     // To pass into audio.js
-    let testAudioFile = "{% static 'assets/sounds/test.mp3' %}"
-    let padAudioFile = "{% static 'assets/sounds/pad.mp3' %}"
-    let pipeAudioFile = "{% static 'assets/sounds/pipe.mp3' %}"
 
-    let ambient_birds = "{% static 'assets/sounds/ambient/birds.mp3' %}"
-    let ambient_wind = "{% static 'assets/sounds/ambient/wind.mp3' %}"
-    let ambient_rain = "{% static 'assets/sounds/ambient/rain.mp3' %}"
-    let ambient_fire = "{% static 'assets/sounds/ambient/fire.mp3' %}"
+    // UI
+    let uiFile = "{% static 'assets/sounds/ui/ui.mp3' %}";
+    let notchFile = "{% static 'assets/sounds/ui/notch.mp3' %}";
+    let buttonFile = "{% static 'assets/sounds/ui/button.mp3' %}";
+    let clickFile = "{% static 'assets/sounds/ui/click.mp3' %}";
+    let pipeFile = "{% static 'assets/sounds/ui/pipe.mp3' %}";
+
+    // Ambient
+    let birdsFile = "{% static 'assets/sounds/ambient/birds.mp3' %}";
+    let fireFile = "{% static 'assets/sounds/ambient/fire.mp3' %}";
+    let rainFile = "{% static 'assets/sounds/ambient/rain.mp3' %}";
+    let shopFile = "{% static 'assets/sounds/ambient/shop.mp3' %}";
+    let cricketsFile = "{% static 'assets/sounds/ambient/crickets.mp3' %}";
+    let harbourFile = "{% static 'assets/sounds/ambient/harbour.mp3' %}";
+    let thunderFile = "{% static 'assets/sounds/ambient/thunder.mp3' %}";
+
+    // Instrument
+    let marimbaFile = "{% static 'assets/sounds/instrument/marimba.mp3' %}";
+    let synthFile = "{% static 'assets/sounds/instrument/synth.mp3' %}";
+    let fluteFile = "{% static 'assets/sounds/instrument/flute.mp3' %}";
+    let pianoFile = "{% static 'assets/sounds/instrument/piano.mp3' %}";
+    let padFile = "{% static 'assets/sounds/instrument/pad.mp3' %}";
+
+    // Drums
+    let kickFile = "{% static 'assets/sounds/instrument/drums/kick.mp3' %}";
+    let snareFile = "{% static 'assets/sounds/instrument/drums/snare.mp3' %}";
+    let hatClosedFile = "{% static 'assets/sounds/instrument/drums/hat-closed.mp3' %}";
+    let hatOpenFile = "{% static 'assets/sounds/instrument/drums/hat-open.mp3' %}";
+    let clapFile = "{% static 'assets/sounds/instrument/drums/clap.mp3' %}";
+    let crunchFile = "{% static 'assets/sounds/instrument/drums/crunch.mp3' %}";
+    let shakerFile = "{% static 'assets/sounds/instrument/drums/shaker.mp3' %}";
+    let cowbellFile = "{% static 'assets/sounds/instrument/drums/cowbell.mp3' %}";
+
+    // Guitar
+    let guitarFiles = {
+        gentle: {
+            sparse: [
+                "{% static 'assets/sounds/instrument/guitar/gentle/sparse/1.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/sparse/2.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/sparse/3.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/sparse/4.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/sparse/5.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/sparse/6.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/sparse/7.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/sparse/8.mp3' %}",
+            ],
+            moderate: [
+                "{% static 'assets/sounds/instrument/guitar/gentle/moderate/1.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/moderate/2.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/moderate/3.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/moderate/4.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/moderate/5.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/moderate/6.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/moderate/7.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/moderate/8.mp3' %}",
+            ],
+            full: [
+                "{% static 'assets/sounds/instrument/guitar/gentle/full/1.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/full/2.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/full/3.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/full/4.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/full/5.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/full/6.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/full/7.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/gentle/full/8.mp3' %}",
+            ],
+        },
+        standard: {
+            sparse: [
+                "{% static 'assets/sounds/instrument/guitar/standard/sparse/1.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/sparse/2.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/sparse/3.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/sparse/4.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/sparse/5.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/sparse/6.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/sparse/7.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/sparse/8.mp3' %}",
+            ],
+            moderate: [
+                "{% static 'assets/sounds/instrument/guitar/standard/moderate/1.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/moderate/2.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/moderate/3.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/moderate/4.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/moderate/5.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/moderate/6.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/moderate/7.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/moderate/8.mp3' %}",
+            ],
+            full: [
+                "{% static 'assets/sounds/instrument/guitar/standard/full/1.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/full/2.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/full/3.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/full/4.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/full/5.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/full/6.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/full/7.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/standard/full/8.mp3' %}",
+            ],
+        },
+        intense: {
+            sparse: [
+                "{% static 'assets/sounds/instrument/guitar/intense/sparse/1.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/sparse/2.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/sparse/3.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/sparse/4.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/sparse/5.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/sparse/6.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/sparse/7.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/sparse/8.mp3' %}",
+            ],
+            moderate: [
+                "{% static 'assets/sounds/instrument/guitar/intense/moderate/1.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/moderate/2.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/moderate/3.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/moderate/4.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/moderate/5.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/moderate/6.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/moderate/7.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/moderate/8.mp3' %}",
+            ],
+            full: [
+                "{% static 'assets/sounds/instrument/guitar/intense/full/1.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/full/2.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/full/3.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/full/4.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/full/5.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/full/6.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/full/7.mp3' %}",
+                "{% static 'assets/sounds/instrument/guitar/intense/full/8.mp3' %}",
+            ],
+        },
+    };
+
+
 </script>
 
-<script src="http://reverbjs.org/reverb.js"></script>
-<script src="{% static 'room.js' %}"></script>
-<script src="{% static 'audio.js' %}"></script>
+<!-- Audio scripts -->
+<script src="{% static 'assets/scripts/audio.js' %}"></script>
+<script src="{% static 'assets/scripts/mixer.js' %}"></script>
+<script src="{% static 'assets/scripts/sequencer.js' %}"></script>
+<script src="{% static 'assets/scripts/instrument.js' %}"></script>
+<script src="{% static 'assets/scripts/visualiser.js' %}"></script>
+
+<!-- Socket script -->
+<script src="{% static 'assets/scripts/socket.js' %}"></script>
+
 
 {% endblock %}
