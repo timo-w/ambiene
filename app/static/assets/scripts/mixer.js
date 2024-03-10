@@ -100,7 +100,7 @@ $(document).ready(function(){
             if (sliders.item(i).value % 10 == 0) {
                 uiTrack.sound("notch");
             }
-            if (sliders.item(i).value % 5 == 0) {
+            if (sliders.item(i).value % 2 == 0) {
                 socket.sendAmbienceSlider(i, sliders.item(i).value);
             }
         });

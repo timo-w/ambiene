@@ -1,6 +1,6 @@
 console.log("Sanity check from instrument.js.");
 
-const instrument_control_sliders = document.getElementsByClassName("instrument-slider");
+let instrument_control_sliders = document.getElementsByClassName("instrument-slider");
 
 let guitar_intensity = 0;
 let guitar_density = 1;
@@ -182,5 +182,19 @@ $(document).ready(function(){
     document.getElementById("guitar-density").addEventListener("input", () => {
         guitar_density = document.getElementById("guitar-density").value;
     });
+
+    // All sliders
+    for (let i=0; i<instrument_control_sliders.length; i++) {
+        $(instrument_control_sliders[i]).on("input", function() {
+            let value = $(instrument_control_sliders[i]).find("input").val();
+            // if (value % 2 == 0) {
+            //     socket.sendInstrumentSlider(i, value);
+            // }
+            socket.sendInstrumentSlider(i, value);
+        });
+        // $(sliders.item(i)).on("mouseup", function() {
+        //     socket.sendAmbienceSlider(i, sliders.item(i).value);
+        // });
+    };
 
 });

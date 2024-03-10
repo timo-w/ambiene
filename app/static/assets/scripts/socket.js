@@ -90,6 +90,7 @@ function decodeAudioMessage(message) {
             }
             break;
         case "instrument":
+            $(instrument_control_sliders[ parseInt(message["slider"]) ]).find("input").val(message["target"]);
             break;
     }
 }
@@ -222,6 +223,17 @@ class Socket {
             message: {
                 "track": "ambience",
                 "type": "slider",
+                "slider": slider,
+                "target": target
+            }
+        }));
+    }
+
+    sendInstrumentSlider(slider, target) {
+        webSocket.send(JSON.stringify({
+            type: "audio_message",
+            message: {
+                "track": "instrument",
                 "slider": slider,
                 "target": target
             }
