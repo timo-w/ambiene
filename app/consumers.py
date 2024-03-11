@@ -1,6 +1,7 @@
 import json
 import asyncio
 from random import randint
+from time import time
 
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
@@ -120,13 +121,19 @@ class RoomConsumer(AsyncWebsocketConsumer):
         print("consumers.py: online_count =", online_count)
         beat = 0
         measure = 0
+
         while online_count > 0:
+            # current_time = time()
+            # time_to_sleep = 1 - (current_time - int(current_time))
+            # await asyncio.sleep(time_to_sleep)
+
+            await asyncio.sleep(0.14)
+            
             online_count = await sync_to_async(self.room.get_online_count)()
             if beat < 31:
                 beat += 1
             else:
                 beat = 0
-            await asyncio.sleep(0.16) # Slightly speed up to account for network/server lag
 
             await self.channel_layer.group_send(
                 self.room_group_name,

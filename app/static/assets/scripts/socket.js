@@ -1,12 +1,9 @@
 console.log("Sanity check from socket.js.");
 
 const roomName = JSON.parse(document.getElementById('roomName').textContent);
-const username = ("{{ user.username }}" == "") ? "Guest" : "{{ user.username }}"
+username = (username == "") ? "Guest" : username;
 let socket;
 let webSocket = null;
-
-const d = new Date();
-timeAtLastMeasure = d.getTime();
 
 let chatLog = document.querySelector("#chatLog");
 let chatMessageInput = document.querySelector("#chatMessageInput");
@@ -90,12 +87,6 @@ function decodeAudioMessage(message) {
             switch (message["type"]) {
                 case "beat":
                     playSequencerAt(message["beat"]);
-                    // Log network lag
-                    if (parseInt(message["beat"]) == 0) {
-                        console.log("Current network delay: " + ((date.getTime() - timeAtLastMeasure) - 5120) + "ms");
-                        console.log("Current network delay including server lag: " + ((date.getTime() - timeAtLastMeasure) - 6400) + "ms");
-                        timeAtLastMeasure = date.getTime();
-                    }
                     break;
                 case "state":
                     if (message["user"] != username) {
