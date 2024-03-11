@@ -71,6 +71,10 @@
 </div>
 
 
+<!-- Home icon -->
+<div id="homeIcon">
+    <a href="{% url 'home' %}"><img src={% static 'assets/icons/home.png' %} alt="Home"></a>
+</div>
 <!-- Chat box -->
 <div id="chatIcon">
     <img src={% static 'assets/icons/chat.png' %} alt="Chat">
@@ -103,43 +107,44 @@
 
 
 <script>
+
     // To pass into audio.js
 
     // UI
-    let uiFile = "{% static 'assets/sounds/ui/ui.mp3' %}";
-    let notchFile = "{% static 'assets/sounds/ui/notch.mp3' %}";
-    let buttonFile = "{% static 'assets/sounds/ui/button.mp3' %}";
-    let clickFile = "{% static 'assets/sounds/ui/click.mp3' %}";
-    let pipeFile = "{% static 'assets/sounds/ui/pipe.mp3' %}";
+    const uiFile = "{% static 'assets/sounds/ui/ui.mp3' %}";
+    const notchFile = "{% static 'assets/sounds/ui/notch.mp3' %}";
+    const buttonFile = "{% static 'assets/sounds/ui/button.mp3' %}";
+    const clickFile = "{% static 'assets/sounds/ui/click.mp3' %}";
+    const pipeFile = "{% static 'assets/sounds/ui/pipe.mp3' %}";
 
     // Ambient
-    let birdsFile = "{% static 'assets/sounds/ambient/birds.mp3' %}";
-    let fireFile = "{% static 'assets/sounds/ambient/fire.mp3' %}";
-    let rainFile = "{% static 'assets/sounds/ambient/rain.mp3' %}";
-    let shopFile = "{% static 'assets/sounds/ambient/shop.mp3' %}";
-    let cricketsFile = "{% static 'assets/sounds/ambient/crickets.mp3' %}";
-    let harbourFile = "{% static 'assets/sounds/ambient/harbour.mp3' %}";
-    let thunderFile = "{% static 'assets/sounds/ambient/thunder.mp3' %}";
+    const birdsFile = "{% static 'assets/sounds/ambient/birds.mp3' %}";
+    const fireFile = "{% static 'assets/sounds/ambient/fire.mp3' %}";
+    const rainFile = "{% static 'assets/sounds/ambient/rain.mp3' %}";
+    const shopFile = "{% static 'assets/sounds/ambient/shop.mp3' %}";
+    const cricketsFile = "{% static 'assets/sounds/ambient/crickets.mp3' %}";
+    const harbourFile = "{% static 'assets/sounds/ambient/harbour.mp3' %}";
+    const thunderFile = "{% static 'assets/sounds/ambient/thunder.mp3' %}";
 
     // Instrument
-    let marimbaFile = "{% static 'assets/sounds/instrument/marimba.mp3' %}";
-    let synthFile = "{% static 'assets/sounds/instrument/synth.mp3' %}";
-    let fluteFile = "{% static 'assets/sounds/instrument/flute.mp3' %}";
-    let pianoFile = "{% static 'assets/sounds/instrument/piano.mp3' %}";
-    let padFile = "{% static 'assets/sounds/instrument/pad.mp3' %}";
+    const marimbaFile = "{% static 'assets/sounds/instrument/marimba.mp3' %}";
+    const synthFile = "{% static 'assets/sounds/instrument/synth.mp3' %}";
+    const fluteFile = "{% static 'assets/sounds/instrument/flute.mp3' %}";
+    const pianoFile = "{% static 'assets/sounds/instrument/piano.mp3' %}";
+    const padFile = "{% static 'assets/sounds/instrument/pad.mp3' %}";
 
     // Drums
-    let kickFile = "{% static 'assets/sounds/instrument/drums/kick.mp3' %}";
-    let snareFile = "{% static 'assets/sounds/instrument/drums/snare.mp3' %}";
-    let hatClosedFile = "{% static 'assets/sounds/instrument/drums/hat-closed.mp3' %}";
-    let hatOpenFile = "{% static 'assets/sounds/instrument/drums/hat-open.mp3' %}";
-    let clapFile = "{% static 'assets/sounds/instrument/drums/clap.mp3' %}";
-    let crunchFile = "{% static 'assets/sounds/instrument/drums/crunch.mp3' %}";
-    let shakerFile = "{% static 'assets/sounds/instrument/drums/shaker.mp3' %}";
-    let cowbellFile = "{% static 'assets/sounds/instrument/drums/cowbell.mp3' %}";
+    const kickFile = "{% static 'assets/sounds/instrument/drums/kick.mp3' %}";
+    const snareFile = "{% static 'assets/sounds/instrument/drums/snare.mp3' %}";
+    const hatClosedFile = "{% static 'assets/sounds/instrument/drums/hat-closed.mp3' %}";
+    const hatOpenFile = "{% static 'assets/sounds/instrument/drums/hat-open.mp3' %}";
+    const clapFile = "{% static 'assets/sounds/instrument/drums/clap.mp3' %}";
+    const crunchFile = "{% static 'assets/sounds/instrument/drums/crunch.mp3' %}";
+    const shakerFile = "{% static 'assets/sounds/instrument/drums/shaker.mp3' %}";
+    const cowbellFile = "{% static 'assets/sounds/instrument/drums/cowbell.mp3' %}";
 
     // Guitar
-    let guitarFiles = {
+    const guitarFiles = {
         gentle: {
             sparse: [
                 "{% static 'assets/sounds/instrument/guitar/gentle/sparse/1.mp3' %}",

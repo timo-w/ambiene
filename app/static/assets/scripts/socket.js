@@ -1,8 +1,12 @@
 console.log("Sanity check from socket.js.");
 
 const roomName = JSON.parse(document.getElementById('roomName').textContent);
+const username = ("{{ user.username }}" == "") ? "Guest" : "{{ user.username }}"
 let socket;
 let webSocket = null;
+
+const d = new Date();
+timeAtLastMeasure = d.getTime();
 
 let chatLog = document.querySelector("#chatLog");
 let chatMessageInput = document.querySelector("#chatMessageInput");
@@ -44,7 +48,7 @@ chatMessageSend.onclick = function() {
 
 // Determine and trigger audio event
 function decodeAudioMessage(message) {
-    // Don't read messages until user closes overlay
+    // Don't read until user closes overlay
     if (!$(overlay).hasClass("overlay-hidden")) {
         return;
     }
@@ -53,7 +57,10 @@ function decodeAudioMessage(message) {
     }
     switch (message["track"]) {
         case "master":
-            masterSliders.item(parseInt(message["trackID"])).value = message["target"];
+            if (message["user"] != username) {
+                $(masterSliders.item(parseInt(message["trackID"]))).trigger("input");
+                masterSliders.item(parseInt(message["trackID"])).value = message["target"];
+            }
             break;
         case "ambience":
             switch (message["type"]) {
@@ -71,8 +78,11 @@ function decodeAudioMessage(message) {
                     triggerAmbience();
                     break;
                 case "slider":
-                    sliders.item(parseInt(message["slider"])).value = parseInt(message["target"]);
-                    slider_labels.item(parseInt(message["slider"])).innerHTML = message["target"];
+                    if (message["user"] != username) {
+                        $(sliders.item(parseInt(message["slider"]))).trigger("input");
+                        sliders.item(parseInt(message["slider"])).value = parseInt(message["target"]);
+                        slider_labels.item(parseInt(message["slider"])).innerHTML = message["target"];
+                    }
                     break;
             }
             break;
@@ -80,9 +90,17 @@ function decodeAudioMessage(message) {
             switch (message["type"]) {
                 case "beat":
                     playSequencerAt(message["beat"]);
+                    // Log network lag
+                    if (parseInt(message["beat"]) == 0) {
+                        console.log("Current network delay: " + ((date.getTime() - timeAtLastMeasure) - 5120) + "ms");
+                        console.log("Current network delay including server lag: " + ((date.getTime() - timeAtLastMeasure) - 6400) + "ms");
+                        timeAtLastMeasure = date.getTime();
+                    }
                     break;
                 case "state":
-                    setSequencerState(JSON.parse(message["state"]));
+                    if (message["user"] != username) {
+                        setSequencerState(JSON.parse(message["state"]));
+                    }
                     break;
                 case "request":
                     socket.sendSequencerState();
@@ -92,7 +110,9 @@ function decodeAudioMessage(message) {
         case "instrument":
             switch (message["type"]) {
                 case "slider":
-                    $(instrument_control_sliders[parseInt(message["slider"])]).find("input").val(message["target"]);
+                    if (message["user"] != username) {
+                        $(instrument_control_sliders[parseInt(message["slider"])]).find("input").val(message["target"]);
+                    }
                     break;
                 case "instrument":
                     switch (message["instrument"]) {
@@ -144,7 +164,7 @@ class Socket {
     
         webSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            console.debug(data);
+            // console.debug(data);
         
             switch (data.type) {
                 case "chat_message":
@@ -193,9 +213,10 @@ class Socket {
         webSocket.send(JSON.stringify({
             type: "audio_message",
             message: {
-                "track": "master",
-                "trackID": trackID,
-                "target": target
+                user: username,
+                track: "master",
+                trackID: trackID,
+                target: target
             }
         }));
     }
@@ -204,9 +225,10 @@ class Socket {
         webSocket.send(JSON.stringify({
             type: "audio_message",
             message: {
-                "track": "sequencer",
-                "type": "state",
-                "state": JSON.stringify(getSequencerState())
+                user: username,
+                track: "sequencer",
+                type: "state",
+                state: JSON.stringify(getSequencerState())
             }
         }));
     }
@@ -215,8 +237,9 @@ class Socket {
         webSocket.send(JSON.stringify({
             type: "audio_message",
             message: {
-                "track": "sequencer",
-                "type": "request"
+                user: username,
+                track: "sequencer",
+                type: "request"
             }
         }));
     }
@@ -225,9 +248,10 @@ class Socket {
         webSocket.send(JSON.stringify({
             type: "audio_message",
             message: {
-                "track": "ambience",
-                "type": "preset",
-                "preset": preset
+                user: username,
+                track: "ambience",
+                type: "preset",
+                preset: preset
             }
         }));
     }
@@ -236,10 +260,11 @@ class Socket {
         webSocket.send(JSON.stringify({
             type: "audio_message",
             message: {
-                "track": "ambience",
-                "type": "toggle",
-                "id": id,
-                "enabled": enabled
+                user: username,
+                track: "ambience",
+                type: "toggle",
+                id: id,
+                enabled: enabled
             }
         }));
     }
@@ -248,10 +273,11 @@ class Socket {
         webSocket.send(JSON.stringify({
             type: "audio_message",
             message: {
-                "track": "ambience",
-                "type": "slider",
-                "slider": slider,
-                "target": target
+                user: username,
+                track: "ambience",
+                type: "slider",
+                slider: slider,
+                target: target
             }
         }));
     }
@@ -260,10 +286,11 @@ class Socket {
         webSocket.send(JSON.stringify({
             type: "audio_message",
             message: {
-                "track": "instrument",
-                "type": "slider",
-                "slider": slider,
-                "target": target
+                user: username,
+                track: "instrument",
+                type: "slider",
+                slider: slider,
+                target: target
             }
         }));
     }

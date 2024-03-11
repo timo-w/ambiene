@@ -115,21 +115,25 @@ class RoomConsumer(AsyncWebsocketConsumer):
         )
 
     async def send_beats(self):
+        print("consumers.py: BEATS INITIALISED")
         online_count = await sync_to_async(self.room.get_online_count)()
+        print("consumers.py: online_count =", online_count)
         beat = 0
+        measure = 0
         while online_count > 0:
             online_count = await sync_to_async(self.room.get_online_count)()
             if beat < 31:
                 beat += 1
             else:
                 beat = 0
-            await asyncio.sleep(0.19) # Slightly sped up to account for lag
+            await asyncio.sleep(0.16) # Slightly speed up to account for network/server lag
 
             await self.channel_layer.group_send(
                 self.room_group_name,
                     {
                         'type': 'audio_message',
                         'message': {
+                            'user': 'SERVER',
                             'track': 'sequencer',
                             'type': 'beat',
                             'beat': beat % 16
@@ -146,6 +150,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
                     {
                         'type': 'audio_message',
                         'message': {
+                            'user': 'SERVER',
                             'track': 'instrument',
                             'type': 'instrument',
                             'instrument': 'marimba',
@@ -155,12 +160,15 @@ class RoomConsumer(AsyncWebsocketConsumer):
             )
 
             if beat == 0:
+                print("consumers.py: MEASURE", measure)
+                measure += 1
                 # Guitar
                 await self.channel_layer.group_send(
                     self.room_group_name,
                         {
                             'type': 'audio_message',
                             'message': {
+                                'user': 'SERVER',
                                 'track': 'instrument',
                                 'type': 'instrument',
                                 'instrument': 'guitar',
@@ -174,6 +182,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
                         {
                             'type': 'audio_message',
                             'message': {
+                                'user': 'SERVER',
                                 'track': 'instrument',
                                 'type': 'instrument',
                                 'instrument': 'pad',
@@ -188,6 +197,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
                         {
                             'type': 'audio_message',
                             'message': {
+                                'user': 'SERVER',
                                 'track': 'instrument',
                                 'type': 'instrument',
                                 'instrument': 'flute',
@@ -203,6 +213,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
                         {
                             'type': 'audio_message',
                             'message': {
+                                'user': 'SERVER',
                                 'track': 'instrument',
                                 'type': 'instrument',
                                 'instrument': 'synth',
@@ -218,6 +229,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
                         {
                             'type': 'audio_message',
                             'message': {
+                                'user': 'SERVER',
                                 'track': 'instrument',
                                 'type': 'instrument',
                                 'instrument': 'piano',
@@ -225,6 +237,8 @@ class RoomConsumer(AsyncWebsocketConsumer):
                             },
                         }
                 )
+
+        print("consumers.py: BEATS STOPPED")
 
 
     async def chat_message(self, event):

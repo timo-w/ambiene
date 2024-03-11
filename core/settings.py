@@ -28,8 +28,8 @@ SECRET_KEY = 'django-insecure-_0_lp_w1kc&$z@(qk22(oa70jl24dg74xukaw7^)74xc5*1kt3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [f"{APP_NAME}.fly.dev"]
-CSRF_TRUSTED_ORIGINS = ["https://*.fly.dev/", "https://*.127.0.0.1"]
+ALLOWED_HOSTS = [f'{APP_NAME}.fly.dev', '127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://*.fly.dev/', 'https://*.127.0.0.1']
 
 
 # Application definition
@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'livereload',
     'django.contrib.staticfiles',
     'app.apps.MainAppConfig',
     'accounts',
@@ -56,7 +55,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'livereload.middleware.LiveReloadScript',
 ]
 
 ROOT_URLCONF = 'core.urls'
