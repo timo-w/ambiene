@@ -74,7 +74,7 @@ function getSequencerAt(beat) {
     return beats;
 }
 
-// Play the sequencer at the specified beat
+// Play the sequencer at the specified sub-beat
 function playSequencerAt(beat) {
     let beats = getSequencerAt(parseInt(beat));
     // Clear beat highlight
@@ -89,6 +89,14 @@ function playSequencerAt(beat) {
             sequencerTrack.playSound(i);
         }
     }
+}
+
+// Play the sequencer at the specified beat
+function playSequencerBeat(beat) {
+    playSequencerAt(beat*4);
+    setTimeout(playSequencerAt, 250, (beat*4+1));
+    setTimeout(playSequencerAt, 500, (beat*4+2));
+    setTimeout(playSequencerAt, 750, (beat*4+3));
 }
 
 

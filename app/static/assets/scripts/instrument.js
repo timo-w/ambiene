@@ -25,14 +25,24 @@ function soundMarimba(note) {
             break;
     }
 }
+function soundMarimbaBeat(notes) {
+    soundMarimba(notes[0]);
+    setTimeout(soundMarimba, 250, notes[1]);
+    setTimeout(soundMarimba, 500, notes[2]);
+    setTimeout(soundMarimba, 750, notes[3]);
+}
 // Sound synth
 function soundSynth(note) {
     instrumentTrack.sound("synth", getNote(note));
 }
+function soundSynthBeat(notes) {
+    setTimeout(soundSynth, 250, notes[0]);
+    setTimeout(soundSynth, 750, notes[1]);
+}
 // Sound flute
-function soundFlute(note1, note2) {
-    instrumentTrack.sound("flute", getNote(note1));
-    instrumentTrack.sound("flute", getNote(note2));
+function soundFlute(notes) {
+    instrumentTrack.sound("flute", getNote(notes[0]));
+    instrumentTrack.sound("flute", getNote(notes[0]));
 }
 // Sound pad
 function soundPad(note) {
@@ -69,6 +79,10 @@ function soundPiano(notes) {
             }, 200);
         // Otherwise do nothing
     }
+}
+function soundPianoBeat(notes) {
+    soundPiano(notes[0]);
+    setTimeout(soundPiano, 500, notes[1]);
 }
 
 

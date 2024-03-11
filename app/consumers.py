@@ -123,18 +123,19 @@ class RoomConsumer(AsyncWebsocketConsumer):
         measure = 0
 
         while online_count > 0:
-            # current_time = time()
-            # time_to_sleep = 1 - (current_time - int(current_time))
-            # await asyncio.sleep(time_to_sleep)
 
-            await asyncio.sleep(0.14)
+            current_time = time()
+            time_to_sleep = 1 - (current_time - int(current_time))
+            await asyncio.sleep(time_to_sleep)
             
             online_count = await sync_to_async(self.room.get_online_count)()
-            if beat < 31:
+            if beat < 3:
                 beat += 1
             else:
                 beat = 0
+                measure += 1
 
+            # Sequencer
             await self.channel_layer.group_send(
                 self.room_group_name,
                     {
@@ -143,15 +144,27 @@ class RoomConsumer(AsyncWebsocketConsumer):
                             'user': 'SERVER',
                             'track': 'sequencer',
                             'type': 'beat',
-                            'beat': beat % 16
+                            'beat': beat
                         },
                     }
             )
-
-            # Trigger instruments based on current beat
-
-
+            # Flute
+            notes = [randint(4, 8), randint(6, 10)]
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                    {
+                        'type': 'audio_message',
+                        'message': {
+                            'user': 'SERVER',
+                            'track': 'instrument',
+                            'type': 'instrument',
+                            'instrument': 'flute',
+                            'notes': notes
+                        },
+                    }
+            )
             # Marimba
+            notes = [randint(5, 14), randint(5, 14), randint(5, 14), randint(5, 14)]
             await self.channel_layer.group_send(
                 self.room_group_name,
                     {
@@ -161,14 +174,45 @@ class RoomConsumer(AsyncWebsocketConsumer):
                             'track': 'instrument',
                             'type': 'instrument',
                             'instrument': 'marimba',
-                            'note': randint(5, 14)
+                            'notes': notes
                         },
                     }
             )
-
-            if beat == 0:
-                print("consumers.py: MEASURE", measure)
-                measure += 1
+            # Bass synth
+            notes = [randint(0, 9), randint(0, 9)]
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                    {
+                        'type': 'audio_message',
+                        'message': {
+                            'user': 'SERVER',
+                            'track': 'instrument',
+                            'type': 'instrument',
+                            'instrument': 'synth',
+                            'notes': notes
+                        },
+                    }
+            )
+            # Piano
+            notes = [
+                randint(0, 9), randint(5, 14), randint(9, 17), randint(6, 10), randint(8, 16), randint(8, 14), randint(10, 16), randint(8, 16), randint(8, 16),
+                randint(0, 9), randint(5, 14), randint(9, 17), randint(6, 10), randint(8, 16), randint(8, 14), randint(10, 16), randint(8, 16), randint(8, 16)
+                ]
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                    {
+                        'type': 'audio_message',
+                        'message': {
+                            'user': 'SERVER',
+                            'track': 'instrument',
+                            'type': 'instrument',
+                            'instrument': 'piano',
+                            'notes': notes
+                        },
+                    }
+            )
+            # Every 2 bars
+            if measure % 2 == 0 and beat == 0:
                 # Guitar
                 await self.channel_layer.group_send(
                     self.room_group_name,
@@ -183,6 +227,8 @@ class RoomConsumer(AsyncWebsocketConsumer):
                             },
                         }
                 )
+            # Every bar
+            if beat == 0:
                 # Pad
                 await self.channel_layer.group_send(
                     self.room_group_name,
@@ -197,53 +243,22 @@ class RoomConsumer(AsyncWebsocketConsumer):
                             },
                         }
                 )
-            if beat % 4 == 0:
-                # Flute
-                await self.channel_layer.group_send(
-                    self.room_group_name,
-                        {
-                            'type': 'audio_message',
-                            'message': {
-                                'user': 'SERVER',
-                                'track': 'instrument',
-                                'type': 'instrument',
-                                'instrument': 'flute',
-                                'note1': randint(4, 8),
-                                'note2': randint(6, 10)
-                            },
-                        }
-                )
-            if beat % 2 == 1:
-                # Bass synth
-                await self.channel_layer.group_send(
-                    self.room_group_name,
-                        {
-                            'type': 'audio_message',
-                            'message': {
-                                'user': 'SERVER',
-                                'track': 'instrument',
-                                'type': 'instrument',
-                                'instrument': 'synth',
-                                'note': randint(0, 9)
-                            },
-                        }
-                )
-            if beat % 2 == 0:
-                # Piano
-                notes = [randint(0, 9), randint(5, 14), randint(9, 17), randint(6, 10), randint(8, 16), randint(8, 14), randint(10, 16), randint(8, 16), randint(8, 16)]
-                await self.channel_layer.group_send(
-                    self.room_group_name,
-                        {
-                            'type': 'audio_message',
-                            'message': {
-                                'user': 'SERVER',
-                                'track': 'instrument',
-                                'type': 'instrument',
-                                'instrument': 'piano',
-                                'notes': notes
-                            },
-                        }
-                )
+            # if measure % 2 == 0:
+            #     # Piano
+            #     notes = [randint(0, 9), randint(5, 14), randint(9, 17), randint(6, 10), randint(8, 16), randint(8, 14), randint(10, 16), randint(8, 16), randint(8, 16)]
+            #     await self.channel_layer.group_send(
+            #         self.room_group_name,
+            #             {
+            #                 'type': 'audio_message',
+            #                 'message': {
+            #                     'user': 'SERVER',
+            #                     'track': 'instrument',
+            #                     'type': 'instrument',
+            #                     'instrument': 'piano',
+            #                     'notes': notes
+            #                 },
+            #             }
+            #     )
 
         print("consumers.py: BEATS STOPPED")
 

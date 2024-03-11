@@ -86,7 +86,7 @@ function decodeAudioMessage(message) {
         case "sequencer":
             switch (message["type"]) {
                 case "beat":
-                    playSequencerAt(message["beat"]);
+                    playSequencerBeat(message["beat"]);
                     break;
                 case "state":
                     if (message["user"] != username) {
@@ -106,6 +106,7 @@ function decodeAudioMessage(message) {
                     }
                     break;
                 case "instrument":
+                    let notes;
                     switch (message["instrument"]) {
                         case "guitar":
                             nextGuitarSample(message["variation"]);
@@ -114,17 +115,20 @@ function decodeAudioMessage(message) {
                             soundPad(message["note"]);
                             break;
                         case "flute":
-                            soundFlute(message["note1"], message["note2"]);
+                            notes = message["notes"];
+                            soundFlute(message["notes"]);
                             break;
                         case "marimba":
-                            soundMarimba(message["note"]);
+                            notes = message["notes"];
+                            soundMarimbaBeat(notes);
                             break;
                         case "synth":
-                            soundSynth(message["note"]);
+                            notes = message["notes"];
+                            soundSynthBeat(message["notes"]);
                             break;
                         case "piano":
-                            let notes = message["notes"];
-                            soundPiano(notes);
+                            notes = message["notes"];
+                            soundPianoBeat([notes.slice(0, 8), notes.slice(9, 17)]);
                             break;
                     }
                     break;
