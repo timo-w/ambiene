@@ -10,8 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import os
 from pathlib import Path
+from urllib.parse import urlparse
 
+APP_NAME = os.environ.get("FLY_APP_NAME")
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,7 +28,8 @@ SECRET_KEY = 'django-insecure-_0_lp_w1kc&$z@(qk22(oa70jl24dg74xukaw7^)74xc5*1kt3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [f"{APP_NAME}.fly.dev"]
+CSRF_TRUSTED_ORIGINS = ["https://*.fly.dev/", "https://*.127.0.0.1"]
 
 
 # Application definition
@@ -125,6 +129,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR/"staticfiles"
 # Extra places for collectstatic to find static files.
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
@@ -132,12 +139,40 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Redis
+def parse_redis_url(url):
+    """ parses a redis url into component parts, stripping password from the host.
+    Long keys in the url result in parsing errors, since labels within a hostname cannot exceed 64 characters under
+    idna rules.
+    In that event, we remove the key/password so that it can be passed separately to the RedisChannelLayer.
+    """
+    parsed = urlparse(url)
+    parts = parsed.netloc.split(':')
+    host = ':'.join(parts[0:-1])
+    port = parts[-1]
+    path = parsed.path.split('/')[1:]
+    db = int(path[0]) if len(path) >= 1 else 0
 
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+    user, password = (None, None)
+    if '@' in host:
+        creds, host = host.split('@')
+        user, password = creds.split(':')
+        host = f'{user}@{host}'
+
+    return host, port, user, password, db
+
+REDIS_URL = os.environ.get('REDIS_URL', default='redis://localhost:6379')
+REDIS_HOST, REDIS_PORT, REDIS_USER, REDIS_PASSWORD, REDIS_DB = parse_redis_url(REDIS_URL)
+
+CHANNEL_LAYERS={
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [{
+                'address': f'redis://{REDIS_HOST}:{REDIS_PORT}',
+                'db': REDIS_DB,
+                'password': REDIS_PASSWORD,
+            }],
         },
     },
 }

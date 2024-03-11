@@ -128,7 +128,7 @@ function decodeAudioMessage(message) {
 class Socket {
 
     connect() {
-        webSocket = new WebSocket("ws://" + window.location.host + "/ws/app/" + roomName + "/");
+        webSocket = new WebSocket("wss://" + window.location.host + "/ws/app/" + roomName + "/");
     
         webSocket.onopen = function(e) {
             console.info("Successfully connected to the WebSocket.");
