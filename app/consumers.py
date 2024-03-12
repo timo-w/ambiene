@@ -17,6 +17,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
         self.room_group_name = None
         self.room = None
         self.user = None
+        self.online_count = 0
 
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
@@ -24,11 +25,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
         self.room = await sync_to_async(Room.objects.get)(name=self.room_name)
         self.user = self.scope['user']
 
-        # only 2 people already connected then close
-        online_count = await sync_to_async(self.room.get_online_count)()
-        if online_count >= 2:
-            await self.close()
-            return
+        self.online_count = await sync_to_async(self.room.get_online_count)()
 
         # join the room group
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
@@ -43,8 +40,8 @@ class RoomConsumer(AsyncWebsocketConsumer):
             'users': users,
         }))
 
+        # send the join event to the room
         if self.user.is_authenticated:
-            # send the join event to the room
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
@@ -53,9 +50,19 @@ class RoomConsumer(AsyncWebsocketConsumer):
                 }
             )
             await sync_to_async(self.room.online.add)(self.user)
+        else:
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'user_join',
+                    'user': 'Guest',
+                }
+            )
+            self.online_count += 1
+            #await sync_to_async(self.room.online.add)(self.user)
         
         # Send beats
-        if online_count == 0:
+        if self.online_count == 1:
             asyncio.ensure_future(self.send_beats())
 
 
@@ -65,8 +72,8 @@ class RoomConsumer(AsyncWebsocketConsumer):
             self.channel_name,
         )
 
+        # send the leave event to the room
         if self.user.is_authenticated:
-            # send the leave event to the room
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
@@ -74,7 +81,16 @@ class RoomConsumer(AsyncWebsocketConsumer):
                     'user': self.user.username,
                 }
             )
-            await sync_to_async(self.room.online.remove)(self.user) # ?
+            await sync_to_async(self.room.online.remove)(self.user)
+        else:
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'user_leave',
+                    'user': 'Guest',
+                }
+            )
+            self.online_count -= 1
 
     async def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
@@ -92,19 +108,32 @@ class RoomConsumer(AsyncWebsocketConsumer):
     
     
     async def receive_chat_message(self, message):
-        if not self.user.is_authenticated:
-            return
+        # if not self.user.is_authenticated:
+        #     return
 
         # send chat message event to the room
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'user': self.user.username,
-                'message': message,
-            }
-        )
-        await sync_to_async(Message.objects.create)(user=self.user, room=self.room, content=message)
+        
+        # send the leave event to the room
+        if self.user.is_authenticated:
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'user': self.user.username,
+                    'message': message,
+                }
+            )
+            await sync_to_async(Message.objects.create)(user=self.user, room=self.room, content=message)
+        else:
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'user': 'Guest',
+                    'message': message,
+                }
+            )
+            #await sync_to_async(Message.objects.create)(user=self.user, room=self.room, content=message)
 
     async def receive_audio_message(self, message):
         await self.channel_layer.group_send(
@@ -118,17 +147,16 @@ class RoomConsumer(AsyncWebsocketConsumer):
     async def send_beats(self):
         print("consumers.py: BEATS INITIALISED")
         online_count = await sync_to_async(self.room.get_online_count)()
-        print("consumers.py: online_count =", online_count)
+        print("consumers.py: online_count =", self.online_count)
         beat = 0
         measure = 0
 
-        while online_count > 0:
+        while self.online_count > 0:
 
             current_time = time()
             time_to_sleep = 1 - (current_time - int(current_time))
             await asyncio.sleep(time_to_sleep)
             
-            online_count = await sync_to_async(self.room.get_online_count)()
             if beat < 3:
                 beat += 1
             else:
@@ -243,22 +271,6 @@ class RoomConsumer(AsyncWebsocketConsumer):
                             },
                         }
                 )
-            # if measure % 2 == 0:
-            #     # Piano
-            #     notes = [randint(0, 9), randint(5, 14), randint(9, 17), randint(6, 10), randint(8, 16), randint(8, 14), randint(10, 16), randint(8, 16), randint(8, 16)]
-            #     await self.channel_layer.group_send(
-            #         self.room_group_name,
-            #             {
-            #                 'type': 'audio_message',
-            #                 'message': {
-            #                     'user': 'SERVER',
-            #                     'track': 'instrument',
-            #                     'type': 'instrument',
-            #                     'instrument': 'piano',
-            #                     'notes': notes
-            #                 },
-            #             }
-            #     )
 
         print("consumers.py: BEATS STOPPED")
 
