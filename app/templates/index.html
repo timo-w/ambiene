@@ -5,28 +5,41 @@
 Home
 {% endblock %}
 
+{% block head %}
+<link rel="stylesheet" href={% static 'assets/styles/index.css' %}>
+{% endblock head %}
+
+
 {% block body %}
 
-<h2>Ambiene</h2>
-<div class="row">
-    <div class="col-12 col-md-8">
-        <div class="mb-2">
-            <label for="roomInput">Enter a room name to connect to it (account required):</label>
-            <input type="text" class="form-control" id="roomInput" placeholder="Room name">
-            <a style="color: red">{{ error }}</a><br>
-            <small id="roomInputHelp" class="form-text text-muted">If the room doesn't exist yet, it will be created for you.</small>
+
+<h1 class="panel-title">Welcome to <a class="accent">Ambiene</a></h1>
+<h1 class="panel-subtitle">Join a Room to Begin</h1>
+<section id="panel-base" class="panel">
+    <div class="room-container">
+        <div class="room-row">
+            <div id="room1" class="room">
+                <h1>Room 1</h1>
+                <p>Connected: <a class="accent">{{ room1 }}</a></p>
+            </div>
+            <div id="room2" class="room">
+                <h1>Room 2</h1>
+                <p>Connected: <a class="accent">{{ room2 }}</a></p>
+            </div>
         </div>
-        <button type="button" id="roomConnect" class="btn btn-success">Connect</button>
+        <div class="room-row">
+            <div id="room3" class="room">
+                <h1>Room 3</h1>
+                <p>Connected: <a class="accent">{{ room3 }}</a></p>
+            </div>
+            <div id="room4" class="room">
+                <h1>Room 4</h1>
+                <p>Connected: <a class="accent">{{ room4 }}</a></p>
+            </div>
+        </div>
     </div>
-    <div class="col-12 col-md-4">
-        <label for="roomSelect">Active rooms</label>
-        <select multiple class="form-control" id="roomSelect">
-            {% for room in rooms %}
-                <option>{{ room }}</option>
-            {% endfor %}
-        </select>
-    </div>
-</div>
-<script src="{% static 'index.js' %}"></script>
+</section>
+
+<script src="{% static 'assets/scripts/index.js' %}"></script>
 
 {% endblock %}

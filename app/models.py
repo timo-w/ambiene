@@ -4,7 +4,7 @@ from accounts.models import User
 
 
 class Room(models.Model):
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=8)
     online = models.ManyToManyField(to=User, blank=True)
 
     def get_online_count(self):

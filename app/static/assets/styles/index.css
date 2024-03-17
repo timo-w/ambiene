@@ -1,0 +1,62 @@
+.panel, .accent {
+    transition: 4s ease-in-out;
+}
+.accent {
+    text-decoration: none;
+    color: #39b0f9;
+    text-shadow: 0px 0px 8px #39b0f9;
+}
+.panel-subtitle {
+    position: absolute;
+    top: 19%;
+    left: 50%;
+    transform: translate(-50%);
+    width: 60rem;
+    font-size: 40px;
+    text-align: center;
+}
+
+.panel {
+    box-shadow: 0px 0px 24px -4px #39b0f9;
+    padding: 1rem;
+}
+.room-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    gap: 1rem;
+}
+.room-row {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 50%;
+    gap: 1rem;
+}
+.room {
+    background-color: #484f55;
+    width: 100%;
+    height: 100%;
+    border-radius: 0.5rem;
+    transition: 0.3s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    h1 {
+        font-size: 70px;
+        margin: 0;
+        transition: 4s ease-in-out;
+    }
+    p {
+        font-size: 20px;
+    }
+}
+.room:hover {
+    transform: scale(1.01);
+    cursor: pointer;
+}

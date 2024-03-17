@@ -9,7 +9,7 @@
         width: 100%;
     }
     #panel-base, .panel-title {
-        display: none;
+        /* display: none; */
     }
 
 }
