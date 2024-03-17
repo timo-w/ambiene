@@ -63,3 +63,7 @@ Create a superuser:
 
 
 Hopefully, you should then be able to use Ambiene by visiting http://127.0.0.1:8000/ on your browser!
+
+
+# License
+Ambiene is licensed under the terms of the MIT license. See more information in the LICENSE file.
