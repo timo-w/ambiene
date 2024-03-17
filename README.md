@@ -26,3 +26,40 @@ Sequence 8 sounds over 16 steps to create a drum track! Mute tracks by clicking 
 Add instruments to your mix using the volume sliders. Then, change their sound using the effect sliders such as adding filters or changing the rhythmic density or tonal intensity!
 
 ![image](https://github.com/timo-w/dissertation/assets/98108156/846daad0-e70e-414d-bef0-59e77f16e4ef)
+
+
+# Requirements
+- Python 3.10, pip, virtualenv
+- A local or remote Redis server
+
+
+# Installation (Linux)
+Follow the steps below to install Ambiene locally.
+
+### Redis Server Setup
+- Ensure a Redis server is running either locally or remotely
+- Add the Redis URL to `core/settings.py`
+
+### Repo and Environment Setup
+Run a new terminal in the directory of your choice, then:
+- `git clone https://github.com/timo-w/ambiene.git`
+- `cd ambiene`
+- `python -m virtualenv venv`
+- `source venv/bin/activate`
+- `pip install -r requirements.txt`
+
+### Server Setup
+Migrate and populate the database:
+- `python manage.py migrate --run-syncdb`
+- `python manage.py loaddata rooms.json`
+
+Create a superuser:
+- `python manage.py createsuperuser`
+- Then follow terminal instructions
+
+
+### Run Server
+- `python manage.py runserver`
+
+
+Hopefully, you should then be able to use Ambiene by visiting http://127.0.0.1:8000/ on your browser!
