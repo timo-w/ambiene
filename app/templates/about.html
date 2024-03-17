@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+About
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href={% static 'assets/styles/about.css' %}>
+{% endblock head %}
+
+
+{% block body %}
+
+<section id="about">
+
+    <h1>About <a class="accent">Ambiene</a></h1>
+    <p>Ambiene is my final-year University project and part of my dissertation in Computing Science & Music at the University of Glasgow.</p>
+    <p>At its core, Ambiene is an online music collaboration and creation project. Users can come and make relaxing ambient music together by controlling the many different controls of the app. It&apos;s built with Django Channels using WebSockets and is deployed on fly.io.</p>
+    <p>See more on the <a href="https://github.com/timo-w/ambiene">GitHub page</a>!</p>
+
+</section>
+
+<script src="{% static 'assets/scripts/index.js' %}"></script>
+
+
+{% endblock %}

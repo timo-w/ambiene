@@ -1,11 +1,4 @@
-.panel, .accent {
-    transition: 4s ease-in-out;
-}
-.accent {
-    text-decoration: none;
-    color: #39b0f9;
-    text-shadow: 0px 0px 8px #39b0f9;
-}
+/* Title and colour accents */
 .panel-subtitle {
     position: absolute;
     top: 19%;
@@ -16,9 +9,11 @@
     text-align: center;
 }
 
+/* Room panel */
 .panel {
     box-shadow: 0px 0px 24px -4px #39b0f9;
     padding: 1rem;
+    transition: 4s ease-in-out;
 }
 .room-container {
     position: relative;

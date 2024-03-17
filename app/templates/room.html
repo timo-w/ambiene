@@ -73,11 +73,11 @@
 
 <!-- Home icon -->
 <div id="homeIcon">
-    <a href="{% url 'home' %}"><img src={% static 'assets/icons/home.png' %} alt="Home"></a>
+    <img src={% static 'assets/icons/home.png' %} alt="Home" title="Home">
 </div>
 <!-- Chat box -->
 <div id="chatIcon">
-    <img src={% static 'assets/icons/chat.png' %} alt="Chat">
+    <img src={% static 'assets/icons/chat.png' %} alt="Chat" title="Chat">
 </div>
 <section id="chat">
     <h1>#{{ room.name }} Chat</h1>
@@ -93,7 +93,7 @@
 
 <!-- Settings menu -->
 <div id="settingsIcon">
-    <img src={% static 'assets/icons/settings.png' %} alt="Settings">
+    <img src={% static 'assets/icons/settings.png' %} alt="Settings" title="Settings">
 </div>
 <section id="settings">
     <h1>Settings</h1>

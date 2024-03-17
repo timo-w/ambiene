@@ -25,6 +25,7 @@ document.addEventListener("click", () => {
     context.resume().then(() => {
         overlay.className = "overlay-hidden";
         initialiseAudio();
+        uiTrack.sound("click")
         socket.requestSequencerState();
     });
 }, {once: true});

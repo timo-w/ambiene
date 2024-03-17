@@ -21,8 +21,8 @@ $(document).ready(function(){
         current_page = "ambience";
         
         $("#panel-nav-ambience").addClass("current-panel").css({"border": "2px solid #39b0f9", "box-shadow": "0px 0px 12px -4px #39b0f9"});
-        $("#panel-nav-sequencer").removeClass("current-panel").css({"border": "none", "box-shadow": "none"});
-        $("#panel-nav-instrument").removeClass("current-panel").css({"border": "none", "box-shadow": "none"});
+        $("#panel-nav-sequencer").removeClass("current-panel").css({"border": "2px solid rgba(0, 0, 0, 0)", "box-shadow": "none"});
+        $("#panel-nav-instrument").removeClass("current-panel").css({"border": "2px solid rgba(0, 0, 0, 0)", "box-shadow": "none"});
         $("#panel-base").css({"box-shadow": "0px 0px 24px -4px #39b0f9"});
 
         $("#panel-sequencer").fadeOut(150);
@@ -41,9 +41,9 @@ $(document).ready(function(){
         uiTrack.sound("click");
         current_page = "sequencer";
 
-        $("#panel-nav-ambience").removeClass("current-panel").css({"border": "none", "box-shadow": "none"});
+        $("#panel-nav-ambience").removeClass("current-panel").css({"border": "2px solid rgba(0, 0, 0, 0)", "box-shadow": "none"});
         $("#panel-nav-sequencer").addClass("current-panel").css({"border": "2px solid #EC5E47", "box-shadow": "0px 0px 12px -4px #EC5E47"});
-        $("#panel-nav-instrument").removeClass("current-panel").css({"border": "none", "box-shadow": "none"});
+        $("#panel-nav-instrument").removeClass("current-panel").css({"border": "2px solid rgba(0, 0, 0, 0)", "box-shadow": "none"});
         $("#panel-base").css({"box-shadow": "0px 0px 24px -4px #EC5E47"});
 
         $("#panel-mixer").fadeOut(150);
@@ -62,8 +62,8 @@ $(document).ready(function(){
         uiTrack.sound("click");
         current_page = "instrument";
 
-        $("#panel-nav-ambience").removeClass("current-panel").css({"border": "none", "box-shadow": "none"});
-        $("#panel-nav-sequencer").removeClass("current-panel").css({"border": "none", "box-shadow": "none"});
+        $("#panel-nav-ambience").removeClass("current-panel").css({"border": "2px solid rgba(0, 0, 0, 0)", "box-shadow": "none"});
+        $("#panel-nav-sequencer").removeClass("current-panel").css({"border": "2px solid rgba(0, 0, 0, 0)", "box-shadow": "none"});
         $("#panel-nav-instrument").addClass("current-panel").css({"border": "2px solid #81DE53", "box-shadow": "0px 0px 12px -4px #81DE53"});
         $("#panel-base").css({"box-shadow": "0px 0px 24px -4px #81DE53"});
 
@@ -127,6 +127,14 @@ $(document).ready(function(){
         });
     };
 
+
+    // Home button
+    $("#homeIcon").on("click", function() {
+        uiTrack.sound("click");
+        setTimeout(() => {
+            window.location.pathname = "app/";
+        }, 200)
+    });
 
     // Settings menu
     $("#settingsIcon").on("click", function() {

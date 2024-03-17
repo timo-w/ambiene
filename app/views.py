@@ -13,8 +13,8 @@ def index_view(request):
         'room4': Room.objects.get(name="roomFour").get_online_count()
     })
 
-def test_view(request):
-    return render(request, 'test-page.html', {})
+def about_view(request):
+    return render(request, 'about.html', {})
 
 def room_view(request, room_name):
     # if room name valid
