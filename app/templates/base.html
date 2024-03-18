@@ -22,7 +22,7 @@
         <section id="navbar">
             <a href="{% url 'home' %}">Home</a>
             <a href="{% url 'about' %}">About</a>
-            <a href="https://github.com/timo-w/ambiene">GitHub</a>
+            <a href="https://github.com/timo-w/ambiene" target="_blank">GitHub</a>
             {% if user.is_authenticated %}
             <a href="{% url 'logout' %}">Logout ({{ user.username }})</a>
             {% else %}

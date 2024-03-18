@@ -128,14 +128,6 @@ $(document).ready(function(){
     };
 
 
-    // Home button
-    $("#homeIcon").on("click", function() {
-        uiTrack.sound("click");
-        setTimeout(() => {
-            window.location.pathname = "app/";
-        }, 200)
-    });
-
     // Settings menu
     $("#settingsIcon").on("click", function() {
         uiTrack.sound("click");
