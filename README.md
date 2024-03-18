@@ -4,6 +4,14 @@
 
 Play it live at https://ambiene.fly.dev/!
 
+## Demos
+Below are some examples of what Ambiene can play:
+- ![Example 1](https://github.com/timo-w/ambiene/assets/98108156/ef6b98dd-32c0-4b20-acb8-72d3ad206aee)
+- ![Example 2](https://github.com/timo-w/ambiene/assets/98108156/05b64d18-1cd9-4997-912c-f09ef239dcb3)
+- ![Example 3](https://github.com/timo-w/ambiene/assets/98108156/e7b46a5b-8a05-4a5d-8fed-6581ccdcebbf)
+- ![Example 4](https://github.com/timo-w/ambiene/assets/98108156/585093f4-5718-4266-a9e5-1f255180aa29)
+
+
 # About
 Ambiene is an online music collaboration and creation project. Users can come and make relaxing ambient music together by controlling the many different controls of the app. It is built with Django Channels using WebSockets and is deployed on fly.io.
 
