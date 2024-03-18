@@ -161,19 +161,6 @@ class RoomConsumer(AsyncWebsocketConsumer):
                 beat = 0
                 measure += 1
 
-            # Sequencer
-            await self.channel_layer.group_send(
-                self.room_group_name,
-                    {
-                        'type': 'audio_message',
-                        'message': {
-                            'user': 'SERVER',
-                            'track': 'sequencer',
-                            'type': 'beat',
-                            'beat': beat
-                        },
-                    }
-            )
             # Flute
             notes = [randint(4, 8), randint(6, 10)]
             await self.channel_layer.group_send(
@@ -201,6 +188,19 @@ class RoomConsumer(AsyncWebsocketConsumer):
                             'type': 'instrument',
                             'instrument': 'marimba',
                             'notes': notes
+                        },
+                    }
+            )
+            # Sequencer
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                    {
+                        'type': 'audio_message',
+                        'message': {
+                            'user': 'SERVER',
+                            'track': 'sequencer',
+                            'type': 'beat',
+                            'beat': beat
                         },
                     }
             )
