@@ -76,7 +76,18 @@ function soundPiano(notes) {
             instrumentTrack.sound("piano", getNote(notes[7]));
             setTimeout(() => {
                 instrumentTrack.sound("piano", getNote(notes[8]));
-            }, 200);
+            }, 250);
+            break;
+        // Play a triplet
+        case 5:
+            instrumentTrack.sound("piano", getNote(notes[7]));
+            setTimeout(() => {
+                instrumentTrack.sound("piano", getNote(notes[8]));
+            }, 167);
+            setTimeout(() => {
+                instrumentTrack.sound("piano", getNote(notes[4]));
+            }, 333);
+            break;
         // Otherwise do nothing
     }
 }

@@ -399,7 +399,13 @@ Instrument.prototype.sound = function(sound, note) {
             break;
     }
     determineFilter(this.ctl.filter, filterValue);
-    this.ctl.source.detune.value = noteCentsOffsets[note];
+    try {
+        this.ctl.source.detune.value = noteCentsOffsets[note];
+    } catch (TypeError) {
+        // If can't decode note don't play
+        this.ctl.gainNode.gain.value = 0;
+    }
+    
     let onName = this.ctl.source.start ? 'start' : 'noteOn';
     this.ctl.source[onName](0);
 };
