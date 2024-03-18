@@ -2,14 +2,21 @@
     
     .panel {
         position: relative;
-        width: 100%;
+        width: 96%;
     }
     .panel-nav {
-        position: relative;
-        width: 100%;
+        width: 96%;
+        bottom: 5%;
     }
     #panel-base, .panel-title {
         /* display: none; */
+    }
+
+}
+@media only screen and (max-height: 1200px) {
+    
+    .panel-nav {
+        bottom: 5%;
     }
 
 }

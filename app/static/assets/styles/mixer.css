@@ -105,9 +105,10 @@
     transform: rotate(270deg) translate(10rem);
 }
 
+/* Preset buttons */
 .mixer-preset-container {
     position: absolute;
-    width: 60rem;
+    width: 100%;
     height: 14%;
     bottom: 0;
     display: flex;
