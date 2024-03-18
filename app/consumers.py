@@ -19,6 +19,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
         self.user = None
         self.online_count = 0
 
+    # User connects to room
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = f'chat_{self.room_name}'
@@ -49,6 +50,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
                     'user': self.user.username,
                 }
             )
+            # Update user count
             await sync_to_async(self.room.online.add)(self.user)
         else:
             await self.channel_layer.group_send(
@@ -58,14 +60,14 @@ class RoomConsumer(AsyncWebsocketConsumer):
                     'user': 'Guest',
                 }
             )
-            self.online_count += 1
-            #await sync_to_async(self.room.online.add)(self.user)
+        self.online_count += 1
         
-        # Send beats
+        # Initialise beats if only person in room
         if self.online_count == 1:
             asyncio.ensure_future(self.send_beats())
 
 
+    # User disconnects to room
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(
             self.room_group_name,
@@ -92,6 +94,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
             )
             self.online_count -= 1
 
+    # Receive a message from the socket
     async def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
         message_type = text_data_json['type']
@@ -106,14 +109,8 @@ class RoomConsumer(AsyncWebsocketConsumer):
         else:
             print(f"RoomConsumer.receive(): Unknown message type {message_type}")
     
-    
+    # Send chat message event to room
     async def receive_chat_message(self, message):
-        # if not self.user.is_authenticated:
-        #     return
-
-        # send chat message event to the room
-        
-        # send the leave event to the room
         if self.user.is_authenticated:
             await self.channel_layer.group_send(
                 self.room_group_name,
@@ -133,8 +130,8 @@ class RoomConsumer(AsyncWebsocketConsumer):
                     'message': message,
                 }
             )
-            #await sync_to_async(Message.objects.create)(user=self.user, room=self.room, content=message)
 
+    # Send audio message to room
     async def receive_audio_message(self, message):
         await self.channel_layer.group_send(
             self.room_group_name,
@@ -144,6 +141,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
             }
         )
 
+    # Start beat loop in a separate thread until no users are in room
     async def send_beats(self):
         print("consumers.py: BEATS INITIALISED")
         online_count = await sync_to_async(self.room.get_online_count)()

@@ -121,10 +121,17 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: row;
+    gap: 2rem;
+    padding: 0 1rem;
     transition: 0.15s ease-in-out;
 
+    a {
+        text-align: center;
+        width: 24%;
+    }
     input {
-        width: 90%;
+        width: 76%;
     }
     input::-webkit-slider-thumb:hover { 
         background-color: #EC5E47;

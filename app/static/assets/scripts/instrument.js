@@ -118,60 +118,74 @@ function nextGuitarSample(variation) {
 
 // Change label on slider hover/input
 for (let i=0; i<instrument_control_sliders.length; i++) {
-    $(instrument_control_sliders.item(i).children[0]).hover(
-
-        // Hover on
-        function() {
-            const id = $(this).attr("id");
-            const text = id.split("-")[1];
-            let setText = function(element, value) {
-                $(element).parent().parent().parent().find("h1").text(value);
-            }
-            setText($(this), text);
-            $(this).on("input", () => {
-                switch (text) {
-                    case "volume":
-                        switch ($(this).val()) {
-                            case '0':
-                                setText($(this), "Off");
-                                break;
-                            case '100':
-                                setText($(this), "Max");
-                                break;
-                            default:
-                                setText($(this), ($(this).val() + "%"));
-                                break;
-                        }
-                        if ($(this).val() % 10 == 0) {
-                            uiTrack.sound("notch");
-                        }
+    let hasChanged = false;
+    let setText = function(element, value) {
+        $(element).parent().parent().parent().find("h1").text(value);
+    }
+    
+    $(instrument_control_sliders.item(i)).find("input").on("input", () => {
+        const element = $(instrument_control_sliders.item(i)).find("input");
+        const id = element.attr("id");
+        const text = id.split("-")[1];
+        hasChanged = true;
+        
+        switch (text) {
+            case "volume":
+                switch (element.val()) {
+                    case '0':
+                        setText(element, "Off");
                         break;
-                    case "filter":
-                        if ($(this).val() < 98 && $(this).val() >= 0) {
-                            setText($(this), ("LP: " + Math.round(Math.exp($(this).val() / 100 * Math.log(20000)) + 99) + "Hz"));
-                        } else if ($(this).val() > 102 && $(this).val() <= 200) {
-                            setText($(this), ("HP: " + Math.round(Math.exp(((Math.log($(this).val()) - Math.log(100)) / (Math.log(200) - Math.log(100))) * Math.log(16000))) + "Hz"));
-                        } else {
-                            setText($(this), "None");
-                        }
-                        if ($(this).val() % 20 == 0) {
-                            uiTrack.sound("notch");
-                        }
+                    case '100':
+                        setText(element, "Max");
                         break;
                     default:
-                        uiTrack.sound("notch");
-                        setText($(this), $(this).val());
+                        setText(element, (element.val() + "%"));
                         break;
                 }
-            });
+                if (element.val() % 10 == 0) {
+                    uiTrack.sound("notch");
+                    socket.sendInstrumentSlider(i, element.val());
+                }
+                break;
+            case "filter":
+                if (element.val() < 98 && element.val() >= 0) {
+                    setText(element, ("LP: " + Math.round(Math.exp(element.val() / 100 * Math.log(20000)) + 99) + "Hz"));
+                } else if (element.val() > 102 && element.val() <= 200) {
+                    setText(element, ("HP: " + Math.round(Math.exp(((Math.log(element.val()) - Math.log(100)) / (Math.log(200) - Math.log(100))) * Math.log(16000))) + "Hz"));
+                } else {
+                    setText(element, "None");
+                }
+                if (element.val() % 20 == 0) {
+                    uiTrack.sound("notch");
+                }
+                if (element.val() % 10 == 0) {
+                    socket.sendInstrumentSlider(i, element.val());
+                }
+                break;
+            default:
+                uiTrack.sound("notch");
+                setText(element, element.val());
+                socket.sendInstrumentSlider(i, element.val());
+                break;
+        }
+    });
+    $(instrument_control_sliders.item(i).children[0]).hover(
+        // Hover on
+        function() {
+            hasChanged = false;
+            const id = $(this).attr("id");
+            const text = id.split("-")[1];
+            setText($(this), text);
         },
         // Hover off
         function() {
             const id = $(this).attr("id");
             const text = id.split("-")[0];
-            $(this).parent().parent().parent().find("h1").text(text)
+            $(this).parent().parent().parent().find("h1").text(text);
+            if (hasChanged) {
+                socket.sendInstrumentSlider(i, $(this).val());
+            }
         }
-
     );
 };
 
@@ -184,19 +198,5 @@ $(document).ready(function(){
     document.getElementById("guitar-density").addEventListener("input", () => {
         guitar_density = document.getElementById("guitar-density").value;
     });
-
-    // All sliders
-    for (let i=0; i<instrument_control_sliders.length; i++) {
-        $(instrument_control_sliders[i]).on("input", function() {
-            let value = $(instrument_control_sliders[i]).find("input").val();
-            // if (value % 2 == 0) {
-            //     socket.sendInstrumentSlider(i, value);
-            // }
-            socket.sendInstrumentSlider(i, value);
-        });
-        // $(sliders.item(i)).on("mouseup", function() {
-        //     socket.sendAmbienceSlider(i, sliders.item(i).value);
-        // });
-    };
 
 });

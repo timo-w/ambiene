@@ -131,14 +131,39 @@ $(document).ready(function(){
         });
     };
 
-
-    // Filter slider
-    sequencer_filter.addEventListener("input", () => {
-        if (sequencer_filter.value % 10 == 0) {
-            uiTrack.sound("notch");
+    // Set filter label to cutoff frequency
+    let sequencerFilterHasChanged = false;
+    $("#sequencer-filter").on("input", () => {
+        element = $("#sequencer-filter");
+        let setText = function(value) {
+            $(element).parent().find("a").text(value);
         }
-        socket.sendSequencerState();
+        sequencerFilterHasChanged = true;
+        if (element.val() < 98 && element.val() >= 0) {
+            setText("LP: " + Math.round(Math.exp(element.val() / 100 * Math.log(20000)) + 99) + "Hz");
+        } else if (element.val() > 102 && element.val() <= 200) {
+            setText("HP: " + Math.round(Math.exp(((Math.log(element.val()) - Math.log(100)) / (Math.log(200) - Math.log(100))) * Math.log(16000))) + "Hz");
+        } else {
+            setText("None");
+        }
+        if (element.val() % 10 == 0) {
+            uiTrack.sound("notch");
+            socket.sendSequencerState();
+        }
     });
+    $("#sequencer-filter").hover(
+        // Hover on
+        function() {
+            sequencerFilterHasChanged = false;
+        },
+        // Hover off
+        function() {
+            $(this).parent().find("a").text("Filter");
+            if (sequencerFilterHasChanged) {
+                socket.sendSequencerState();
+            }
+        }
+    );
 
 
 });

@@ -4,6 +4,7 @@ const sliders = document.getElementsByClassName("slider");
 const slider_labels = document.getElementsByClassName("slider-label");
 const slider_toggles = document.getElementsByClassName("slider-toggle");
 const preset_buttons = document.getElementsByClassName("mixer-preset");
+let isFirstInput = true;
 
 const ambience_presets = [
     {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 50},
@@ -95,6 +96,10 @@ $(document).ready(function(){
     // Volume sliders
     for (let i=0; i<sliders.length; i++) {
         sliders.item(i).addEventListener("input", () => {
+            if (isFirstInput) {
+                isFirstInput = false;
+                ambienceTrack.play();
+            }
             slider_labels.item(i).innerHTML = sliders.item(i).value;
             if (sliders.item(i).value % 10 == 0) {
                 uiTrack.sound("notch");
