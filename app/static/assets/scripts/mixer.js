@@ -6,14 +6,15 @@ const slider_toggles = document.getElementsByClassName("slider-toggle");
 const preset_buttons = document.getElementsByClassName("mixer-preset");
 let isFirstInput = true;
 
+// Preset mixes
 const ambience_presets = [
-    {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 50},
-    {0: 80, 2: 10},
-    {1: 70, 4: 26, 6: 12, 7: 40},
-    {2: 42, 3: 90, 5: 20, 7: 28},
-    {3: 20, 5: 90, 7: 60},
-    {2: 70, 6: 56, 7: 20},
-    {0: 64, 1: 4, 3: 5, 5: 15, 7: 56}
+    {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 50},  // Default/reset
+    {0: 80, 2: 10},                                     // Rainforest
+    {1: 70, 4: 26, 6: 12, 7: 40},                       // Evening Campfire
+    {2: 42, 3: 90, 5: 20, 7: 28},                       // Nextdoor Cafe
+    {3: 20, 5: 90, 7: 60},                              // Seaside
+    {2: 70, 6: 56, 7: 20},                              // Midnight Thunder
+    {0: 64, 1: 4, 3: 5, 5: 15, 7: 56}                   // Park Morning
 ];
 
 // Slide volume slider to target
@@ -26,7 +27,7 @@ function slideChannel(channelID, target) {
             if (channel.value % 10 == 0) {
                 uiTrack.sound("notch");
             }
-            // Prevent from getting stuck
+            // Prevent from getting stuck if multiple conflicting intervals
             if (numberOfTries > 100) {
                 clearInterval(slideInterval);
             }

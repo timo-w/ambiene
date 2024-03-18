@@ -138,11 +138,17 @@ $(document).ready(function(){
         let setText = function(value) {
             $(element).parent().find("a").text(value);
         }
+        let toFrequency = function(number) {
+            if (number < 1000) {
+                return number.toString() + "Hz";
+            }
+            return (number / 1000).toFixed(1) + "KHz";
+        }
         sequencerFilterHasChanged = true;
         if (element.val() < 98 && element.val() >= 0) {
-            setText("LP: " + Math.round(Math.exp(element.val() / 100 * Math.log(20000)) + 99) + "Hz");
+            setText("LP: " + toFrequency(Math.round(Math.exp(element.val() / 100 * Math.log(20000)) + 99)));
         } else if (element.val() > 102 && element.val() <= 200) {
-            setText("HP: " + Math.round(Math.exp(((Math.log(element.val()) - Math.log(100)) / (Math.log(200) - Math.log(100))) * Math.log(16000))) + "Hz");
+            setText("HP: " + toFrequency(Math.round(Math.exp(((Math.log(element.val()) - Math.log(100)) / (Math.log(200) - Math.log(100))) * Math.log(16000)))));
         } else {
             setText("None");
         }

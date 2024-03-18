@@ -133,6 +133,12 @@ for (let i=0; i<instrument_control_sliders.length; i++) {
     let setText = function(element, value) {
         $(element).parent().parent().parent().find("h1").text(value);
     }
+    let toFrequency = function(number) {
+        if (number < 1000) {
+            return number.toString() + "Hz";
+        }
+        return (number / 1000).toFixed(1) + "KHz";
+    }
     
     $(instrument_control_sliders.item(i)).find("input").on("input", () => {
         const element = $(instrument_control_sliders.item(i)).find("input");
@@ -160,9 +166,9 @@ for (let i=0; i<instrument_control_sliders.length; i++) {
                 break;
             case "filter":
                 if (element.val() < 98 && element.val() >= 0) {
-                    setText(element, ("LP: " + Math.round(Math.exp(element.val() / 100 * Math.log(20000)) + 99) + "Hz"));
+                    setText(element, ("LP: " + toFrequency(Math.round(Math.exp(element.val() / 100 * Math.log(20000)) + 99))));
                 } else if (element.val() > 102 && element.val() <= 200) {
-                    setText(element, ("HP: " + Math.round(Math.exp(((Math.log(element.val()) - Math.log(100)) / (Math.log(200) - Math.log(100))) * Math.log(16000))) + "Hz"));
+                    setText(element, ("HP: " + toFrequency(Math.round(Math.exp(((Math.log(element.val()) - Math.log(100)) / (Math.log(200) - Math.log(100))) * Math.log(16000))))));
                 } else {
                     setText(element, "None");
                 }
