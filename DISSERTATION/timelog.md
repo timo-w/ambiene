@@ -5,13 +5,6 @@
 * 2556936
 * MATHIEU CHOLLET
 
-## Guidance
-
-* This file contains the time log for your project. It will be submitted along with your final dissertation.
-* **YOU MUST KEEP THIS UP TO DATE AND UNDER VERSION CONTROL.**
-* This timelog should be filled out honestly, regularly (daily) and accurately. It is for *your* benefit.
-* Follow the structure provided, grouping time by weeks.  Quantise time to the half hour.
-
 ## Semester 1 Week 1
 
 ### 14 Oct 2023
@@ -40,7 +33,7 @@
 
 * *1 hour* Add name validation to rooms
 
-# Semester 1 Week 11
+## Semester 1 Week 11
 
 ### 29 Nov 2023
 
@@ -49,14 +42,14 @@
 * *2 hours* Create some basic sound events that are sent over the socket and played synchronously to all connected users
 * *4 hours* Add more sound types, basic generated melodies/bass/pad parts using pentatonic scale
 
-# Semester 2 Week 6
+## Semester 2 Week 6
 
 ### 14 Feb 2024
 
 * *3 hours* Design and create a mixer panel to be used for the ambient sounds mix
 * *3 hours* Add toggle button functionality and slider animations using js
 
-# Semester 2 Week 8
+## Semester 2 Week 8
 
 ### 29 Feb 2024
 
@@ -74,7 +67,7 @@
 * *6 hours* Start to design and implement 16-step sequencer panel in new test page, add 8 drum samples
 * *3 hours* Add two instrument samples and begin to implement instrument panel, create scale and note offset table so samples can be detuned to a desired note
 
-# Semester 2 Week 9
+## Semester 2 Week 9
 
 ### 6 Mar 2024
 
@@ -124,7 +117,7 @@
 * *2 hours* Convert instrument panel to send and receive socket messages, remove unused/old files from project
 * *2 hours* Implement instrument triggering in backend, instrument trigger messages now sent through socket alongside notes to play, messages parsed locally. App now ready to deploy and test
 
-# Semester 2 Week 10
+## Semester 2 Week 10
 
 ### 11 Mar 2024
 
@@ -146,7 +139,7 @@
 * *2 hours* Update README with installation instructions, add LICENSE to repository
 * *3 hours* Add global navigation bar, create about page
 
-# Semester 2 Week 11
+## Semester 2 Week 11
 
 ### 18 Mar 2024
 
