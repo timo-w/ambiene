@@ -1,0 +1,80 @@
+\chapter{Analysis/Requirements}
+
+\section{Analysis}
+From background research, it was clear that despite there being many online music creation sites, there were not many applications which played back generated music in real-time and allowed user inputs to change how the music was created as it is generated. There was also a lack of collaborative experiences that were easily accessible to users with little musical experience.
+
+From this, the functional and non-functional requirements can be defined.
+
+\section{Requirements}
+
+\subsection{Functional Requirements}
+
+Site framework:
+\begin{itemize}
+    \item 
+        Users should be able to create an account and login to the app using their credentials.
+    \item 
+        Users, logged in or not, can join an audio room, and each room should accommodate multiple users to be connected to it.
+\end{itemize}
+
+Synchronised functions:
+\begin{itemize}
+    \item 
+        All changes to an audio room should occur in close to real-time.
+    \item 
+        Users should be able to adjust modifiers or parameters of the different tracks while they are generated and/or are playing.
+    \item 
+        Users should be able to hear audibly when they change a track’s parameters or modifiers in real time.
+    \item 
+        Changes made by one user should be reflected to all other connected users with negligible latency.
+    \item 
+        Each user should hear an identical audio output during a given session.
+\end{itemize}
+
+Audio tracks:
+\begin{itemize}
+    \item 
+        There should be three audio tracks, each with its own panel where users can adjust the parameters and modifiers of each track. There will be an ambience mixer, a 16-step sequencer, and a panel with various instruments.
+    \item 
+        Users should be able to mix several ambient noises together to create a soundscape.
+    \item 
+        Users should be able to use the sequencer to create a looping drum pattern.
+    \item 
+        Users should be able to add instruments to the mix and alter how they sound using modifiers and parameters.
+\end{itemize}
+
+\subsection{Non-Functional Requirements}
+
+Performance and reliability:
+\begin{itemize}
+    \item 
+        The system should be able to send audio messages consistently and in time with the beat.
+    \item 
+        The time between a user adjusting a parameter or modifier and that change being synchronised with all other connected users should be minimised.
+    \item 
+        The system should be able to handle a large number of connected users to a room without significant latency or beat consistency problems.
+\end{itemize}
+
+Usability:
+\begin{itemize}
+    \item 
+        The UI should be intuitive and clean so the user is not overwhelmed or confused.
+    \item 
+        The system should support multiple device sizes and resolutions to provide an accessible and consistent experience across platforms and screen sizes.
+\end{itemize}
+
+Deployment:
+\begin{itemize}
+    \item 
+        The app should be fully deployed on a live site with all features working as intended
+    \item 
+        The deployed app should be stable and live without disruption.
+\end{itemize}
+
+Psychosocial:
+\begin{itemize}
+    \item 
+        Users should feel connected to each other while they create music together in an audio room.
+    \item 
+        Users should feel relaxed and engaged in the music-making process.
+\end{itemize}
