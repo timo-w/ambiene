@@ -1,62 +1,31 @@
 \chapter{Evaluation} 
-How good is your solution? How well did you solve the general problem, and what evidence do you have to support that?
+% How good is your solution? How well did you solve the general problem, and what evidence do you have to support that?
+% Ask specific questions that address the general problem.
+% Answer them with precise evidence (graphs, numbers, statistical analysis, qualitative analysis).
+% Be fair and be scientific.
+% The key thing is to show that you know how to evaluate your work, not that your work is the most amazing product ever.
 
-\section{Guidance}
-\begin{itemize}
-    \item
-        Ask specific questions that address the general problem.
-    \item
-        Answer them with precise evidence (graphs, numbers, statistical
-        analysis, qualitative analysis).
-    \item
-        Be fair and be scientific.
-    \item
-        The key thing is to show that you know how to evaluate your work, not
-        that your work is the most amazing product ever.
-\end{itemize}
+To evaluate the system and assess how successfully it meets the requirement specification, a user evaluation was conducted. First, there were tasks for the user to complete, then a survey on their experience.
 
-\section{Evidence}
-Make sure you present your evidence well. Use appropriate visualisations, 
-reporting techniques and statistical analysis, as appropriate. The point is not
-to dump all the data you have but to present an argument well supported by evidence gathered.
+\section{Participants}
+It was important to obtain participants with a variety of backgrounds, particularly in musical experience. While the app may be intuitive to users with experience in music production due to the skeuomorphic design (as discussed in the design chapter), it was crucial to understand how users with little or no music-making experience would navigate and use the systems. With the goal of creating an accessible, engaging, and intuitive app, analysing participants with a range of prior musical experiences would be crucial in determining the success of the project.
 
-If you use numerical evidence, specify reasonable numbers of significant digits; don't state ``18.41141\% of users were successful'' if you only had 20 users. If you average \textit{anything}, present both a measure of central tendency (e.g. mean, median) \textit{and} a measure of spread (e.g. standard deviation, min/max, interquartile range).
+\section{Format}
+First, participants performed two tasks: One was an individual exercise where they used the system by themselves, following the structure of a typical session by adding tracks one by one to create a final mix. Then, the participant was instructed to repeat a similar exercise but instead with another user connected to the audio room. The full task handout is available in Appendix \ref{appendix:handout}.
 
-You can use \texttt{siunitx} to define units, space numbers neatly, and set the precision for the whole LaTeX document. 
+After performing the two tasks, a user survey was filled out. This asked questions about the participant’s musical experience, engagement and enjoyment of the app and whether the systems allowed for sufficient control. After this, there were some open-ended questions in which participants could provide feedback on the system, including suggestions on improvements of features they would like to see implemented on the app. The full user survey is available in Appendix \ref{appendix:questions}.
 
-% setup siunitx to have two decimal places
-\sisetup{
-	round-mode = places,
-	round-precision = 2
-}
+\section{Results}
+The survey was primarily qualitative, with most questions answered using a five-point Likert scale. The full results can be found in Appendix \ref{appendix:responses}. All participants responded positively to the experience, agreeing that the system was enjoyable, immersive, relaxing, and engaging. Additionally, participants enjoyed using the app more with another person, and results showed that they were more engaged, although the collaborative experience was less relaxing compared to using the app individually. Participants also generally felt a social connection to the other user while using the app, which was a crucial aspect of the requirements of the project.
 
-For example, these numbers will appear with two decimal places: \num{3.141592}, \num{2.71828}, and this one will appear with reasonable spacing \num{1000000}.
+It was also clear that regardless of musical experience, participants could understand and feel immersed in the music-making process. They also enjoyed the simplicity of the controls, although participants with more music-making experience were more likely to suggest more control or more instruments/samples. This makes sense because if participants already had experience with contemporary music production software like DAWs, they may feel that the app had a limited set of controls in comparison.
 
+All participants were able to figure out what the controls of the various panels did. The only confusing control was the filter, which applied a low or high-pass cutoff on the associated sound. This was especially confusing for participants with no music production experience, as, despite the app showing what cutoff frequency was active, they needed to understand what the frequency represented or how it related to the sound. However, participants who were confused later noted that once they started using the slider, they could hear the difference in sound.
 
+\section{Suggestions}
+Participants were given an opportunity to suggest new features or changes to the app. Generally, they were happy with the state of the site, however, some participants suggested features such as being able to change the tempo of the music or more effects added to the instruments. More freedom with the instruments was a common theme among suggestions and this is a point worth considering for future work.
 
-If you use statistical procedures, make sure you understand the process you are using,
-and that you check the required assumptions hold in your case. 
+The interface was unanimously received as easy to use and pleasing to look at. The only problems were with users with smaller displays, in which elements would sometimes overlap or not display correctly. This was corrected in a later version of the site by adding media queries and changing the position of certain elements based on the site of the user’s screen.
 
-If you visualise, follow the basic rules, as illustrated in Figure \ref{fig:boxplot}:
-\begin{itemize}
-\item Label everything correctly (axis, title, units).
-\item Caption thoroughly.
-\item Reference in text.
-\item \textbf{Include appropriate display of uncertainty (e.g. error bars, Box plot)}
-\item Minimize clutter.
-\end{itemize}
-
-See the file \texttt{guide\_to\_visualising.pdf} for further information and guidance.
-
-\begin{figure}[htb]
-    \centering
-    \includegraphics[width=1.0\linewidth]{images/boxplot_finger_distance.pdf}    
-
-    \caption{Average number of fingers detected by the touch sensor at different heights above the surface, averaged over all gestures. Dashed lines indicate
-    the true number of fingers present. The Box plots include bootstrapped uncertainty notches for the median. It is clear that the device is biased toward 
-    undercounting fingers, particularly at higher $z$ distances.
-    }
-
-    % use the notation fig:name to cross reference a figure
-    \label{fig:boxplot} 
-\end{figure}
+\section{Summary}
+Overall, the user evaluation was successful in identifying key aspects which participants focused on as well as in understanding how successful the social and musical features were. There was useful feedback which allowed for further development into the user experience, as well as insightful information on how participants felt during both the individual and collaborative exercise. The evaluation also proves the project meets the requirements defined in the requirements specification.

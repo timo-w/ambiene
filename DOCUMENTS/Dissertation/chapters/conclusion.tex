@@ -1,25 +1,24 @@
 \chapter{Conclusion}    
-Summarise the whole project for a lazy reader who didn't read the rest (e.g. a prize-awarding committee). This chapter should be short in most dissertations; maybe one to three pages.
-\section{Guidance}
-\begin{itemize}
-    \item
-        Summarise briefly and fairly.
-    \item
-        You should be addressing the general problem you introduced in the
-        Introduction.        
-    \item
-        Include summary of concrete results (``the new compiler ran 2x
-        faster'')
-    \item
-        Indicate what future work could be done, but remember: \textbf{you
-        won't get credit for things you haven't done}.
-\end{itemize}
 
 \section{Summary}
-Summarise what you did; answer the general questions you asked in the introduction. What did you achieve? Briefly describe what was built and summarise the evaluation results.
+In this project, I have developed an online collaborative music-making app which is fully deployed on a remote server. Through background research, it was clear that music-making was beneficial for the mental health of its players, yet there was a noticeable lack of easily accessible, collaborative music experiences which allowed users to make music together in an intuitive, engaging, and relaxing way.
+
+The project is a web app which makes use of the Web Audio API to load, manipulate, and produce continuous, procedurally-generated music. To synchronise the experience for all connected users, a WebSockets connection is established through the use of the Django Channels extension. This allows the experience to be identical across all connected users as if they were creating music in the same physical place.
+
+Through implementing various systems and algorithms to generate music in real-time while allowing users to adjust how that music is created, the app provides a cohesive and organic music-making experience between people who may not be able to create music with one another in person.
+
+The evaluation stage of this project tested participants’ ability to create music with the application both individually and collaboratively, and participants were shown to be engaged both musically, and socially during the experience.
+
 
 \section{Reflection}
-Discuss what went well and what didn't and how you would do things differently if you did this project again.
+I enjoyed the research, design, and implementation of this project. Being able to combine both a passion for music and computing to create a system that I have used frequently with friends in my spare time has been a valuable and engaging experience. Solving novel problems such as synchronising system states over a socket connection was interesting, and facing network issues which required optimisations to be implemented into the deployed system was an insightful experience.
 
-\section{Future work}
-Discuss what you would do if you could take this further -- where would the interesting directions to go next be? (e.g. you got another year to work on it, or you started a company to work on this, or you pursued a PhD on this topic)
+If I were to attempt this project again, I would spend more time on the procedural generation of the instruments, fine-tuning each instrument so that it had unique and interesting behaviours compared to the rest of the digital ensemble. I enjoyed creating the rules for the piano instrument and would like to add more modifiers and parameters which the user could play with to change the way the music was generated. I would also like to experiment more with harmony and use scales other than the pentatonic one used in this project.
+
+I would try to spread out the workload more evenly across the semester as this project did have a fair amount of last-minute crunch. Setting a more cohesive and structured plan for the year would have helped to achieve this.
+
+
+\section{Future Work}
+As mentioned previously, I would like to further experiment with procedurally generated music by using different harmonies, melodic and rhythmic structures, and instrumental parameters. Furthermore, I would like to develop systems for music which can react to external factors such as weather, moods, and time of day.
+
+I would also like to further research the psychology of music-making and how generating certain types of music can induce an emotional response. This project focused on creating a relaxing environment, but I would be interested in creating systems to induce other emotions in addition to this.

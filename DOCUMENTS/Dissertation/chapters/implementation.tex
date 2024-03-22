@@ -95,9 +95,9 @@ To play different notes, a sample is pitch-shifted by either increasing or decre
 
 Audio source nodes in the Web Audio API have a property called “detune”, which offsets the playback frequency by cents. In music, a cent is one-hundredth of a semitone, so setting the detune property to +100 would sound the sample at one semitone higher, and a value of -100 would sound the sample at one semitone lower in pitch. Using this information, a map can be created which maps notes to their corresponding detune value. For example, A4 would be +0, B4 would be +200, F4 would map to -400, etc.
 
-The JavaScript code in Listing \ref{lst:notes} creates a map between notes in Scientific Pitch Notation to the detune value in cents required to pitch a sample playing at 440Hz to that note.
+The JavaScript code in Listing \ref{lst:offsets} creates a map between notes in Scientific Pitch Notation to the detune value in cents required to pitch a sample playing at 440Hz to that note.
 
-\begin{lstlisting}[float, caption={Creates a map "noteCentsOffsets" between notes in Scientific Pitch Notation to the detune value in cents required to pitch a sample playing at 440Hz to that note}, label=lst:notes]
+\begin{lstlisting}[float, caption={Creates a map "noteCentsOffsets" between notes in Scientific Pitch Notation to the detune value in cents required to pitch a sample playing at 440Hz to that note}, label=lst:offsets]
 
     // Generate equal temperament notes list
     const range = (start, stop) => Array(stop - start + 1).fill().map((_, i) => start + i);
@@ -146,7 +146,7 @@ First, a random number is generated with a minimum value of zero, and a maximum 
 
 If the number does not match any of the cases, then the piano will play nothing. A new number is generated every half-beat, which means eight numbers will be generated and matched to a variation through the course of one bar of music.
 
-When compared to a more rudimentary method of generating melodies, for example by choosing a random note every beat and then playing it, these rules generate a piano part which sounds more organic and musically purposeful. Figure \ref{fig:piano} compares the notation of an excerpt of the piano’s algorithm with a high density with one that generates a random note for every beat.
+When compared to a more rudimentary method of generating melodies, for example by choosing a random note for every beat and then playing it, these rules generate a piano part which sounds more organic and musically purposeful. Figure \ref{fig:piano} compares the notation of an excerpt of the piano’s algorithm with a high density with one that generates a random note for every beat.
 
 \begin{figure}[htb] 
     \centering
@@ -185,11 +185,11 @@ One of the most challenging aspects of this project was ensuring the musical exp
 By making sure every change to the app is sent through to the users in an audio room, the system can ensure consistency across those connected users. This came with additional complexities which had to be resolved for the app to work efficiently and consistently. This section describes some of the technical factors behind creating the finished product.
 
 \subsection{Message Format}
-The messages sent through the socket follow a specific format which was developed to efficiently convey system control and state updates. Any message that involves audio includes \verb|‘type: ‘audio_message’| at the beginning of the message to indicate that the app should then parse the rest of the message.
+The messages sent through the socket follow a specific format which was developed to efficiently convey system control and state updates. Any message that involves audio includes \verb|type: audio_message| at the beginning of the message to indicate that the app should then parse the rest of the message.
 
-These messages typically contained a \verb|track| field, which indicated which track the change was for. For example, when a user mutes a sequencer sample, the track field would be \verb|'sequencer'|, or if the user drags an ambience volume slider, the track field would be \verb|'ambience'|. To parse audio messages, switch statements are used to determine what category of control was made. For each track type, there were subsequent fields such as \verb|'target'|, \verb|'instrument'| or \verb|'sliderID'|.
+These messages typically contained a \verb|track| field, which indicated which track the change was for. For example, when a user mutes a sequencer sample, the track field would be \verb|sequencer|, or if the user drags an ambience volume slider, the track field would be \verb|ambience|. To parse audio messages, switch statements are used to determine what category of control was made. For each track type, there were subsequent fields such as \verb|target|, \verb|instrument| or \verb|sliderID|.
 
-Audio messages contain a \verb|'user'| field, which was implemented during testing as when a client sent audio messages to the server, the server would forward that message to all connected users, including the client who sent the message. A result of this was “rubber-banding”, where after making a change to the app, there would be a brief delay before that change was then echoed back to the client and that state update would repeat itself. This was not noticeable with changes such as toggling a track on or off, but when sliding a control slider, the slider would flicker back and forth as it received the client’s own commands while the user was still dragging the slider, typically after <100ms. Fixing this involved sending the username as a field within the socket message. Then, clients could ignore any messages that had their username attached, removing the rubber-banding effect completely.
+Audio messages contain a \verb|user| field, which was implemented during testing as when a client sent audio messages to the server, the server would forward that message to all connected users, including the client who sent the message. A result of this was “rubber-banding”, where after making a change to the app, there would be a brief delay before that change was then echoed back to the client and that state update would repeat itself. This was not noticeable with changes such as toggling a track on or off, but when sliding a control slider, the slider would flicker back and forth as it received the client’s own commands while the user was still dragging the slider, typically after <100ms. Fixing this involved sending the username as a field within the socket message. Then, clients could ignore any messages that had their username attached, removing the rubber-banding effect completely.
 
 Instruments, alongside what notes they play, are also triggered by socket messages. Every beat, the server sends messages about the notes that each instrument should play. These can be randomly generated, but since they are generated server-side and then sent to the clients, the random notes are the same notes for each connected user, ensuring a consistent experience.
 
@@ -207,3 +207,20 @@ By doing this, the average bar duration variance fell from over 1500ms to <25ms,
 Reducing the server’s update frequency from 4 updates per beat to 1 resulted in a major refactoring to the socket format, particularly to the sequencer. Previously, the server would send 16 updates per bar which directly triggered the sequencer to play one of its timesteps. After the change, clients receive one server beat update every four sequencer timesteps. Because of this, when a server beat message is received by the client (every 1000ms), it plays the first of the timestep of the beat instantly, then sets three internal timeouts: 250, 500, and 750ms respectively, where each of these timeouts plays one of the other subsequent sequencer timesteps. For example, when the client receives “Beat 1”, the sequencer plays timestep 0, waits 250ms, plays timestep 1, waits, plays 2, waits, and plays 3. Then in 250ms time, the client should expect to receive “Beat 2” from the socket which triggers sequencer timesteps 4-7.
 
 By combining occasional but accurate server pulses with local timeouts, the user experiences a very consistent rhythm which is important for the immersive aspect of the app.
+
+\section{Deployment}
+
+Hosting the app on a live remote server where it can be publicly accessed was a key part of this project. Through the deployment stage, the collaborative aspects of the system could be tested and optimised in a real-world context with real-world latency and network limitations, rather than hosting the server on a local network where latency is negligible.
+
+\subsection{Preparing for Deployment}
+The system had to incorporate several changes to be ready for deployment. First, static files such as images, scripts, stylesheets and audio samples had to be served through the server rather than Django. Then, a remote Redis server had to be set up and linked to act as a storage layer and to dispatch the WebSocket messages. Additionally, a population script was created so that whenever the app was deployed onto the remote server the rooms would be correctly set up.
+
+\subsection{Network Optimisation}
+As discussed previously, the beat update messages which triggered the sequencer beats and cued instruments to play underwent significant changes after deploying and testing on the remote site. This was not the only change which was required to make the system usable, and various network optimisation techniques were used to streamline the experience.
+
+Most of the slider controls on the site use a range between 0 and 200. These sliders use event listener functions which wait for user input before executing a function, usually consisting of altering the local sound of the system, then sending a socket message to synchronise the other users in the room. Because these listeners trigger on every input, if a user sliders a slider from its minimum to the maximum value, there are 200 events in a fairly short period (depending on how fast the user drags the slider). At first, the event listener function sent a socket message on every single input, which meant that hundreds of messages would be sent through the socket when a user changed a slider value. During testing, this caused a significant slow-down, as the server could not keep up with sending up to hundreds of messages a second.
+
+\subsection{Reducing Message Frequency}
+To fix this issue, the event listener only sends a socket message periodically instead of on every single input, in many cases when the slider value is a multiple of 5 or 10. Instead of sending 200 messages for a min-max slider drag, the client only sends 40 or 20 respectively. Of course, this meant that the other users would only receive a quantised value, to the nearest 5 or 10. For example, if user 1 drags a slider to 68, the socket’s most recent message would tell user 2 to set the value to 65. To maintain the accuracy of the synchronisation, a new event listener was added which waited for the “hover off” event. Then, when a user’s mouse cursor leaves the slider, the final precise value is sent through the socket.
+
+By implementing the updates in this way, the socket message frequency and therefore server load is decreased, while the accuracy of the synchronisation is maintained.
