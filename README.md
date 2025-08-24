@@ -2,8 +2,6 @@
 
 "Ambiene" is my final-year dissertation project.
 
-Play it live at https://ambiene.fly.dev/!
-
 ## Demos
 Below are some examples of what Ambiene can play:
 - ![Example 1](https://github.com/timo-w/ambiene/assets/98108156/ef6b98dd-32c0-4b20-acb8-72d3ad206aee)
